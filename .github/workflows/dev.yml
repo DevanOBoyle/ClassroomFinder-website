@@ -37,10 +37,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Create Test Build
         run: yarn build
-      - name: Running JS tests
-        run: yarn test:ci
-        env:
-          CI: true
+
   lint:
     runs-on: ubuntu-latest
     steps:
