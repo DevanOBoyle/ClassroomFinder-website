@@ -1,0 +1,51 @@
+html {
+  width: 100%;
+}
+
+body {
+	padding: 0;
+	margin: 30px 160px 80px 160px;
+	background-color: #003c6c;
+	color: #fdc700;
+	font-family: "Roboto";
+}
+
+#sammyslug {
+	width: 30%;
+	float: right;
+}
+
+button {
+	background-color: white;
+  	color: black;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+}
+
+#search_box {
+	margin: 20px 0;
+}
+
+#map {
+  	height: 600px;
+  	width: 100%;
+	padding: 0;
+}
+
+#infoWindow {
+	font-family: "Roboto";
+	color: rgb(60, 60, 60);
+	font-weight: normal;
+}
+
+#infoWindow_link {
+	font-weight: normal;
+	color: #3376d5;
+}
+#infoWindow_link:link {
+	text-decoration: none;
+}
+#infoWindow_link:hover {
+	text-decoration: underline;
+}
