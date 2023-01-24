@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="sammyslug.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <title>UCSC ClassroomFinder</title>
+  </head>
+  <body>
+    <div id="searchBlock">
+      <h1>UCSC ClassroomFinder</h1>
+      
+      <div id="search_box">
+        <form id="myForm">
+          <input type="radio" id="room" name="inputType" value="room" checked>
+          <label for="room">Search by room (eg "R Carson Acad 250")</label><br>
+          <input type="radio" id="class" name="inputType" value="class">
+          <label for="class">Search by class code (eg "CSE 111")</label><br>  
+          <input type="text" id="input" name="input"><br>
+          <input type="submit" id="submit" value="Search"><br>
+        </form>
+      </div>
+
+      <img id="sammy" src="sammyslug.png">
+    </div>
+    <script>
+      sammy.onclick = function() {
+        let start = Date.now();
+        let timer = setInterval(function() {
+          let timePassed = Date.now() - start;
+          sammy.style.left = timePassed / 5 + 'px';
+          searchBlock.style.top = timePassed / 5 + 'px';
+          if (timePassed > 6000) {
+            clearInterval(timer);
+            searchBlock.style.opacity = 0;
+          }
+        }, 15);
+      } /*
+        // fade 
+        var op = 1;  // initial opacity
+        var timer = setInterval(function () {
+          if (op <= 0.1){
+              clearInterval(timer);
+              searchBlock.style.display = 'none';
+          }
+          searchBlock.style.opacity = op;
+          searchBlock.style.filter = 'alpha(opacity=' + op * 100 + ")";
+          op -= op * 0.1;
+        }, 50);
+      } */
+    </script>
+
+    <div id="map"></div>
+    <script type="module" src="./main.js"></script>
+
+  </body>
+
+</html>    

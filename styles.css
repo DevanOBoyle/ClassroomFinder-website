@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,600,700,800,900');
+@import "node_modules/ol/ol.css";
+
+html, body {
+    margin: 0;
+    height: 100%;
+    background-color: #003c6c;
+}
+
+#searchBlock{
+    position: absolute;
+    z-index: 2;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	font-size: 20px;
+	line-height: 1.7;
+	color: #fdc700;
+	background-color: #003c6c;
+	overflow-x: hidden;
+    padding: 2% 10%;
+}
+
+#input {
+    width: 100%;
+    padding: 18px 20px;
+    margin: 8px 0;
+    font-size: 16px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  
+#submit {
+    width: 100%;
+    background-color: #fdc700;
+    color: #003c6c;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+  
+#submit:hover {
+    background-color: #45a049;
+}
+
+#sammy {
+    width: 20%;
+    position: relative;
+}
+
+#map {
+    position: absolute;
+    z-index: 1;
+
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+  }
