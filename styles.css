@@ -46,7 +46,7 @@ html, body {
 }
   
 #submit:hover {
-    background-color: #45a049;
+    background-color: #efbe1b;
 }
 
 #sammy {
@@ -57,9 +57,35 @@ html, body {
 #map {
     position: absolute;
     z-index: 1;
-
     top: 0;
     bottom: 0;
     height: 100%;
     width: 100%;
-  }
+}
+
+.overlayContainer {
+    background-color: #fdc700;
+    color: #003c6c;
+    width: 250px;
+    text-align: center;
+    font-family: 'Roboto';
+    padding: 10px 5px;
+    position: absolute;
+    border-radius: 5px;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -131px;
+    margin-bottom: 14px;
+}
+
+.overlayContainer #buildingAddress::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 1.2;
+    margin-left: -10px;
+    border-style: solid;
+    border-width: 10px;
+    border-color: #fdc700 transparent transparent transparent;
+}
