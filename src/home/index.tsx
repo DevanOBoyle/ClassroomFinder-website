@@ -3,7 +3,7 @@ import "./index.scss"
 
 const Home: React.FC = () => (
   <>
-    <div className='.home__container'>Classroom Finder</div>
+    <div className='home_container'>Classroom Finder</div>
   </>
 )
 
