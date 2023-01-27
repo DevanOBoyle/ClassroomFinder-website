@@ -4750,6 +4750,11 @@
   "resolved" "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   "version" "1.0.0-beta.2"
 
+"geojson@^0.5.0":
+  "integrity" "sha512-/Bx5lEn+qRF4TfQ5aLu6NH+UKtvIv7Lhc487y/c8BdludrCTpiWf9wyI0RTyqg49MFefIAvFDuEi5Dfd/zgNxQ=="
+  "resolved" "https://registry.npmjs.org/geojson/-/geojson-0.5.0.tgz"
+  "version" "0.5.0"
+
 "geotiff@^2.0.7":
   "integrity" "sha512-FKvFTNowMU5K6lHYY2f83d4lS2rsCNdpUC28AX61x9ZzzqPNaWFElWv93xj0eJFaNyOYA63ic5OzJ88dHpoA5Q=="
   "resolved" "https://registry.npmjs.org/geotiff/-/geotiff-2.0.7.tgz"
