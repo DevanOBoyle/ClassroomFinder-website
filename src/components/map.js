@@ -17,29 +17,12 @@ import VectorLayer from "ol/layer/Vector"
 import { transform } from "ol/proj"
 import { toStringXY } from "ol/coordinate"
 
-function MapWrapper(props) {
-  // set intial state
-  const [map, setMap] = useState()
-  const [featuresLayer, setFeaturesLayer] = useState()
-  // const [selectedCoord, setSelectedCoord] = useState()
-
+function MapWrapper() {
   // pull refs
   const mapElement = useRef()
   const nameElement = useRef()
   const addressElement = useRef()
   const textElement = useRef()
-
-  // create state ref that can be accessed in OpenLayers onclick callback
-  // function
-  // https://stackoverflow.com/a/60643670
-  const mapRef = useRef()
-  mapRef.current = map
-
-  const style = new Style({
-    fill: new Fill({
-      color: "#eeeeee",
-    }),
-  })
 
   // Vector layer with buildings
   const fillStyle = new Fill({
@@ -49,7 +32,6 @@ function MapWrapper(props) {
     color: [45, 45, 45, 1],
     width: 1.2,
   })
-  // create and add vector source layer
   const initialFeaturesLayer = new VectorImageLayer({
     source: new VectorSource({
       url: "/map.geojson",
@@ -82,92 +64,41 @@ function MapWrapper(props) {
         new TileLayer({
           source: new OSM(),
         }),
-
         StamenToner,
         initialFeaturesLayer,
       ],
       view: new View({
         center: [-13587641.820142383, 4438297.780079307],
         zoom: 15,
-        // projection: "EPSG:3857",
       }),
     })
-    /*
-    const featureOverlay = new VectorLayer({
-      source: new VectorSource(),
-      map: map,
-      style: new Style({
-        stroke: new Stroke({
-          color: "rgba(255, 255, 255, 0.7)",
-          width: 2,
-        }),
-      }),
-    }) */
-    /*
 
-    // const overlayContainerElement = textElement
-    /*
-    const overlayLayer = new Overlay({ // NOT WORKING!
+    // Text container that will show info on the map
+    const overlayContainerElement = textElement.current
+    const overlayLayer = new Overlay({
       element: overlayContainerElement,
     })
     initialMap.addOverlay(overlayLayer)
-    // const overlayBuildingName = document.getElementById("buildingName")
-    // const overlayBuildingAddress = document.getElementById("buildingAddress")
-    */
-    // set map onclick handler
+    const overlayBuildingName = nameElement.current
+    const overlayBuildingAddress = addressElement.current
+
+    // Map onclick handler
     initialMap.on("click", function (e) {
+      overlayLayer.setPosition(undefined)
       initialMap.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
         let clickedCoord = e.coordinate
         let clickedBuildingName = feature.get("name")
         let clickedBuildingAddress = feature.get("address")
         console.log(clickedBuildingName)
         console.log(clickedBuildingAddress)
+        overlayLayer.setPosition(clickedCoord)
+        overlayBuildingName.innerHTML = clickedBuildingName
+        overlayBuildingAddress.innerHTML = clickedBuildingAddress
       })
     })
-
-    // save map and vector layer references to state
-    setMap(initialMap)
-    setFeaturesLayer(initialFeaturesLayer)
   }, [])
 
-  // update map if features prop changes - logic formerly put
-  // into componentDidUpdate
-  /*
-  useEffect(() => {
-    if (props.features.length) {
-      // may be null on first render
-      // set features to map
-      featuresLayer.setSource(
-        new VectorSource({
-          features: props.features,
-          // make sure features is an array
-        })
-      )
-      // fit map to feature extent (with 100px of padding)
-      map.getView().fit(featuresLayer.getSource().getExtent(), {
-        padding: [100, 100, 100, 100],
-      })
-    }
-  }, [props.features]) */
-
-  // map click handler
-  const handleMapClick = event => {
-    console.log(event.pixel)
-
-    /*
-    // get clicked coordinate using mapRef to access current
-    // React state inside OpenLayers callback
-    //  https://stackoverflow.com/a/60643670
-    const clickedCoord = mapRef.current.getCoordinateFromPixel(event.pixel)
-
-    // transform coord to EPSG 4326 standard Lat Long
-    const transormedCoord = transform(clickedCoord, "EPSG:3857", "EPSG:4326")
-
-    // set React state
-    setSelectedCoord(transormedCoord) */
-  }
-
-  // render component
+  // The HTML containers holding the map and info window
   return (
     <div>
       <div ref={mapElement} className='map-container'></div>
@@ -176,17 +107,13 @@ function MapWrapper(props) {
           ref={nameElement}
           className='overlayContainerText'
           id='buildingName'
-        >
-          Hej
-        </span>
+        ></span>
         <br></br>
         <span
           ref={addressElement}
           className='overlayContainerText'
           id='buildingAddress'
-        >
-          Hejda
-        </span>
+        ></span>
         <br></br>
       </div>
     </div>

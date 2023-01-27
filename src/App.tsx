@@ -10,8 +10,8 @@ const App: React.FC = () => {
     <div className='app'>
       <Routes>
         {/* Paths should be modified */}
-        <Route path='/' element={<MapWrapper />} />
-        <Route path='/' element={<Form />} />
+        <Route path='/map' element={<MapWrapper />} />
+        <Route path='/form' element={<Form />} />
         <Route path='/' element={<Home />} />
       </Routes>
     </div>
