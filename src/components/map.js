@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react"
 import "../stylesheets/map.scss"
+import "../../node_modules/ol/ol.css"
 
 // Openlayers imports
 import Map from "ol/Map"
 import View from "ol/View"
 import TileLayer from "ol/layer/Tile"
+import Stamen from "ol/source/Stamen.js"
 import OSM from "ol/source/OSM.js"
 import GeoJSON from "ol/format/GeoJSON"
 import VectorImageLayer from "ol/layer/VectorImage"
@@ -23,16 +25,13 @@ function MapWrapper() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
-  // const [selectedCoord, setSelectedCoord] = useState()
 
-  // pull refs
-  // const mapElement = useRef<HTMLDivElement>(null)
-  // create state ref that can be accessed in OpenLayers onclick
-  // callback function https://stackoverflow.com/a/60643670
+  // PlaceId that is returned from the database
+  const placeId_BE = "ChIJUfzq4HRBjoARZyoPLQd-ORM"
+  const placeId_HSS = "ChIJ5WaXa6FBjoARz3jyS-_t22A"
+  const placeId_CU = "ChIJ__8_56BBjoARnYLZxB5PFEU"
 
   // References to the divs
-  // PlaceId that is returned from the database
-  const placeId = "ChIJUfzq4HRBjoARZyoPLQd-ORM"
   const mapElement = useRef()
   const textElement = useRef()
   const nameElement = useRef()
@@ -99,6 +98,12 @@ function MapWrapper() {
       visible: true,
     })
 
+    const designLayer = new TileLayer({
+      source: new Stamen({
+        layer: "toner-lite",
+      }),
+    })
+
     // Create an overlay text container that will show info on the map
     const initialOverlayLayer = new Overlay({
       element: textElement.current,
@@ -111,7 +116,7 @@ function MapWrapper() {
         new TileLayer({
           source: new OSM(),
         }),
-        StamenToner,
+        designLayer,
         buildingsLayer,
         // markerLayer,
       ],
@@ -119,6 +124,7 @@ function MapWrapper() {
       view: new View({
         center: [-13587641.820142383, 4438297.780079307],
         zoom: 15,
+        minZoom: 13,
       }),
     })
     // Handle map click
@@ -135,8 +141,15 @@ function MapWrapper() {
     let building = featRef.current.getSource().getFeatureById(id)
     // Set position
     let newCoordinates = building.getGeometry().geometries_[0].getCoordinates()
-    overlayRef.current.setPosition([newCoordinates[0] + 500, newCoordinates[1]])
-    // How to know the coordinates? ///////////////////////
+    overlayRef.current.setPosition([newCoordinates[0] + 490, newCoordinates[1]])
+    // Center and zoom the map
+    mapRef.current.setView(
+      new View({
+        center: [newCoordinates[0] + 490, newCoordinates[1] - 100],
+        zoom: 16,
+        minZoom: 13,
+      })
+    )
     // Set text
     nameElement.current.innerHTML = building.get("name")
     addressElement.current.innerHTML = building.get("address")
@@ -151,9 +164,10 @@ function MapWrapper() {
   }
 
   // Handle the placeID received from the database
+  //////// change the input to placeID
   function showInfoById(e) {
     overlayRef.current.setPosition(undefined) // Close the current window
-    showFeatureInfoById(placeId)
+    showFeatureInfoById(placeId_BE)
   }
 
   // Show an info window at click
@@ -176,7 +190,7 @@ function MapWrapper() {
     })
   }
 
-  // map click handler
+  // Map click handler
   const handleMapClick = event => {
     overlayRef.current.setPosition(undefined) // Close the current window
     showFeatureInfo(event)
@@ -185,7 +199,7 @@ function MapWrapper() {
   // The HTML containers holding the map and info window
   return (
     <div>
-      <div ref={mapElement} className='map-container'></div>
+      <div ref={mapElement} id='map' className='map'></div>
       <div ref={textElement} className='overlayContainer'>
         <span
           ref={nameElement}

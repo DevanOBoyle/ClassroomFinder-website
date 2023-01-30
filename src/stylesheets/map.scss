@@ -1,6 +1,6 @@
-.map-container {
+.map {
   height: 600px;
-  width: 600px;
+  width: 100%;
   position: absolute;
   z-index: 1;
   top: 0;
@@ -45,4 +45,5 @@
   z-index: 2;
   height: 50px;
   width: 100px;
+  top: 570px;
 }
