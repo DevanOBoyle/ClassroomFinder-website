@@ -10,26 +10,19 @@ import Stamen from "ol/source/Stamen.js"
 import OSM from "ol/source/OSM.js"
 import GeoJSON from "ol/format/GeoJSON"
 import VectorImageLayer from "ol/layer/VectorImage"
-import VectorLayer from "ol/layer/Vector"
 import VectorSource from "ol/source/Vector"
-import Feature from "ol/Feature"
-import Point from "ol/geom/Point"
 import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
-import XYZ from "ol/source/XYZ"
-import { useGeographic } from "ol/proj.js"
 
 function MapWrapper() {
-  // useGeographic()
-
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
 
   // PlaceId that is returned from the database
   const placeId_BE = "ChIJUfzq4HRBjoARZyoPLQd-ORM"
-  const placeId_HSS = "ChIJ5WaXa6FBjoARz3jyS-_t22A"
-  const placeId_CU = "ChIJ__8_56BBjoARnYLZxB5PFEU"
+  // const placeId_HSS = "ChIJ5WaXa6FBjoARz3jyS-_t22A"
+  // const placeId_CU = "ChIJ__8_56BBjoARnYLZxB5PFEU"
 
   // References to the divs
   const mapElement = useRef()
@@ -37,7 +30,6 @@ function MapWrapper() {
   const nameElement = useRef()
   const addressElement = useRef()
   const linkElement = useRef()
-  const searchButton = useRef()
 
   const mapRef = useRef()
   mapRef.current = map
@@ -74,6 +66,7 @@ function MapWrapper() {
       color: [45, 45, 45, 1],
       width: 1.2,
     })
+
     const buildingsSource = new VectorSource({
       url: "/map.geojson",
       format: new GeoJSON(),
@@ -88,16 +81,6 @@ function MapWrapper() {
     })
 
     // Grey-scale design layer
-    const StamenToner = new TileLayer({
-      source: new XYZ({
-        url: "https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png",
-        attributions:
-          "Map tiles by Stamen Design, under CC BY 3.0. " +
-          "Data by OpenStreetMap, under ODbL.",
-      }),
-      visible: true,
-    })
-
     const designLayer = new TileLayer({
       source: new Stamen({
         layer: "toner-lite",
@@ -165,7 +148,7 @@ function MapWrapper() {
 
   // Handle the placeID received from the database
   //////// change the input to placeID
-  function showInfoById(e) {
+  function showInfoById() {
     overlayRef.current.setPosition(undefined) // Close the current window
     showFeatureInfoById(placeId_BE)
   }
@@ -192,7 +175,8 @@ function MapWrapper() {
 
   // Map click handler
   const handleMapClick = event => {
-    overlayRef.current.setPosition(undefined) // Close the current window
+    // Close the current window
+    overlayRef.current.setPosition(undefined)
     showFeatureInfo(event)
   }
 
@@ -204,25 +188,25 @@ function MapWrapper() {
         <span
           ref={nameElement}
           className='overlayContainerText'
-          id='buildingName'
+          id='building-name'
         ></span>
         <br></br>
         <span
           ref={addressElement}
           className='overlayContainerText'
-          id='buildingAddress'
+          id='building-address'
         ></span>
         <br></br>
         <span
           ref={linkElement}
           className='overlayContainerText'
-          id='buildingDirections'
+          id='building-directions'
         >
           Link to Google maps
         </span>
         <br></br>
       </div>
-      <div id='searchButton'>
+      <div id='search-button'>
         <button onClick={showInfoById}>Search</button>
       </div>
     </div>

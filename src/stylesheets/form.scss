@@ -1,66 +1,66 @@
 :root {
-    --slugYellow: #fdc700;
-    --slugBlue: #003c6c;
+  --slug-yellow: #fdc700;
+  --slug-blue: #003c6c;
 }
 
-#searchBlock{
-    position: absolute;
-    width: 800px;
-    z-index: 2;
-	font-family: 'Roboto', sans-serif;
-	font-weight: 300;
-	font-size: 20px;
-	line-height: 1.7;
-	color: var(--slugYellow);
-	background-color: var(--slugBlue);
-	overflow-x: hidden;
-    padding: 5% 10%;
+#search-block {
+  position: absolute;
+  width: 800px;
+  z-index: 2;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--slug-yellow);
+  background-color: var(--slug-blue);
+  overflow-x: hidden;
+  padding: 5% 10%;
 }
 
-.tab {
-    margin-bottom:1rem !important;
-    // background-color: aqua !important;
-    font-size: 15px !important;
+#tab1,
+#tab2 {
+  margin-bottom: 1rem;
+  font-size: 15px;
 }
 
-.tab.active {
-    background-color: var(--slugYellow) !important;
+#tab1.active,
+#tab2.active {
+  background-color: var(--slug-yellow);
 }
-
 
 .input {
-    width: 100%;
-    padding: 18px 20px;
-    margin: 8px 0;
-    font-size: 16px;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 18px 20px;
+  margin: 8px 0;
+  font-size: 16px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .drop-down {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-	font-size: 20px;
-    margin-left: 10px;
-    padding: 3px;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  margin-left: 10px;
+  padding: 3px;
 }
-  
+
 #submit {
-    width: 100%;
-    background-color: var(--slugYellow);
-    color: var(--slugBlue);
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
-    padding: 16px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+  width: 100%;
+  background-color: var(--slug-yellow);
+  color: var(--slug-blue);
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
-  
+
 #submit:hover {
-    background-color: green;
+  background-color: green;
 }

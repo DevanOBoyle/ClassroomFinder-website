@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import ReactDOM from "react-dom"
-import { useForm, SubmitHandler } from "react-hook-form"
+
 import {
   MDBTabs,
   MDBTabsItem,
@@ -39,7 +38,7 @@ export default function Form() {
   }
 
   return (
-    <div id='searchBlock'>
+    <div id='search-block'>
       <h1>UCSC ClassroomFinder</h1>
       <div id='search_box'>
         <a>Search by: </a>
@@ -49,6 +48,7 @@ export default function Form() {
               onClick={() => setInputType("room")}
               active={basicActive === "room"}
               className='tab'
+              id='tab1'
             >
               Classroom
             </MDBTabsLink>
@@ -58,6 +58,7 @@ export default function Form() {
               onClick={() => setInputType("class")}
               active={basicActive === "class"}
               className='tab'
+              id='tab2'
             >
               Class code
             </MDBTabsLink>
