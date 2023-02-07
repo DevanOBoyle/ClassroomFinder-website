@@ -1,5 +1,5 @@
 import React from "react"
-import "../stylesheets/form.scss"
+import "./index.scss"
 
 export default function Form() {
   const setInputType = value => {

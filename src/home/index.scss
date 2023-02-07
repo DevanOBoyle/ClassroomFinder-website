@@ -1,6 +1,33 @@
-.home_container {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 600;
-  color: rgb(245 12 12);
+@use "../stylesheets/fonts";
+@use "../stylesheets/responsiveness";
+@import "../stylesheets/fonts";
+
+.home__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &--title {
+    margin-top: 1em;
+  }
+
+  &--text {
+    margin-top: 1em;
+  }
+
+  &--search_box {
+    margin-top: 1em;
+  }
+
+  &--names {
+    margin-top: 1em;
+  }
+
+  &--sammy {
+    margin-top: 1em;
+
+    width: 320px;
+    height: 320px;
+  }
 }

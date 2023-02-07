@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
-import "../stylesheets/map.scss"
-import "../../node_modules/ol/ol.css"
+import "./index.scss"
+import "../../../node_modules/ol/ol.css"
 
 // Openlayers imports
 import Map from "ol/Map"
