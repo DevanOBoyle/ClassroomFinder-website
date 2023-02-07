@@ -1,0 +1,97 @@
+:root {
+  --slug-yellow: #fdc700;
+  --slug-blue: #003c6c;
+  --yellow-hover: #ffe682;
+  --blue-button: #2a5575;
+}
+
+#search-block {
+  width: 50%;
+  z-index: 2;
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  line-height: 1.7;
+  color: var(--slug-yellow);
+  background-color: var(--slug-blue);
+  overflow-x: hidden;
+  padding: 4% 10% 8%;
+  margin: 5% auto;
+}
+
+.tab {
+  width: 48%;
+  background-color: var(--blue-button);
+  color: var(--slug-yellow);
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  padding: 15px;
+  border: solid 2px var(--slug-yellow);
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--yellow-hover);
+    color: var(--slug-blue);
+  }
+
+  &:focus {
+    background-color: var(--slug-yellow);
+    color: var(--slug-blue);
+  }
+}
+
+#tab1 {
+  margin: 8px 2% 20px 0;
+}
+
+#tab2 {
+  margin: 8px 0 20px 2%;
+}
+
+.input {
+  margin: auto;
+  margin-top: 20px;
+  width: 100%;
+  padding: 18px 20px;
+  font-size: 16px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.drop-down {
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  margin-left: 10px;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+#submit {
+  width: 100%;
+  background-color: var(--slug-yellow);
+  color: var(--slug-blue);
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  text-align: center;
+  padding: 16px 20px;
+  margin: auto;
+  margin-top: 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: var(--yellow-hover);
+}
+
+#room-div,
+#class-div {
+  display: none;
+}
