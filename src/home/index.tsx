@@ -1,6 +1,5 @@
 import React from "react"
 import "./index.scss"
-import Sammy from "../assets/sammybiking.png"
 import MapWrapper from "../components/map/index"
 
 const Home: React.FC = () => {
