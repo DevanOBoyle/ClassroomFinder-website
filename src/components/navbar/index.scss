@@ -1,0 +1,18 @@
+@use "../../stylesheets/fonts";
+@use "../../stylesheets/responsiveness";
+@import "../../stylesheets/fonts";
+
+.navbar__container {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  top: 0;
+  height: 4em;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 11px #000;
+  background-color: #fdc700;
+}

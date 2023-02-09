@@ -1,6 +1,7 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
 import Home from "./home/index"
+import NavBar from "./components/navbar"
 import Form from "./components/form"
 import MapWrapper from "./components/map"
 import "./App.scss"
@@ -8,6 +9,7 @@ import "./App.scss"
 const App: React.FC = () => {
   return (
     <div className='app'>
+      <NavBar />
       <Routes>
         {/* Paths should be modified */}
         <Route path='/' element={<Home />} />
