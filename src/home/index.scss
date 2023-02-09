@@ -7,27 +7,32 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  //height: 100vh;
 
-  &--title {
-    margin-top: 1em;
+  &--search {
+    margin-top: 4em;
+    width: 100%;
+    height: 5em;
+    background-color: #003c6c;
+    z-index: 1;
   }
 
-  &--text {
-    margin-top: 1em;
+  &--map {
+    width: 100%;
+    height: 400px;
   }
 
-  &--search_box {
-    margin-top: 1em;
+  &--info {
+    width: 100%;
+    height: 85px;
+    background-color: #003c6c;
+    z-index: 1;
   }
 
-  &--names {
-    margin-top: 1em;
-  }
-
-  &--sammy {
-    margin-top: 1em;
-
-    width: 320px;
-    height: 320px;
+  &--footer {
+    width: 100%;
+    height: 8em;
+    background-color: #fdc700;
+    z-index: 1;
   }
 }

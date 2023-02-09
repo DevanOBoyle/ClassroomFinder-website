@@ -1,8 +1,8 @@
 .map {
-  height: 600px;
+  height: 400px;
   width: 100%;
-  position: absolute;
-  z-index: 1;
+  //position: absolute;
+  // z-index: 1;
   top: 0;
   bottom: 0;
   margin: 0;
@@ -16,7 +16,7 @@
   text-align: center;
   font-family: Roboto, sans-serif;
   padding: 10px 5px;
-  position: absolute;
+  //position: absolute;
   border-radius: 5px;
   bottom: 100%;
   left: 50%;
@@ -26,7 +26,7 @@
 
 .overlayContainer #building-address::after {
   content: "";
-  position: absolute;
+  // position: absolute;
   top: 100%;
   left: 50%;
   z-index: 1.2;
@@ -41,7 +41,7 @@
 }
 
 #search-button {
-  position: absolute;
+  // position: absolute;
   z-index: 2;
   height: 50px;
   width: 100px;
