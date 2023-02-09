@@ -1,7 +1,7 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
 import Home from "./home/index"
-import NavBar from "./components/navbar"
+import NavBar from "./components/navbar/index"
 import Form from "./components/form"
 import MapWrapper from "./components/map"
 import "./App.scss"
