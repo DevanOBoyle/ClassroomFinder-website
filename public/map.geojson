@@ -1,6 +1,11 @@
 {"type":"FeatureCollection","features":[
 
-{"type":"Feature","id":"ChIJCXluInVBjoARXmKm8WSQRNk","properties":{"address":"605 Baskin Circle","name":"Jack Baskin Engineering Auditorium"},"geometry":{
+{"type":"Feature","id":"ChIJCXluInVBjoARXmKm8WSQRNk","properties":{"address":"605 Baskin Circle","name":"Jack Baskin Engineering Auditorium","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -13,7 +18,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJUfzq4HRBjoARZyoPLQd-ORM","properties":{"address":"606 Engineering Loop","name":"Jack Baskin Engineering"},"geometry":{
+{"type":"Feature","id":"ChIJUfzq4HRBjoARZyoPLQd-ORM","properties":{"address":"606 Engineering Loop","name":"Jack Baskin Engineering","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -26,7 +36,13 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ2_4c5XRBjoAR7iUn2qxSw14","properties":{"address":"612 Engineering Loop","name":"Jack Baskin Engineering 2"},"geometry":{
+{"type":"Feature","id":"ChIJ2_4c5XRBjoAR7iUn2qxSw14","properties":{"address":"612 Engineering Loop","name":"Jack Baskin Engineering 2","floors":[
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"],
+    ["floor4.png", "Floor 4"],
+    ["floor5.png", "Floor 5"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -39,7 +55,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJjxsi_QpBjoARorQrq5ho8y4","properties":{"address":"712 John R. Lewis College Road","name":"Social Sciences 2"},"geometry":{
+{"type":"Feature","id":"ChIJjxsi_QpBjoARorQrq5ho8y4","properties":{"address":"712 John R. Lewis College Road","name":"Social Sciences 2","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -52,7 +73,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJES0MqgtBjoARwrgoMTg248U","properties":{"address":"704 College Nine Road","name":"Social Sciences 1"},"geometry":{
+{"type":"Feature","id":"ChIJES0MqgtBjoARwrgoMTg248U","properties":{"address":"704 College Nine Road","name":"Social Sciences 1","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -65,7 +91,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJyU0VFaBBjoAR6PC5UGhQ4Oo","properties":{"address":"552 Red Hill Road","name":"Earth & Marine Sciences"},"geometry":{
+{"type":"Feature","id":"ChIJyU0VFaBBjoAR6PC5UGhQ4Oo","properties":{"address":"552 Red Hill Road","name":"Earth & Marine Sciences","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -78,7 +109,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJj8X8459BjoARjkqsXKjjxtE","properties":{"address":"568 Steinhart Way","name":"Thimann Laborabories"},"geometry":{
+{"type":"Feature","id":"ChIJj8X8459BjoARjkqsXKjjxtE","properties":{"address":"568 Steinhart Way","name":"Thimann Laborabories","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -91,7 +127,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJV0Pj-Z9BjoAR7ImknetozVE","properties":{"address":"562 Steinhart Way","name":"Thimann Lecture Hall"},"geometry":{
+{"type":"Feature","id":"ChIJV0Pj-Z9BjoAR7ImknetozVE","properties":{"address":"562 Steinhart Way","name":"Thimann Lecture Hall","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -104,7 +145,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJVXVy_59BjoARLm5yuqp9dDk","properties":{"address":"570 Red Hill Road","name":"Natural Sciences 2 Annex"},"geometry":{
+{"type":"Feature","id":"ChIJVXVy_59BjoARLm5yuqp9dDk","properties":{"address":"570 Red Hill Road","name":"Natural Sciences 2 Annex","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -117,7 +163,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJK_vcBaBBjoAReP0Ep5R6OPY","properties":{"address":"560 Red Hill Road","name":"Natural Sciences 2"},"geometry":{
+{"type":"Feature","id":"ChIJK_vcBaBBjoAReP0Ep5R6OPY","properties":{"address":"560 Red Hill Road","name":"Natural Sciences 2","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -130,7 +181,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJK2ubaZ9BjoARJ2TGgiqsjKA","properties":{"address":"453 Kerr Road","name":"Media Theater"},"geometry":{
+{"type":"Feature","id":"ChIJK2ubaZ9BjoARJ2TGgiqsjKA","properties":{"address":"453 Kerr Road","name":"Media Theater","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -143,7 +199,9 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJoxjba59BjoAR4W-yjpaB94s","properties":{"address":"441 Kerr Road","name":"Theater Arts Center / Main Stage"},"geometry":{
+{"type":"Feature","id":"ChIJoxjba59BjoAR4W-yjpaB94s","properties":{"address":"441 Kerr Road","name":"Theater Arts Center / Main Stage","floors":[
+    ["overview.gif", "Overview"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -156,7 +214,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJEZlpQ59BjoARXSuPWPT3gZs","properties":{"address":"451 Kerr Road","name":"Second Stage"},"geometry":{
+{"type":"Feature","id":"ChIJEZlpQ59BjoARXSuPWPT3gZs","properties":{"address":"451 Kerr Road","name":"Second Stage","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -169,7 +232,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ7zpJbp9BjoARcaSHWm9cRpE","properties":{"address":"455 Kerr Road","name":"eXperimental Theater"},"geometry":{
+{"type":"Feature","id":"ChIJ7zpJbp9BjoARcaSHWm9cRpE","properties":{"address":"455 Kerr Road","name":"eXperimental Theater","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -182,7 +250,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJbwp1D6JBjoARrtq8R11mxwY","properties":{"address":"404 McHenry Road","name":"Gamelan Studio"},"geometry":{
+{"type":"Feature","id":"ChIJbwp1D6JBjoARrtq8R11mxwY","properties":{"address":"404 McHenry Road","name":"Gamelan Studio","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -195,7 +268,9 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJm7GpwhBBjoARlhToZ3mHkf8","properties":{"address":"405 Porter-Kresge Road","name":"Porter College Academic"},"geometry":{
+{"type":"Feature","id":"ChIJm7GpwhBBjoARlhToZ3mHkf8","properties":{"address":"405 Porter-Kresge Road","name":"Porter College Academic","floors":[
+    ["overview.png", "Overview"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -208,7 +283,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJTXu6omhBjoAR294-oMbZcOk","properties":{"address":"355 Rachel Carson Road","name":"Rachel Carson College Academic Building"},"geometry":{
+{"type":"Feature","id":"ChIJTXu6omhBjoAR294-oMbZcOk","properties":{"address":"355 Rachel Carson Road","name":"Rachel Carson College Academic Building","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -221,7 +301,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ87MPNI1BjoARTe5lwE41HGg","properties":{"address":"350 Rachel Carson Road","name":"Visual Arts Research Facility"},"geometry":{
+{"type":"Feature","id":"ChIJ87MPNI1BjoARTe5lwE41HGg","properties":{"address":"350 Rachel Carson Road","name":"Visual Arts Research Facility","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -234,7 +319,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJtcHMOJhBjoARenWkIXKZTlw","properties":{"address":"233 Oakes Road","name":"Oakes College Academic Building"},"geometry":{
+{"type":"Feature","id":"ChIJtcHMOJhBjoARenWkIXKZTlw","properties":{"address":"233 Oakes Road","name":"Oakes College Academic Building","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -247,7 +337,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ_cCjF6JBjoARdyyDuXXjk_U","properties":{"address":"402 McHenry Road","name":"Music Center"},"geometry":{
+{"type":"Feature","id":"ChIJ_cCjF6JBjoARdyyDuXXjk_U","properties":{"address":"402 McHenry Road","name":"Music Center","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -260,7 +355,9 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ3XghLDNBjoARFiMk2Mbq5-E","properties":{"address":"518 Cowell-Stevenson Road","name":"Cowell Classrooms / Academic Building "},"geometry":{
+{"type":"Feature","id":"ChIJ3XghLDNBjoARFiMk2Mbq5-E","properties":{"address":"518 Cowell-Stevenson Road","name":"Cowell Classrooms / Academic Building ","floors":[
+    ["overview.png", "Overview"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -273,7 +370,9 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJb0OQ9qZBjoAR94U1aPFDWfQ","properties":{"address":"521 Cowell-Stevenson Road","name":"Hahn Art Facility"},"geometry":{
+{"type":"Feature","id":"ChIJb0OQ9qZBjoAR94U1aPFDWfQ","properties":{"address":"521 Cowell-Stevenson Road","name":"Hahn Art Facility","floors":[
+    ["overview.png", "Overview"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -286,7 +385,9 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJX8zMcKZBjoARIjaoqFXSrjI","properties":{"address":"530 Cowell-Stevenson Road","name":"Stevenson Academic Building"},"geometry":{
+{"type":"Feature","id":"ChIJX8zMcKZBjoARIjaoqFXSrjI","properties":{"address":"530 Cowell-Stevenson Road","name":"Stevenson Academic Building","floors":[
+    ["overview.png", "Overview"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -299,7 +400,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJlbasy6ZBjoAR8PhXRbSULbM","properties":{"address":"501 Cowell Service Road","name":"Cowell Computer Lab"},"geometry":{
+{"type":"Feature","id":"ChIJlbasy6ZBjoAR8PhXRbSULbM","properties":{"address":"501 Cowell Service Road","name":"Cowell Computer Lab","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -312,7 +418,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ__8_56BBjoARnYLZxB5PFEU","properties":{"address":"520 Steinhart Way","name":"Classroom Unit"},"geometry":{
+{"type":"Feature","id":"ChIJ__8_56BBjoARnYLZxB5PFEU","properties":{"address":"520 Steinhart Way","name":"Classroom Unit","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -325,7 +436,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJFyeQk59BjoAR8hgeoyJ-I9I","properties":{"address":"500 Kerr Road","name":"Kerr Hall"},"geometry":{
+{"type":"Feature","id":"ChIJFyeQk59BjoAR8hgeoyJ-I9I","properties":{"address":"500 Kerr Road","name":"Kerr Hall","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -338,7 +454,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJf8vrSnVBjoAR4wWUP8qeyNg","properties":{"address":"575 McLaughlin Drive","name":"Biomedical Sciences"},"geometry":{
+{"type":"Feature","id":"ChIJf8vrSnVBjoAR4wWUP8qeyNg","properties":{"address":"575 McLaughlin Drive","name":"Biomedical Sciences","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -351,7 +472,13 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJO5ZnR3VBjoARXKjPwXMugvE","properties":{"address":"590 Steinhart Way","name":"Physical Sciences"},"geometry":{
+{"type":"Feature","id":"ChIJO5ZnR3VBjoARXKjPwXMugvE","properties":{"address":"590 Steinhart Way","name":"Physical Sciences","floors":[
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"],
+    ["floor4.png", "Floor 4"],
+    ["floor5.png", "Floor 5"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -364,7 +491,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJi9OaKXVBjoAR69nXF9zif4c","properties":{"address":"620 Baskin Circle","name":"Communications"},"geometry":{
+{"type":"Feature","id":"ChIJi9OaKXVBjoAR69nXF9zif4c","properties":{"address":"620 Baskin Circle","name":"Communications","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -377,7 +509,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ5WaXa6FBjoARz3jyS-_t22A","properties":{"address":"400 Hahn Road","name":"Hahn Student Services"},"geometry":{
+{"type":"Feature","id":"ChIJ5WaXa6FBjoARz3jyS-_t22A","properties":{"address":"400 Hahn Road","name":"Hahn Student Services","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -390,7 +527,13 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJk7eypKFBjoAR87wpNgAjQek","properties":{"address":"414 McHenry Road","name":"McHenry Library"},"geometry":{
+{"type":"Feature","id":"ChIJk7eypKFBjoAR87wpNgAjQek","properties":{"address":"414 McHenry Road","name":"McHenry Library","floors":[
+    ["groundfloor.png", "Ground floor"],
+    ["firstfloor.png", "First Floor"],
+    ["secondfloor.png", "Second Floor"],
+    ["thirdfloor.png", "Third Floor"],
+    ["fourthfloor.jpeg", "Fourth Floor"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -403,7 +546,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJ3Vh_46FBjoARU-Dr3H-ZOFY","properties":{"address":"424 Baskin Arts Service Road","name":"Elena Baskin Visual Arts Center"},"geometry":{
+{"type":"Feature","id":"ChIJ3Vh_46FBjoARU-Dr3H-ZOFY","properties":{"address":"424 Baskin Arts Service Road","name":"Elena Baskin Visual Arts Center","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
@@ -416,7 +564,12 @@
     }]
 }},
 
-{"type":"Feature","id":"ChIJk61FV3VBjoAR60vQw_XE5Os","properties":{"address":"582 Steinhart Way","name":"Sinsheimer Labs"},"geometry":{
+{"type":"Feature","id":"ChIJk61FV3VBjoAR60vQw_XE5Os","properties":{"address":"582 Steinhart Way","name":"Sinsheimer Labs","floors":[
+    ["basement.png", "Basement"],
+    ["floor1.png", "Floor 1"],
+    ["floor2.png", "Floor 2"],
+    ["floor3.png", "Floor 3"]
+]},"geometry":{
     "type": "GeometryCollection",
     "geometries": [
     {
