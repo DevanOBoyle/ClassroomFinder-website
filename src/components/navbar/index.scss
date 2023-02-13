@@ -2,17 +2,32 @@
 @use "../../stylesheets/responsiveness";
 @import "../../stylesheets/fonts";
 
-.navbar__container {
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
+.header {
+  position: fixed; /* Fixed at scrolling */
   top: 0;
-  height: 4em;
   width: 100%;
-  z-index: 1000;
-  box-shadow: 0 4px 11px #000;
   background-color: #fdc700;
+  z-index: 100;
+}
+
+.header-text {
+  float: left;
+  display: block;
+  text-align: left;
+  font-family: $corinthia;
+  color: #001f39;
+  padding: 5px 16px;
+}
+
+@include responsiveness.screen(smallest, phone) {
+  .header {height: 45px;}
+  .header-text {font-size: 30px;}
+}
+@include responsiveness.screen(tablet, large-tablet) {
+  .header {height: 55px;}
+  .header-text {font-size: 40px;}
+}
+@include responsiveness.screen(desktop, big-desktop) {
+  .header {height: 65px;}
+  .header-text {font-size: 50px;}
 }

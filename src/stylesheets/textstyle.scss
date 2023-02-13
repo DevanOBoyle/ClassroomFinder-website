@@ -1,0 +1,94 @@
+@use "./responsiveness";
+
+@include responsiveness.screen(smallest, phone) {
+    h1 {
+        font-size: 28px;
+        font-weight: 400;
+    }
+    h2 {
+        font-size: 25px;
+        font-weight: 400;
+    }
+    h3 {
+        font-size: 22px;
+        font-weight: 400;
+    }
+    h4 {
+        font-size: 19px;
+        font-weight: 400;
+    }
+    h5,
+    input,
+    select {
+        font-size: 14px;
+        font-weight: 400;
+    }
+    h6 {
+        font-size: 12px;
+        font-weight: 400;
+    }
+    p {font-size: 10px;}
+    a {font-size: 10px;}
+}
+
+  @include responsiveness.screen(tablet, large-tablet) {
+    h1 {
+        font-size: 28px;
+        font-weight: 400;
+    }
+    h2 {
+        font-size: 25px;
+        font-weight: 400;
+    }
+    h3 {
+        font-size: 22px;
+        font-weight: 400;
+    }
+    h4 {
+        font-size: 19px;
+        font-weight: 400;
+    }
+    h5,
+    input,
+    select {
+        font-size: 18px;
+        font-weight: 400;
+    }
+    h6 {
+        font-size: 15px;
+        font-weight: 400;
+    }
+    p {font-size: 11px;}
+    a {font-size: 11px;}
+}
+
+  @include responsiveness.screen(desktop, big-desktop) {
+    h1 {
+        font-size: 36px;
+        font-weight: 400;
+    }
+    h2 {
+        font-size: 32px;
+        font-weight: 400;
+    }
+    h3 {
+        font-size: 28px;
+        font-weight: 400;
+    }
+    h4 {
+        font-size: 24px;
+        font-weight: 400;
+    }
+    h5,
+    input,
+    select {
+        font-size: 21px;
+        font-weight: 400;
+    }
+    h6 {
+        font-size: 18px;
+        font-weight: 400;
+    }
+    p {font-size: 12px;}
+    a {font-size: 12px;}
+  }

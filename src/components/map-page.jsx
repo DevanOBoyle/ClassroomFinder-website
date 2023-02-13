@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import "../stylesheets/textstyle.scss"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
 
@@ -115,19 +116,24 @@ export default function MapPage() {
   }, [])
 
   function toggleClick() {
-    document.getElementById("room-form").style.display = toggleRight
+    document.getElementById("roomForm").style.display = toggleRight
       ? "contents"
       : "none"
-    document.getElementById("class-form").style.display = toggleRight
+    document.getElementById("classForm").style.display = toggleRight
       ? "none"
       : "contents"
-    document.getElementById("search-toggle-text-room").style.color = toggleRight
+    document.getElementById("searchToggleTextRoom").style.color = toggleRight
       ? "rgb(253 199 0 / 100%)"
       : "black"
-    document.getElementById("search-toggle-text-class").style.color =
-      toggleRight ? "black" : "rgb(253 199 0 / 100%)"
-    document.getElementById("slide").style.left = toggleRight ? "6px" : "auto"
-    document.getElementById("slide").style.right = toggleRight ? "auto" : "6px"
+    document.getElementById("searchToggleTextClass").style.color = toggleRight
+      ? "black"
+      : "rgb(253 199 0 / 100%)"
+    document.getElementById("searchToggleSlide").style.left = toggleRight
+      ? "6px"
+      : "auto"
+    document.getElementById("searchToggleSlide").style.right = toggleRight
+      ? "auto"
+      : "6px"
     toggleRight = !toggleRight
   }
 
@@ -135,39 +141,39 @@ export default function MapPage() {
     // Change the size of the search window and show/hide content
     if (search) {
       // Hide content
-      document.getElementById("search-block").style.display = "none"
-      document.getElementById("search-text").style.display = "block"
-      document.getElementById("search-arrow").style.transform = "rotate(45deg)"
-      document.getElementById("search-arrow").style.bottom = "20px"
+      document.getElementById("searchDiv").style.display = "none"
+      document.getElementById("searchText").style.display = "block"
+      document.getElementById("searchArrow").style.transform = "rotate(180deg)"
+      document.getElementById("searchArrow").style.bottom = "10px"
     } else {
       // Show content
-      document.getElementById("search-block").style.display = "contents"
-      document.getElementById("search-text").style.display = "none"
-      document.getElementById("search-arrow").style.transform =
-        "rotate(-135deg)"
-      document.getElementById("search-arrow").style.bottom = "0"
+      document.getElementById("searchDiv").style.display = "flex"
+      document.getElementById("searchText").style.display = "none"
+      document.getElementById("searchArrow").style.transform = "rotate(0)"
+      document.getElementById("searchArrow").style.bottom = "10px"
     }
     search = !search
   }
 
   function openInfoWindow() {
-    document.getElementById("info-block").style.display = buildingMarked
+    document.getElementById("infoDiv").style.display = buildingMarked
       ? "block"
       : "none"
-    document.getElementById("info-nobuilding").style.display = buildingMarked
+    document.getElementById("infoNobuildingText").style.display = buildingMarked
       ? "none"
       : "block"
-    document.getElementById("info-text").style.display = "none"
-    document.getElementById("info-arrow").style.transform = "rotate(45deg)"
-    document.getElementById("info-arrow").style.top = "0"
+    document.getElementById("infoText").style.display = "none"
+    document.getElementById("infoArrow").style.transform = "rotate(180deg)"
+    document.getElementById("infoArrow").style.top = "10px"
     info = true
   }
+
   function closeInfoWindow() {
-    document.getElementById("info-block").style.display = "none"
-    document.getElementById("info-nobuilding").style.display = "none"
-    document.getElementById("info-text").style.display = "block"
-    document.getElementById("info-arrow").style.transform = "rotate(-135deg)"
-    document.getElementById("info-arrow").style.top = "20px"
+    document.getElementById("infoDiv").style.display = "none"
+    document.getElementById("infoNobuildingText").style.display = "none"
+    document.getElementById("infoText").style.display = "block"
+    document.getElementById("infoArrow").style.transform = "rotate(0)"
+    document.getElementById("infoArrow").style.top = "10px"
     info = false
   }
 
@@ -217,11 +223,12 @@ export default function MapPage() {
           i++
         }
       }
-      document.getElementById("floor").innerHTML = selectCode
+      document.getElementById("floorDropdownSelect").innerHTML = selectCode
       // Show the right floor plan image
       floorMapFolder = floorMapBaseFolder + building.getId() + "/"
-      floorMapHref = floorMapFolder + document.getElementById("floor").value
-      document.getElementById("floormap").src = floorMapHref
+      floorMapHref =
+        floorMapFolder + document.getElementById("floorDropdownSelect").value
+      document.getElementById("floorMap").src = floorMapHref
       // Make sure the info window is open
       openInfoWindow()
     })
@@ -233,78 +240,83 @@ export default function MapPage() {
   }
 
   function selectFloorMap() {
-    // console.log(document.getElementById("floor").value)
-    floorMapHref = floorMapFolder + document.getElementById("floor").value
-    document.getElementById("floormap").src = floorMapHref
+    // console.log(document.getElementById("floorDropdownSelect").value)
+    floorMapHref =
+      floorMapFolder + document.getElementById("floorDropdownSelect").value
+    document.getElementById("floorMap").src = floorMapHref
   }
 
   return (
-    <div className='main'>
-      <div className='search'>
-        <div id='search-block'>
-          <div className='search-toggle' onClick={toggleClick}>
-            <div className='search-toggle-field'></div>
-            <div className='search-toggle-slide' id='slide'></div>
-            <span id='search-toggle-text-room'>Room</span>
-            <span id='search-toggle-text-class'>Class code</span>
+    <div id='main'>
+      <div id='searchWindow'>
+        <div id='searchDiv'>
+          <div id='searchToggle' onClick={toggleClick}>
+            <div id='searchToggleField'></div>
+            <div id='searchToggleSlide'></div>
+            <h4 id='searchToggleTextRoom'>Room</h4>
+            <h4 id='searchToggleTextClass'>Class code</h4>
           </div>
-          <div className='input-div'>
-            <div id='room-form'>
-              <div className='search-bar'>
+          <div id='inputDiv'>
+            <div id='roomForm'>
+              <div className='searchBar'>
                 <input
-                  id='class-room'
+                  type='text'
+                  id='classroomInput'
                   className='input'
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   required
                 />
-                <div className='search-bar-field'></div>
-                <div className='search-bar-circle'>
-                  <input type='submit' id='submit-room' value=''></input>
-                  <div className='search-bar-circle-blue'></div>
+                <div className='searchBarField'></div>
+                <div className='searchBarButton'>
+                  <input type='submit' id='roomSubmitButton' value=''></input>
+                  <img id='roomArrow' src='/arrowcircle.png'></img>
                 </div>
-                <div className='search-bar-arrow right'></div>
               </div>
             </div>
-            <div id='class-form'>
-              <div className='search-dropdown'>
-                <select
-                  id='quarter'
-                  className='search-dropdown-select'
-                  defaultValue={"w23"}
-                >
+            <div id='classForm'>
+              <div id='quarterDropdown'>
+                <select id='quarterDropdownSelect' defaultValue={"w23"}>
                   <option value='f22'>Fall 22</option>
                   <option value='w23'>Winter 23</option>
                   <option value='s23'>Spring 23</option>
                 </select>
-                <div className='search-dropdown-field'></div>
-                <div className='dropdown-circle'></div>
-                <div className='dropdown-arrow down'></div>
+                <div id='quarterDropdownField'></div>
+                <img
+                  id='quarterArrowCircle'
+                  src='/arrowcircle.png'
+                  className='arrowCircle'
+                ></img>
               </div>
-              <div className='search-bar'>
+              <div className='searchBar'>
                 <input
-                  id='class-code'
+                  type='text'
+                  id='classcodeInput'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
-                <div className='search-bar-field'></div>
-                <div className='search-bar-circle'>
-                  <input type='submit' id='submit-code' value=''></input>
-                  <div className='search-bar-circle-blue'></div>
+                <div className='searchBarField'></div>
+                <div className='searchBarButton'>
+                  <input
+                    type='submit'
+                    id='classcodeSubmitButton'
+                    value=''
+                  ></input>
+                  <img id='classcodeArrow' src='/arrowcircle.png'></img>
                 </div>
-                <div className='search-bar-arrow right'></div>
               </div>
             </div>
           </div>
         </div>
-        <span id='search-text'>Search</span>
-        <div
-          id='search-arrow'
-          className='arrow up'
+        <h4 id='searchText'>Search</h4>
+        <img
+          id='searchArrow'
+          className='arrow'
+          src='/arrow.png'
           onClick={searchButtonClick}
-        ></div>
+        ></img>
       </div>
       <div ref={mapElement} id='map' className='map'></div>
       <img
@@ -315,54 +327,53 @@ export default function MapPage() {
           "/256/Map-Marker-Ball-Pink-icon.png"
         }
       ></img>
-      <div className='info'>
-        <span id='info-text'>Info</span>
-        <div
-          id='info-arrow'
-          className='arrow up'
+      <div id='infoWindow'>
+        <h4 id='infoText'>Info</h4>
+        <img
+          id='infoArrow'
+          className='arrow'
+          src='/arrow.png'
           onClick={infoButtonClick}
-        ></div>
-        <p id='info-nobuilding'>
+        ></img>
+        <h6 id='infoNobuildingText'>
           Click on a building or search for a classroom to show floor plans and
           get directions
-        </p>
-        <div id='info-block'>
-          <div
-            ref={textElement}
-            className='info-block-text'
-            id='info-block-text'
-          >
-            <h3
+        </h6>
+        <div id='infoDiv'>
+          <div ref={textElement} className='infoDivText' id='infoDivText'>
+            <h5
               ref={nameElement}
-              className='info-block-text'
+              className='infoDivText'
               id='building-name'
-            ></h3>
+            ></h5>
             <br></br>
-            <p
+            <h6
               ref={addressElement}
-              className='info-block-text'
+              className='infoDivText'
               id='building-address'
-            ></p>
+            ></h6>
             <br></br>
             <span
               ref={linkElement}
-              className='info-block-text'
+              className='infoDivText'
               id='building-directions'
             ></span>
             <br></br>
-            <div className='floor-dropdown' id='floor-dropdown'>
+            <div className='floorDropdown' id='floorDropdown'>
               <select
-                id='floor'
-                className='floor-dropdown-select'
+                id='floorDropdownSelect'
                 onInput={selectFloorMap}
               ></select>
-              <div className='floor-dropdown-field'></div>
-              <div className='dropdown-circle'></div>
-              <div className='dropdown-arrow down'></div>
+              <div id='floorDropdownField'></div>
+              <img
+                id='floorArrowCircle'
+                src='/arrowcircle.png'
+                className='arrowCircle'
+              ></img>
             </div>
           </div>
-          <div className='info-line'></div>
-          <img className='info-floormap' id='floormap'></img>
+          <div id='infoLine'></div>
+          <img id='floorMap'></img>
         </div>
       </div>
     </div>
