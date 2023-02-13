@@ -1,28 +1,11 @@
 import { statement } from "@babel/template"
 import React, { useState, useEffect } from "react"
 import getBuilding, { Building } from "../../utils/api"
+import SearchIcon from "@mui/icons-material/Search"
+import CloseIcon from "@mui/icons-material/Close"
+import "./index.scss"
 
 const SearchBar = () => {
-  /*
-  const [buildings, setBuildings] = useState<Array<Building>>([])
-  const [render, setRender] = useState<boolean>(false)
-  
-  
-  useEffect(() => {
-    getBuilding(setBuildings).then(() => setRender(true))
-  }, [])
-
-  if (render) {
-    console.log(buildings)
-  }
-  
-  return (
-    <div className='search__container'>
-      <input type='text' placeholder='Search...'></input>
-    </div>
-  )
-  */
-
   const [buildings, setBuildings] = useState<Array<Building>>([])
   const [render, setRender] = useState<boolean>(false)
 
@@ -36,16 +19,6 @@ const SearchBar = () => {
   if (render) {
     console.log(buildings)
   }
-
-  /*
-  return (
-    <div className='search__container'>
-      <div className='searchInputs'>
-        <input type='text' placeholder='Search...'></input>
-      </div>
-    </div>
-  )
-*/
 
   const handleFilter = (event: { target: { value: any } }) => {
     const searchWord = event.target.value
@@ -62,28 +35,37 @@ const SearchBar = () => {
       setFilteredData(newFilter)
     }
   }
+  /*
   const clearInput = () => {
     setFilteredData([])
     setWordEntered("")
   }
-
+  */
   return (
-    <div className='search'>
+    <div className='search__container'>
       <div className='searchInputs'>
         <input
+          className='bar'
           type='text'
           placeholder='Search...'
           value={wordEntered}
           onChange={handleFilter}
         />
-        <div className='searchIcon'></div>
+
+        <div className='searchIcon'>
+          {/*filteredData.length === 0 ? (
+            <SearchIcon />
+          ) : (
+            <CloseIcon id='clearBtn' onClick={clearInput} />
+          )*/}
+        </div>
       </div>
 
       {filteredData.length != 0 && (
         <div className='dataResult'>
-          {filteredData.slice(0, 15).map(value => {
+          {filteredData.slice(0, 15).map((value, key) => {
             return (
-              <a className='dataItem' target='_blank'>
+              <a key={key} className='dataItem' target='_blank'>
                 {" "}
                 <p>{value.name}</p>{" "}
               </a>
