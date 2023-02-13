@@ -3,15 +3,15 @@
 @include responsiveness.screen(smallest, phone) {
     h1 {
         font-size: 28px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h2 {
         font-size: 25px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h3 {
         font-size: 22px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h4 {
         font-size: 19px;
@@ -33,47 +33,47 @@
 
   @include responsiveness.screen(tablet, large-tablet) {
     h1 {
-        font-size: 28px;
-        font-weight: 400;
+        font-size: 31px;
+        font-weight: 500;
     }
     h2 {
-        font-size: 25px;
-        font-weight: 400;
+        font-size: 28px;
+        font-weight: 500;
     }
     h3 {
-        font-size: 22px;
-        font-weight: 400;
+        font-size: 25px;
+        font-weight: 500;
     }
     h4 {
-        font-size: 19px;
+        font-size: 22px;
         font-weight: 400;
     }
     h5,
     input,
     select {
-        font-size: 18px;
+        font-size: 19px;
         font-weight: 400;
     }
-    h6 {
-        font-size: 15px;
+    h6,
+    a {
+        font-size: 16px;
         font-weight: 400;
     }
-    p {font-size: 11px;}
-    a {font-size: 11px;}
+    p {font-size: 12px;}
 }
 
   @include responsiveness.screen(desktop, big-desktop) {
     h1 {
         font-size: 36px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h2 {
         font-size: 32px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h3 {
         font-size: 28px;
-        font-weight: 400;
+        font-weight: 500;
     }
     h4 {
         font-size: 24px;

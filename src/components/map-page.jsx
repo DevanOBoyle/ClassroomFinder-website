@@ -25,6 +25,7 @@ var buildingMarked = false
 const floorMapBaseFolder = "/floormaps/"
 var floorMapFolder
 var floorMapHref
+const googleMapsLinkBase = "https://www.google.com/maps/place/?q=place_id:"
 
 export default function MapPage() {
   const [map, setMap] = useState()
@@ -34,10 +35,8 @@ export default function MapPage() {
   // References to the divs
   const mapElement = useRef()
   const mapPin = useRef()
-  const textElement = useRef()
   const nameElement = useRef()
   const addressElement = useRef()
-  const linkElement = useRef()
 
   const mapRef = useRef()
   mapRef.current = map
@@ -129,11 +128,11 @@ export default function MapPage() {
       ? "black"
       : "rgb(253 199 0 / 100%)"
     document.getElementById("searchToggleSlide").style.left = toggleRight
-      ? "6px"
+      ? "1.5%"
       : "auto"
     document.getElementById("searchToggleSlide").style.right = toggleRight
       ? "auto"
-      : "6px"
+      : "1.5%"
     toggleRight = !toggleRight
   }
 
@@ -193,15 +192,8 @@ export default function MapPage() {
       // nameElement.current.innerHTML = building.getId()
       nameElement.current.innerHTML = building.get("name")
       addressElement.current.innerHTML = building.get("address")
-      let dirUrl =
-        "https://www.google.com/maps/place/?q=place_id:" + building.getId()
-      let linkText = "Get directions on Google Maps"
-      linkElement.current.innerHTML =
-        '<a href="' +
-        dirUrl +
-        '" target="_blank" rel="noopener noreferrer">' +
-        linkText +
-        "</a>"
+      document.getElementById("buildingDirections").href =
+        googleMapsLinkBase + building.getId()
       // Change the options of the drop-down menu
       var selectCode = ""
       const floorFileNames = building.get("floors")
@@ -246,6 +238,15 @@ export default function MapPage() {
     document.getElementById("floorMap").src = floorMapHref
   }
 
+  function showFullScreen() {
+    let image = document.getElementById("floorMap")
+    if (!document.fullscreenElement) {
+      image?.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  }
+
   return (
     <div id='main'>
       <div id='searchWindow'>
@@ -254,7 +255,9 @@ export default function MapPage() {
             <div id='searchToggleField'></div>
             <div id='searchToggleSlide'></div>
             <h4 id='searchToggleTextRoom'>Room</h4>
-            <h4 id='searchToggleTextClass'>Class code</h4>
+            <div id='searchToggleTextClass'>
+              <h4>Class code</h4>
+            </div>
           </div>
           <div id='inputDiv'>
             <div id='roomForm'>
@@ -340,24 +343,26 @@ export default function MapPage() {
           get directions
         </h6>
         <div id='infoDiv'>
-          <div ref={textElement} className='infoDivText' id='infoDivText'>
-            <h5
+          <div className='infoDivText' id='infoDivText'>
+            <h4
               ref={nameElement}
               className='infoDivText'
-              id='building-name'
-            ></h5>
-            <br></br>
+              id='buildingName'
+            ></h4>
             <h6
               ref={addressElement}
               className='infoDivText'
-              id='building-address'
+              id='building-Address'
             ></h6>
-            <br></br>
-            <span
-              ref={linkElement}
+            <a
+              href=''
+              target='_blank'
+              rel='noopener noreferrer'
               className='infoDivText'
-              id='building-directions'
-            ></span>
+              id='buildingDirections'
+            >
+              Get directions on Google Maps
+            </a>
             <br></br>
             <div className='floorDropdown' id='floorDropdown'>
               <select
@@ -373,7 +378,7 @@ export default function MapPage() {
             </div>
           </div>
           <div id='infoLine'></div>
-          <img id='floorMap'></img>
+          <img id='floorMap' onClick={showFullScreen}></img>
         </div>
       </div>
     </div>
