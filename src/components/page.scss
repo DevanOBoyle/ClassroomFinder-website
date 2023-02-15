@@ -18,37 +18,79 @@
   display: flex;
   font-family: $roboto;
 }
-@include responsiveness.screen(smallest, phone) {
-  #main {min-height: 150vh;}
-}
-@include responsiveness.screen(tablet, large-tablet) {
-  #main {height: 150vh;}
-}
-@include responsiveness.screen(desktop, big-desktop) {
-  #main {height: 150vh;}
+
+#map {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 65px;
+  bottom: 180px;
 }
 
-#searchWindow {
+#pin { width: 50px; }
+
+@include responsiveness.screen(smallest, phone) {
+  #main { min-height: 105vh; }
+
+  #map {
+    top: 45px;
+    bottom: 120px;
+  }
+}
+
+@include responsiveness.screen(tablet, large-tablet) {
+  #main { min-height: 105vh; }
+
+  #map {
+    top: 55px;
+    bottom: 160px;
+  }
+}
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #main { min-height: 115vh; }
+
+  #map {
+    top: 65px;
+    bottom: 180px;
+  }
+}
+
+// Search window
+
+#search-window {
   width: 100%;
-  // min-height: 150px;
-  // padding: 65px 0;
   background: rgb(0 60 108 / 100%);
   box-shadow: 0 4px 45px rgb(0 0 0 / 70%);
   z-index: 80;
   position: absolute;
   top: 0;
-}
-@include responsiveness.screen(smallest, phone) {
-  #searchWindow {padding: 45px 0;}
-}
-@include responsiveness.screen(tablet, large-tablet) {
-  #searchWindow {padding: 55px 0;}
-}
-@include responsiveness.screen(desktop, big-desktop) {
-  #searchWindow {padding: 65px 0;}
+  min-height: 90px;
+  overflow-y: auto;
 }
 
-#searchDiv {
+@include responsiveness.screen(smallest, phone) {
+  #search-window {
+    padding: 45px 0 30px;
+    max-height: calc(105vh - 120px);
+  }
+}
+
+@include responsiveness.screen(tablet, large-tablet) {
+  #search-window {
+    padding: 55px 0;
+    max-height: calc(105vh - 160px);
+  }
+}
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #search-window {
+    padding: 65px 0;
+    max-height: calc(115vh - 180px);
+  }
+}
+
+#search-div {
   width: 100%;
   height: 100%;
   padding: 0;
@@ -60,46 +102,53 @@
 
 // Toggle
 
-#searchToggle {
+#search-toggle {
   padding: 0;
-  margin: 75px 0 5px; // 
   text-align: center;
   position: relative;
   cursor: pointer;
 }
 
 @include responsiveness.screen(smallest, phone) {
-  #searchToggle {
+  #search-toggle {
     width: 70%;
     height: 38px;
+    margin: 42px 0 5px;
   }
-  #searchToggleTextRoom,
-  #searchToggleTextClass {
+
+  #search-toggle-text-room,
+  #search-toggle-text-class {
     line-height: 38px;
   }
 }
+
 @include responsiveness.screen(tablet, large-tablet) {
-  #searchToggle {
+  #search-toggle {
     width: 55%;
     height: 54px;
+    margin: 65px 0 5px;
   }
-  #searchToggleTextRoom,
-  #searchToggleTextClass {
+
+  #search-toggle-text-room,
+  #search-toggle-text-class {
     line-height: 54px;
   }
 }
-@include responsiveness.screen(desktop, big-desktop) {
-  #searchToggle {
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #search-toggle {
     width: 40%;
     height: 70px;
+    margin: 75px 0 5px;
   }
-  #searchToggleTextRoom,
-  #searchToggleTextClass {
+
+  #search-toggle-text-room,
+  #search-toggle-text-class {
     line-height: 70px;
   }
 }
 
-#searchToggleField {
+#search-toggle-field {
   width: 100%;
   height: 100%;
   background: rgb(255 255 255 / 100%);
@@ -112,7 +161,7 @@
   border-radius: 68px;
 }
 
-#searchToggleSlide {
+#search-toggle-slide {
   width: 51%;
   height: 80%;
   background: rgb(0 31 57 / 100%);
@@ -121,13 +170,12 @@
   left: 1.5%;
   margin: 0;
   padding: 0;
-  border-radius: 55px; //
+  border-radius: 55px;
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
-
 }
 
-#searchToggleTextRoom,
-#searchToggleTextClass {
+#search-toggle-text-room,
+#search-toggle-text-class {
   width: 53%;
   height: 100%;
   position: absolute;
@@ -137,73 +185,68 @@
   top: 0;
 }
 
-#searchToggleTextRoom {
+#search-toggle-text-room {
   left: 0;
   color: rgb(253 199 0 / 100%);
 }
 
-#searchToggleTextClass {
+#search-toggle-text-class {
   right: 0;
   color: black;
 }
 
 // Forms and input
 
-.searchBar,
-#quarterDropdown,
-#floorDropdown {
+#class-form {
+  display: none;
+}
+
+.search-bar,
+#quarter-dropdown,
+#floor-dropdown {
   position: relative;
 }
 
 @include responsiveness.screen(smallest, phone) {
-  .searchBar,
-  #quarterDropdown {
+  .search-bar,
+  #quarter-dropdown {
     width: 70vw;
     height: 40px;
-    margin: 36px 0;
+    margin: 30px 0;
   }
 }
+
 @include responsiveness.screen(tablet, large-tablet) {
-  .searchBar,
-  #quarterDropdown {
+  .search-bar,
+  #quarter-dropdown {
     width: 55vw;
     height: 54px;
-    margin: 43px 0;
+    margin: 42px 0;
   }
 }
-@include responsiveness.screen(desktop, big-desktop) {
-  .searchBar,
-  #quarterDropdown {
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  .search-bar,
+  #quarter-dropdown {
     width: 40vw;
     height: 68px;
     margin: 50px 0;
   }
 }
 
-.searchBarField,
-#quarterDropdownField {
+.search-bar-field,
+#quarter-dropdown-field {
   width: 100%;
   height: 100%;
   background: white;
   box-shadow: inset 0 4px 4px rgb(0 0 0 / 25%);
   position: absolute;
   margin: 0;
-  border-radius: 68px; //
+  border-radius: 68px;
 }
-/*
-.searchBarGraytext {
-  width: 100%;
-  position: absolute;
-  top: 15px; //
-  left: 35px; //
-  margin: 0;
 
-  color: rgb(159 159 159 / 100%);
-  text-align: left;
-} */
-
-#quarterDropdownSelect,
-#floorDropdownSelect {
+#quarter-dropdown-select,
+#floor-dropdown-select {
   background: none;
   border: none;
   position: absolute;
@@ -212,13 +255,12 @@
   height: 100%;
   z-index: 500;
   appearance: none;
-  border-radius: 50px; //
-  padding-left: 35px;
+  border-radius: 50px;
   color: black;
 }
 
-#classroomInput,
-#classcodeInput {
+#classroom-input,
+#classcode-input {
   width: 100%;
   height: 100%;
   background-color: transparent;
@@ -226,7 +268,6 @@
   border-radius: 50px;
   position: absolute;
   z-index: 150;
-  padding: 0 80px 0 35px;
   color: black;
   text-align: left;
 }
@@ -242,28 +283,60 @@ input[type="submit"] {
   border-radius: 50%;
 }
 
-//
+// Drop-down menus
 
 @include responsiveness.screen(smallest, phone) {
-  #floorDropdown {
+  #floor-dropdown {
     height: 40px;
     margin: 16px 0;
   }
-}
-@include responsiveness.screen(tablet, large-tablet) {
-  #floorDropdown {
-    height: 54px;
-    margin: 28px 0;
+
+  #quarter-dropdown-select,
+  #floor-dropdown-select {
+    padding-left: 20px;
   }
-}
-@include responsiveness.screen(desktop, big-desktop) {
-  #floorDropdown {
-    height: 68px;
-    margin: 50px 0;
+
+  #classroom-input,
+  #classcode-input {
+    padding: 0 38px 0 15px;
   }
 }
 
-#floorDropdownField {
+@include responsiveness.screen(tablet, large-tablet) {
+  #floor-dropdown {
+    height: 54px;
+    margin: 28px 0;
+  }
+
+  #quarter-dropdown-select,
+  #floor-dropdown-select {
+    padding-left: 30px;
+  }
+
+  #classroom-input,
+  #classcode-input {
+    padding: 0 60px 0 30px;
+  }
+}
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #floor-dropdown {
+    height: 68px;
+    margin: 50px 0;
+  }
+
+  #quarter-dropdown-select,
+  #floor-dropdown-select {
+    padding-left: 35px;
+  }
+
+  #classroom-input,
+  #classcode-input {
+    padding: 0 80px 0 35px;
+  }
+}
+
+#floor-dropdown-field {
   width: 100%;
   height: 100%;
   background: linear-gradient(rgb(255 255 255 / 100%), rgb(246 246 246 / 100%));
@@ -275,10 +348,10 @@ input[type="submit"] {
   border-radius: 68px;
 }
 
-// 
+// Arrows and buttons
 
-.arrowCircle,
-.searchBarButton {
+.arrow-circle,
+.search-bar-button {
   height: 80%;
   position: absolute;
   top: 10%;
@@ -289,20 +362,20 @@ input[type="submit"] {
   z-index: 300;
 }
 
-#quarterArrowCircle,
-#floorArrowCircle {
+#quarter-arrow-circle,
+#floor-arrow-circle {
   transform: rotate(90deg);
 }
 
-#roomSubmitButton,
-#classcodeSubmitButton {
+#room-submit-button,
+#classcode-submit-button {
   width: 100%;
   height: 100%;
   position: absolute;
 }
 
-#roomArrow,
-#classcodeArrow {
+#room-arrow,
+#classcode-arrow {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -310,150 +383,178 @@ input[type="submit"] {
   top: 0;
 }
 
-// Arrow and info text to show and hide the search and info blocks
 .arrow {
   margin: 0;
   z-index: 150;
   position: absolute;
 }
+
 @include responsiveness.screen(smallest, phone) {
   .arrow {
     width: 40px;
     right: 20px;
   }
 }
+
 @include responsiveness.screen(tablet, large-tablet) {
   .arrow {
     width: 60px;
     right: 25px;
   }
 }
-@include responsiveness.screen(desktop, big-desktop) {
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
   .arrow {
     width: 70px;
     right: 30px;
   }
 }
 
-#searchArrow,
-#searchText { bottom: 10px;}
+#search-arrow,
+#search-text { bottom: 10px; }
 
-#infoArrow,
-#infoText {top: 10px;}
+#info-arrow,
+#info-text { top: 10px; }
 
-#searchText,
-#infoText {
+#search-text,
+#info-text {
   color: rgb(253 199 0 / 100%);
   position: absolute;
   text-align: right;
 }
 
-#searchText {display: none;}
+#search-text { display: none; }
 
 @include responsiveness.screen(smallest, phone) {
-  #searchText,
-  #infoText {
+  #search-text,
+  #info-text {
     width: 160px;
     right: 70px;
   }
 }
+
 @include responsiveness.screen(tablet, large-tablet) {
-  #searchText,
-  #infoText {
+  #search-text,
+  #info-text {
     width: 185px;
     right: 90px;
   }
 }
-@include responsiveness.screen(desktop, big-desktop) {
-  #searchText,
-  #infoText {
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #search-text,
+  #info-text {
     width: 220px;
     right: 120px;
   }
 }
 
-#classForm {
-  display: none;
-}
+// Info window
 
-#map {
+#info-window {
   width: 100%;
-  position: absolute;
-  z-index: 1;
-  top: 65px;
-  bottom: 180px;
-}
-
-#pin {
-  width: 50px;
-}
-
-#infoWindow {
-  width: 100%;
-  min-height: 245px;
   background: rgb(0 60 108 / 100%);
   position: absolute;
   bottom: 0;
-  padding-bottom: 180px;
   box-shadow: 0 -3px 35px rgb(0 0 0 / 50%);
   z-index: 75;
 }
 
-#infoNobuildingText {
+@include responsiveness.screen(smallest, phone) {
+  #info-window {
+    padding-bottom: 120px;
+    min-height: 170px;
+  }
+
+  #info-div {
+    margin: 40px auto 14px;
+    max-height: calc(105vh - 45px - 45px - 120px - 90px);
+  }
+  #info-nobuilding-text { width: 84%; }
+}
+
+@include responsiveness.screen(tablet, large-tablet) {
+  #info-window {
+    padding-bottom: 160px;
+    min-height: 220px;
+  }
+
+  #info-div {
+    margin: 50px auto 30px;
+    max-height: calc(105vh - 55px - 55px - 160px - 110px);
+  }
+}
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  #info-window {
+    padding-bottom: 180px;
+    min-height: 245px;
+  }
+
+  #info-div {
+    margin: 60px auto 40px;
+    max-height: calc(115vh - 65px - 65px - 180px - 100px - 30px);
+  }
+}
+
+#info-nobuilding-text {
   // margin: 60px auto 30px;
   padding: 20px;
   color: rgb(253 199 0 / 100%);
   display: none;
 }
 
-#infoDiv {
-  margin: 60px auto 30px;
+#info-div {
   padding: 20px;
   background-color: white;
-  width: 95%;
+  width: 93%;
   min-height: 150px;
   text-align: center;
   display: none;
+  overflow-y: auto;
 }
 
-#infoDiv::after {
+#info-div::after {
   content: "";
   clear: both;
   display: table;
 }
 
-#infoDivText {
+#info-div-text {
   float: left;
   padding: 20px;
   line-height: 1.5;
 }
 
-#floorMap {
+#floor-map {
   background-color: white;
 }
 
 @include responsiveness.screen(smallest, phone,tablet) {
-  #infoDivText {
+  #info-div-text {
     width: 100%;
     padding: 0 20px;
     line-height: 1.5;
   }
-  #infoLine {
+
+  #info-line {
     display: none;
   }
-  #floorMap {
+
+  #floor-map {
     width: 90%;
-    max-height: 75vh;
-    padding: 0 20px;
+    padding: 10px 20px;
   }
 }
-@include responsiveness.screen(large-tablet, desktop, big-desktop) {
-  #infoDivText {
+
+@include responsiveness.screen(large-tablet, small-laptop, desktop, big-desktop) {
+  #info-div-text {
     width: 35%;
     padding: 20px;
     line-height: 2;
   }
-  #infoLine {
+
+  #info-line {
     width: 3px;
     position: absolute;
     top: 92px;
@@ -461,9 +562,9 @@ input[type="submit"] {
     background-color: rgb(0 60 108 / 100%);
     left: 40%;
   }
-  #floorMap {
+
+  #floor-map {
     width: 55%;
     float: right;
-    max-height: 75vh;
   }
 }

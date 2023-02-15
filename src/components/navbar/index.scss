@@ -19,15 +19,38 @@
   padding: 5px 16px;
 }
 
-@include responsiveness.screen(smallest, phone) {
-  .header {height: 45px;}
-  .header-text {font-size: 30px;}
+@include responsiveness.screen(smallest) {
+  .header { height: 39px; }
+
+  .header-text {
+    font-size: 23px;
+    padding: 8px 16px;
+  }
 }
+
+@include responsiveness.screen(phone) {
+  .header { height: 45px; }
+
+  .header-text {
+    font-size: 30px;
+    padding: 5px 16px;
+  }
+}
+
 @include responsiveness.screen(tablet, large-tablet) {
-  .header {height: 55px;}
-  .header-text {font-size: 40px;}
+  .header { height: 55px; }
+
+  .header-text {
+    font-size: 40px;
+    padding: 5px 16px;
+  }
 }
-@include responsiveness.screen(desktop, big-desktop) {
-  .header {height: 65px;}
-  .header-text {font-size: 50px;}
+
+@include responsiveness.screen(small-laptop, desktop, big-desktop) {
+  .header { height: 65px; }
+
+  .header-text {
+    font-size: 50px;
+    padding: 5px 16px;
+  }
 }

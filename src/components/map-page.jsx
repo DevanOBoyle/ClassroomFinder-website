@@ -49,8 +49,6 @@ export default function MapPage() {
   search = true
   info = false
   toggleRight = false
-  // const [searchStyle, setSearchStyle] = useState("search1")
-  // const [infoStyle, setInfoStyle] = useState("info1")
 
   // Initialize map
   useEffect(() => {
@@ -99,6 +97,7 @@ export default function MapPage() {
         designLayer,
         buildingsLayer,
       ],
+      controls: [],
       overlays: [initialOverlayLayer],
       view: new View({
         center: [-13587641.820142383, 4438297.780079307],
@@ -115,22 +114,21 @@ export default function MapPage() {
   }, [])
 
   function toggleClick() {
-    document.getElementById("roomForm").style.display = toggleRight
+    document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
-    document.getElementById("classForm").style.display = toggleRight
+    document.getElementById("class-form").style.display = toggleRight
       ? "none"
       : "contents"
-    document.getElementById("searchToggleTextRoom").style.color = toggleRight
+    document.getElementById("search-toggle-text-room").style.color = toggleRight
       ? "rgb(253 199 0 / 100%)"
       : "black"
-    document.getElementById("searchToggleTextClass").style.color = toggleRight
-      ? "black"
-      : "rgb(253 199 0 / 100%)"
-    document.getElementById("searchToggleSlide").style.left = toggleRight
+    document.getElementById("search-toggle-text-class").style.color =
+      toggleRight ? "black" : "rgb(253 199 0 / 100%)"
+    document.getElementById("search-toggle-slide").style.left = toggleRight
       ? "1.5%"
       : "auto"
-    document.getElementById("searchToggleSlide").style.right = toggleRight
+    document.getElementById("search-toggle-slide").style.right = toggleRight
       ? "auto"
       : "1.5%"
     toggleRight = !toggleRight
@@ -140,39 +138,38 @@ export default function MapPage() {
     // Change the size of the search window and show/hide content
     if (search) {
       // Hide content
-      document.getElementById("searchDiv").style.display = "none"
-      document.getElementById("searchText").style.display = "block"
-      document.getElementById("searchArrow").style.transform = "rotate(180deg)"
-      document.getElementById("searchArrow").style.bottom = "10px"
+      document.getElementById("search-div").style.display = "none"
+      document.getElementById("search-text").style.display = "block"
+      document.getElementById("search-arrow").style.transform = "rotate(180deg)"
+      document.getElementById("search-arrow").style.bottom = "10px"
     } else {
       // Show content
-      document.getElementById("searchDiv").style.display = "flex"
-      document.getElementById("searchText").style.display = "none"
-      document.getElementById("searchArrow").style.transform = "rotate(0)"
-      document.getElementById("searchArrow").style.bottom = "10px"
+      document.getElementById("search-div").style.display = "flex"
+      document.getElementById("search-text").style.display = "none"
+      document.getElementById("search-arrow").style.transform = "rotate(0)"
+      document.getElementById("search-arrow").style.bottom = "10px"
     }
     search = !search
   }
 
   function openInfoWindow() {
-    document.getElementById("infoDiv").style.display = buildingMarked
+    document.getElementById("info-div").style.display = buildingMarked
       ? "block"
       : "none"
-    document.getElementById("infoNobuildingText").style.display = buildingMarked
-      ? "none"
-      : "block"
-    document.getElementById("infoText").style.display = "none"
-    document.getElementById("infoArrow").style.transform = "rotate(180deg)"
-    document.getElementById("infoArrow").style.top = "10px"
+    document.getElementById("info-nobuilding-text").style.display =
+      buildingMarked ? "none" : "block"
+    document.getElementById("info-text").style.display = "none"
+    document.getElementById("info-arrow").style.transform = "rotate(180deg)"
+    document.getElementById("info-arrow").style.top = "10px"
     info = true
   }
 
   function closeInfoWindow() {
-    document.getElementById("infoDiv").style.display = "none"
-    document.getElementById("infoNobuildingText").style.display = "none"
-    document.getElementById("infoText").style.display = "block"
-    document.getElementById("infoArrow").style.transform = "rotate(0)"
-    document.getElementById("infoArrow").style.top = "10px"
+    document.getElementById("info-div").style.display = "none"
+    document.getElementById("info-nobuilding-text").style.display = "none"
+    document.getElementById("info-text").style.display = "block"
+    document.getElementById("info-arrow").style.transform = "rotate(0)"
+    document.getElementById("info-arrow").style.top = "10px"
     info = false
   }
 
@@ -192,7 +189,7 @@ export default function MapPage() {
       // nameElement.current.innerHTML = building.getId()
       nameElement.current.innerHTML = building.get("name")
       addressElement.current.innerHTML = building.get("address")
-      document.getElementById("buildingDirections").href =
+      document.getElementById("building-directions").href =
         googleMapsLinkBase + building.getId()
       // Change the options of the drop-down menu
       var selectCode = ""
@@ -215,31 +212,31 @@ export default function MapPage() {
           i++
         }
       }
-      document.getElementById("floorDropdownSelect").innerHTML = selectCode
+      document.getElementById("floor-dropdown-select").innerHTML = selectCode
       // Show the right floor plan image
       floorMapFolder = floorMapBaseFolder + building.getId() + "/"
       floorMapHref =
-        floorMapFolder + document.getElementById("floorDropdownSelect").value
-      document.getElementById("floorMap").src = floorMapHref
+        floorMapFolder + document.getElementById("floor-dropdown-select").value
+      document.getElementById("floor-map").src = floorMapHref
       // Make sure the info window is open
       openInfoWindow()
     })
   }
 
-  // Map click handler
+  // -map click handler
   const handleMapClick = event => {
     showFeatureInfo(event)
   }
 
   function selectFloorMap() {
-    // console.log(document.getElementById("floorDropdownSelect").value)
+    // console.log(document.getElementById("floor-dropdownSelect").value)
     floorMapHref =
-      floorMapFolder + document.getElementById("floorDropdownSelect").value
-    document.getElementById("floorMap").src = floorMapHref
+      floorMapFolder + document.getElementById("floor-dropdown-select").value
+    document.getElementById("floor-map").src = floorMapHref
   }
 
   function showFullScreen() {
-    let image = document.getElementById("floorMap")
+    let image = document.getElementById("floor-map")
     if (!document.fullscreenElement) {
       image?.requestFullscreen()
     } else {
@@ -249,73 +246,73 @@ export default function MapPage() {
 
   return (
     <div id='main'>
-      <div id='searchWindow'>
-        <div id='searchDiv'>
-          <div id='searchToggle' onClick={toggleClick}>
-            <div id='searchToggleField'></div>
-            <div id='searchToggleSlide'></div>
-            <h4 id='searchToggleTextRoom'>Room</h4>
-            <div id='searchToggleTextClass'>
+      <div id='search-window'>
+        <div id='search-div'>
+          <div id='search-toggle' onClick={toggleClick}>
+            <div id='search-toggle-field'></div>
+            <div id='search-toggle-slide'></div>
+            <h4 id='search-toggle-text-room'>Room</h4>
+            <div id='search-toggle-text-class'>
               <h4>Class code</h4>
             </div>
           </div>
-          <div id='inputDiv'>
-            <div id='roomForm'>
-              <div className='searchBar'>
+          <div id='input-div'>
+            <div id='room-form'>
+              <div className='search-bar'>
                 <input
                   type='text'
-                  id='classroomInput'
+                  id='classroom-input'
                   className='input'
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   required
                 />
-                <div className='searchBarField'></div>
-                <div className='searchBarButton'>
-                  <input type='submit' id='roomSubmitButton' value=''></input>
-                  <img id='roomArrow' src='/arrowcircle.png'></img>
+                <div className='search-bar-field'></div>
+                <div className='search-bar-button'>
+                  <input type='submit' id='room-submit-button' value=''></input>
+                  <img id='room-arrow' src='/arrowcircle.png'></img>
                 </div>
               </div>
             </div>
-            <div id='classForm'>
-              <div id='quarterDropdown'>
-                <select id='quarterDropdownSelect' defaultValue={"w23"}>
+            <div id='class-form'>
+              <div id='quarter-dropdown'>
+                <select id='quarter-dropdown-select' defaultValue={"w23"}>
                   <option value='f22'>Fall 22</option>
                   <option value='w23'>Winter 23</option>
                   <option value='s23'>Spring 23</option>
                 </select>
-                <div id='quarterDropdownField'></div>
+                <div id='quarter-dropdown-field'></div>
                 <img
-                  id='quarterArrowCircle'
+                  id='quarter-arrow-circle'
                   src='/arrowcircle.png'
-                  className='arrowCircle'
+                  className='arrow-circle'
                 ></img>
               </div>
-              <div className='searchBar'>
+              <div className='search-bar'>
                 <input
                   type='text'
-                  id='classcodeInput'
+                  id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
-                <div className='searchBarField'></div>
-                <div className='searchBarButton'>
+                <div className='search-bar-field'></div>
+                <div className='search-bar-button'>
                   <input
                     type='submit'
-                    id='classcodeSubmitButton'
+                    id='classcode-submit-button'
                     value=''
                   ></input>
-                  <img id='classcodeArrow' src='/arrowcircle.png'></img>
+                  <img id='classcode-arrow' src='/arrowcircle.png'></img>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <h4 id='searchText'>Search</h4>
+        <h4 id='search-text'>Search</h4>
         <img
-          id='searchArrow'
+          id='search-arrow'
           className='arrow'
           src='/arrow.png'
           onClick={searchButtonClick}
@@ -330,55 +327,55 @@ export default function MapPage() {
           "/256/Map-Marker-Ball-Pink-icon.png"
         }
       ></img>
-      <div id='infoWindow'>
-        <h4 id='infoText'>Info</h4>
+      <div id='info-window'>
+        <h4 id='info-text'>Info</h4>
         <img
-          id='infoArrow'
+          id='info-arrow'
           className='arrow'
           src='/arrow.png'
           onClick={infoButtonClick}
         ></img>
-        <h6 id='infoNobuildingText'>
+        <h6 id='info-nobuilding-text'>
           Click on a building or search for a classroom to show floor plans and
           get directions
         </h6>
-        <div id='infoDiv'>
-          <div className='infoDivText' id='infoDivText'>
+        <div id='info-div'>
+          <div className='info-div-text' id='info-div-text'>
             <h4
               ref={nameElement}
-              className='infoDivText'
-              id='buildingName'
+              className='info-div-text'
+              id='building-name'
             ></h4>
             <h6
               ref={addressElement}
-              className='infoDivText'
-              id='building-Address'
+              className='info-div-text'
+              id='building-address'
             ></h6>
             <a
               href=''
               target='_blank'
               rel='noopener noreferrer'
-              className='infoDivText'
-              id='buildingDirections'
+              className='info-div-text'
+              id='building-directions'
             >
               Get directions on Google Maps
             </a>
             <br></br>
-            <div className='floorDropdown' id='floorDropdown'>
+            <div className='floor-dropdown' id='floor-dropdown'>
               <select
-                id='floorDropdownSelect'
+                id='floor-dropdown-select'
                 onInput={selectFloorMap}
               ></select>
-              <div id='floorDropdownField'></div>
+              <div id='floor-dropdown-field'></div>
               <img
-                id='floorArrowCircle'
+                id='floor-arrow-circle'
                 src='/arrowcircle.png'
-                className='arrowCircle'
+                className='arrow-circle'
               ></img>
             </div>
           </div>
-          <div id='infoLine'></div>
-          <img id='floorMap' onClick={showFullScreen}></img>
+          <div id='info-line'></div>
+          <img id='floor-map' onClick={showFullScreen}></img>
         </div>
       </div>
     </div>
