@@ -1,9 +1,9 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
-import Home from "./home/index"
 import NavBar from "./components/navbar/index"
-import Form from "./components/form"
-import MapWrapper from "./components/map"
+import MapPage from "./components/map-page"
+import Footer from "./components/footer/index"
+import Home from "./home/index"
 import "./App.scss"
 
 const App: React.FC = () => {
@@ -12,10 +12,10 @@ const App: React.FC = () => {
       <NavBar />
       <Routes>
         {/* Paths should be modified */}
-        <Route path='/' element={<Home />} />
-        <Route path='/map' element={<MapWrapper />} />
-        <Route path='/form' element={<Form />} />
+        <Route path='/' element={<MapPage />} />
+        <Route path='/home' element={<Home />} />
       </Routes>
+      <Footer />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import "./index.scss"
+// import "./index.scss"
 import "../../../node_modules/ol/ol.css"
 
 // Openlayers imports
