@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
+import getBuilding from "../utils/api"
 
 // Openlayers imports
 import Map from "ol/Map"
@@ -29,6 +30,9 @@ export default function MapPage() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
+  const [buildings, setBuildings] = useState([])
+  const [filteredData, setFilteredData] = useState([])
+  const [wordEntered, setWordEntered] = useState("")
 
   // References to the divs
   const mapElement = useRef()
@@ -112,6 +116,8 @@ export default function MapPage() {
     setMap(initialMap)
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
+
+    getBuilding(setBuildings)
   }, [])
 
   function toggleClick() {
@@ -227,6 +233,27 @@ export default function MapPage() {
     })
   }
 
+  // Search filter handler
+  const handleFilter = event => {
+    const searchWord = event.target.value
+    setWordEntered(searchWord)
+    const newFilter = buildings.filter(value => {
+      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+    })
+
+    console.log(newFilter)
+
+    if (searchWord === "") {
+      setFilteredData([])
+    } else {
+      setFilteredData(newFilter)
+    }
+  }
+
+  const handleFilterClick = name => {
+    setWordEntered(name)
+  }
+
   // Map click handler
   const handleMapClick = event => {
     showFeatureInfo(event)
@@ -256,6 +283,8 @@ export default function MapPage() {
                   className='input'
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
+                  value={wordEntered}
+                  onChange={handleFilter}
                   required
                 />
                 <div className='search-bar-field'></div>
@@ -264,6 +293,25 @@ export default function MapPage() {
                   <div className='search-bar-circle-blue'></div>
                 </div>
                 <div className='search-bar-arrow right'></div>
+                <div>
+                  {filteredData.length != 0 && (
+                    <div className='dataResult'>
+                      {filteredData.slice(0, 15).map((value, key) => {
+                        return (
+                          <a
+                            key={key}
+                            onClick={() => handleFilterClick(value.name)}
+                            className='dataItem'
+                            target='_blank'
+                          >
+                            {" "}
+                            <p>{value.name}</p>{" "}
+                          </a>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div id='class-form'>
