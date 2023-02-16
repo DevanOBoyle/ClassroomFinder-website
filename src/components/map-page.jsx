@@ -250,27 +250,6 @@ export default function MapPage() {
     setWordEntered(name)
   }
 
-  // Search filter handler
-  const handleFilter = event => {
-    const searchWord = event.target.value
-    setWordEntered(searchWord)
-    const newFilter = buildings.filter(value => {
-      return value.name.toLowerCase().includes(searchWord.toLowerCase())
-    })
-
-    console.log(newFilter)
-
-    if (searchWord === "") {
-      setFilteredData([])
-    } else {
-      setFilteredData(newFilter)
-    }
-  }
-
-  const handleFilterClick = name => {
-    setWordEntered(name)
-  }
-
   // -map click handler
   const handleMapClick = event => {
     showFeatureInfo(event)
@@ -323,25 +302,25 @@ export default function MapPage() {
                   <img id='room-arrow' src='/arrowcircle.png'></img>
                 </div>
                 <div className='search-bar-arrow right'></div>
-                <div>
-                  {filteredData.length != 0 && (
-                    <div className='dataResult'>
-                      {filteredData.slice(0, 15).map((value, key) => {
-                        return (
-                          <a
-                            key={key}
-                            onClick={() => handleFilterClick(value.name)}
-                            className='dataItem'
-                            target='_blank'
-                          >
-                            {" "}
-                            <p>{value.name}</p>{" "}
-                          </a>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
+              </div>
+              <div>
+                {filteredData.length != 0 && (
+                  <div className='dataResult'>
+                    {filteredData.slice(0, 15).map((value, key) => {
+                      return (
+                        <a
+                          key={key}
+                          onClick={() => handleFilterClick(value.name)}
+                          className='dataItem'
+                          target='_blank'
+                        >
+                          {" "}
+                          <p>{value.name}</p>{" "}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
             <div id='class-form'>

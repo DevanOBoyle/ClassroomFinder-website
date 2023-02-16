@@ -220,7 +220,7 @@
   #quarter-dropdown {
     width: 70vw;
     height: 40px;
-    margin: 30px 0;
+    margin: 30px 0 0;
   }
 }
 
@@ -229,7 +229,7 @@
   #quarter-dropdown {
     width: 55vw;
     height: 54px;
-    margin: 42px 0;
+    margin: 42px 0 0;
   }
 }
 
@@ -238,7 +238,7 @@
   #quarter-dropdown {
     width: 40vw;
     height: 68px;
-    margin: 50px 0;
+    margin: 50px 0 0;
   }
 }
 
@@ -591,13 +591,15 @@ input[type="submit"] {
 }
 
 .dataResult {
-  margin-top: 5px;
-  width: 330px;
+  margin: auto;
+  width: 90%;
   height: 200px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   overflow: hidden;
   overflow-y: auto;
+  border-radius: 5px;
+  z-index: 500;
 }
 
 .dataResult .dataItem {
@@ -606,6 +608,14 @@ input[type="submit"] {
   display: flex;
   align-items: center;
   color: black;
+
+  @include responsiveness.screen(smallest, phone) {
+    height: 30px;
+  }
+
+  @include responsiveness.screen(tablet, large-tablet) {
+    height: 40px;
+  }
 }
 
 .dataItem p {
