@@ -11,13 +11,11 @@ const Footer = () => {
       ></img>
       <div className='footer-line'></div>
       <div className='footer-text'>
-        <h2>
-          Brought to you by:<br></br>
-        </h2>
-        <p>
+        <h5>Brought to you by:</h5>
+        <h6>
           Caroline Olsmats, Maria Pomelov, Kristen Chiu, Nicholas Wong & Devan
           O’Boyle
-        </p>
+        </h6>
       </div>
     </div>
   )
