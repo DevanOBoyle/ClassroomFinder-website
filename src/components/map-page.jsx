@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import "../stylesheets/textstyle.scss"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
-import getBuilding from "../utils/api"
+import getBuilding, { getClasses } from "../utils/api"
 
 // Openlayers imports
 import Map from "ol/Map"
@@ -35,6 +35,9 @@ export default function MapPage() {
   const [buildings, setBuildings] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
+
+  // eslint-disable-next-line
+  const [classes, setClasses] = useState([])
 
   // References to the divs
   const mapElement = useRef()
@@ -237,7 +240,7 @@ export default function MapPage() {
       return value.name.toLowerCase().includes(searchWord.toLowerCase())
     })
 
-    console.log(newFilter)
+    // console.log(newFilter)
 
     if (searchWord === "") {
       setFilteredData([])
@@ -325,10 +328,22 @@ export default function MapPage() {
             </div>
             <div id='class-form'>
               <div id='quarter-dropdown'>
-                <select id='quarter-dropdown-select' defaultValue={"w23"}>
-                  <option value='f22'>Fall 22</option>
-                  <option value='w23'>Winter 23</option>
-                  <option value='s23'>Spring 23</option>
+                <select
+                  id='quarter-dropdown-select'
+                  onChange={() =>
+                    getClasses(
+                      setClasses,
+                      document.getElementsByTagName("option")[
+                        document.getElementById("quarter-dropdown-select")
+                          .selectedIndex
+                      ].value
+                    )
+                  }
+                  defaultValue={"winter2023"}
+                >
+                  <option value='fall2022'>Fall 22</option>
+                  <option value='winter2023'>Winter 23</option>
+                  <option value='spring2023'>Spring 23</option>
                 </select>
                 <div id='quarter-dropdown-field'></div>
                 <img
@@ -338,6 +353,7 @@ export default function MapPage() {
                 ></img>
               </div>
               <div className='search-bar'>
+                {/* Implement search by code around here */}
                 <input
                   type='text'
                   id='classcode-input'
