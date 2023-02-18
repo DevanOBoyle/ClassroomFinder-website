@@ -11,9 +11,8 @@ const getBuilding = async (setBuilding: Dispatch<any>) => {
         "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_ORIGIN || "",
       },
     }
-    const res = await axios(getBuildingAxiosRequest)
+    const res = await axios(getBuildingAxiosRequest) // Something is wrong here
     const buildingData = res.data.buildings
-
     console.log(buildingData)
 
     setBuilding(buildingData)

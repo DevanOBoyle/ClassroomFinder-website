@@ -28,6 +28,11 @@ var floorMapFolder
 var floorMapHref
 const googleMapsLinkBase = "https://www.google.com/maps/place/?q=place_id:"
 
+const buildingsSource = new VectorSource({
+  url: "/map.geojson",
+  format: new GeoJSON(),
+})
+
 export default function MapPage() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
@@ -68,10 +73,6 @@ export default function MapPage() {
       width: 1.2,
     })
 
-    const buildingsSource = new VectorSource({
-      url: "/map.geojson",
-      format: new GeoJSON(),
-    })
     const buildingsLayer = new VectorImageLayer({
       source: buildingsSource,
       visible: true,
@@ -143,6 +144,10 @@ export default function MapPage() {
     toggleRight = !toggleRight
   }
 
+  function placeBuilding() {
+    console.log("clicked")
+  }
+
   function searchButtonClick() {
     // Change the size of the search window and show/hide content
     if (search) {
@@ -188,6 +193,45 @@ export default function MapPage() {
     else openInfoWindow()
   }
 
+  // Change the info text to infoabout the building building
+  function changeInfoText(building) {
+    nameElement.current.innerHTML = building.get("name")
+    addressElement.current.innerHTML = building.get("address")
+    document.getElementById("building-directions").href =
+      googleMapsLinkBase + building.getId()
+  }
+
+  // Show the correct floormaps
+  function showFloorMaps(building) {
+    // Change the options of the drop-down menu
+    var selectCode = ""
+    const floorFileNames = building.get("floors")
+    if (floorFileNames.length > 0) {
+      selectCode +=
+        "<option value='" +
+        floorFileNames[0][0] +
+        "' selected>" +
+        floorFileNames[0][1] +
+        "</option>"
+      let i = 1
+      while (floorFileNames.length > i) {
+        selectCode +=
+          "<option value='" +
+          floorFileNames[i][0] +
+          "'>" +
+          floorFileNames[i][1] +
+          "</option>"
+        i++
+      }
+    }
+    document.getElementById("floor-dropdown-select").innerHTML = selectCode
+    // Show the right floor plan image
+    floorMapFolder = floorMapBaseFolder + building.getId() + "/"
+    floorMapHref =
+      floorMapFolder + document.getElementById("floor-dropdown-select").value
+    document.getElementById("floor-map").src = floorMapHref
+  }
+
   // Show info at click
   function showFeatureInfo(e) {
     mapRef.current.forEachFeatureAtPixel(e.pixel, function (building) {
@@ -195,38 +239,8 @@ export default function MapPage() {
       // Place a marker
       overlayRef.current.setPosition(e.coordinate)
       // Set text
-      // nameElement.current.innerHTML = building.getId()
-      nameElement.current.innerHTML = building.get("name")
-      addressElement.current.innerHTML = building.get("address")
-      document.getElementById("building-directions").href =
-        googleMapsLinkBase + building.getId()
-      // Change the options of the drop-down menu
-      var selectCode = ""
-      const floorFileNames = building.get("floors")
-      if (floorFileNames.length > 0) {
-        selectCode +=
-          "<option value='" +
-          floorFileNames[0][0] +
-          "' selected>" +
-          floorFileNames[0][1] +
-          "</option>"
-        let i = 1
-        while (floorFileNames.length > i) {
-          selectCode +=
-            "<option value='" +
-            floorFileNames[i][0] +
-            "'>" +
-            floorFileNames[i][1] +
-            "</option>"
-          i++
-        }
-      }
-      document.getElementById("floor-dropdown-select").innerHTML = selectCode
-      // Show the right floor plan image
-      floorMapFolder = floorMapBaseFolder + building.getId() + "/"
-      floorMapHref =
-        floorMapFolder + document.getElementById("floor-dropdown-select").value
-      document.getElementById("floor-map").src = floorMapHref
+      changeInfoText(building)
+      showFloorMaps(building)
       // Make sure the info window is open
       openInfoWindow()
     })
@@ -239,9 +253,6 @@ export default function MapPage() {
     const newFilter = buildings.filter(value => {
       return value.name.toLowerCase().includes(searchWord.toLowerCase())
     })
-
-    // console.log(newFilter)
-
     if (searchWord === "") {
       setFilteredData([])
     } else {
@@ -249,11 +260,24 @@ export default function MapPage() {
     }
   }
 
-  const handleFilterClick = name => {
-    setWordEntered(name)
+  const placeOnMap = placeId => {
+    const building = buildingsSource.getFeatureById(placeId)
+    buildingMarked = true
+    const cord = building.get("geometry").geometries_[0].flatCoordinates
+    // Place a marker
+    overlayRef.current.setPosition([cord[0] + 500, cord[1]])
+    changeInfoText(building)
+    showFloorMaps(building)
+    openInfoWindow()
   }
 
-  // -map click handler
+  const handleFilterClick = value => {
+    setWordEntered(value.name)
+    console.log(value)
+    placeOnMap(value.place_id)
+  }
+
+  // Map click handler
   const handleMapClick = event => {
     showFeatureInfo(event)
   }
@@ -300,11 +324,12 @@ export default function MapPage() {
                   required
                 />
                 <div className='search-bar-field'></div>
-                <div className='search-bar-button'>
-                  <input type='submit' id='room-submit-button' value=''></input>
-                  <img id='room-arrow' src='/arrowcircle.png'></img>
-                </div>
-                <div className='search-bar-arrow right'></div>
+                <img
+                  className='search-bar-button'
+                  onClick={placeBuilding}
+                  id='classcode-submit-button'
+                  src='/arrowcircle.png'
+                ></img>
               </div>
               <div>
                 {filteredData.length != 0 && (
@@ -313,7 +338,7 @@ export default function MapPage() {
                       return (
                         <a
                           key={key}
-                          onClick={() => handleFilterClick(value.name)}
+                          onClick={() => handleFilterClick(value)}
                           className='dataItem'
                           target='_blank'
                         >
@@ -353,7 +378,6 @@ export default function MapPage() {
                 ></img>
               </div>
               <div className='search-bar'>
-                {/* Implement search by code around here */}
                 <input
                   type='text'
                   id='classcode-input'
@@ -363,14 +387,12 @@ export default function MapPage() {
                   required
                 />
                 <div className='search-bar-field'></div>
-                <div className='search-bar-button'>
-                  <input
-                    type='submit'
-                    id='classcode-submit-button'
-                    value=''
-                  ></input>
-                  <img id='classcode-arrow' src='/arrowcircle.png'></img>
-                </div>
+                <img
+                  className='search-bar-button'
+                  onClick={placeBuilding}
+                  id='class-submit-button'
+                  src='/arrowcircle.png'
+                ></img>
               </div>
             </div>
           </div>
