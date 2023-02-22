@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import "../stylesheets/textstyle.scss"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
+import "../stylesheets/search_bar.scss"
 import getBuilding, { getClasses } from "../utils/api"
 
 // Openlayers imports
@@ -119,8 +120,12 @@ export default function MapPage() {
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
 
+    getClasses(setClasses)
     getBuilding(setBuildings)
   }, [])
+
+  console.log(buildings)
+  console.log(classes)
 
   function toggleClick() {
     document.getElementById("room-form").style.display = toggleRight
@@ -233,14 +238,18 @@ export default function MapPage() {
   }
 
   // Search filter handler
-  const handleFilter = event => {
+  function handleFilter(event, arr) {
     const searchWord = event.target.value
     setWordEntered(searchWord)
-    const newFilter = buildings.filter(value => {
-      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+    const newFilter = arr.filter(value => {
+      if (arr == buildings) {
+        return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      } else {
+        return value.code.toLowerCase().includes(searchWord.toLowerCase())
+      }
     })
 
-    // console.log(newFilter)
+    console.log(newFilter)
 
     if (searchWord === "") {
       setFilteredData([])
@@ -296,7 +305,8 @@ export default function MapPage() {
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   value={wordEntered}
-                  onChange={handleFilter}
+                  onChange={event => handleFilter(event, buildings)}
+                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
@@ -339,8 +349,11 @@ export default function MapPage() {
                       ].value
                     )
                   }
-                  defaultValue={"winter2023"}
                 >
+                  <option disabled selected value>
+                    {" "}
+                    -- select an option --{" "}
+                  </option>
                   <option value='fall2022'>Fall 22</option>
                   <option value='winter2023'>Winter 23</option>
                   <option value='spring2023'>Spring 23</option>
@@ -353,12 +366,13 @@ export default function MapPage() {
                 ></img>
               </div>
               <div className='search-bar'>
-                {/* Implement search by code around here */}
                 <input
                   type='text'
                   id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
+                  value={wordEntered}
+                  onChange={event => handleFilter(event, classes)}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
@@ -371,6 +385,23 @@ export default function MapPage() {
                   ></input>
                   <img id='classcode-arrow' src='/arrowcircle.png'></img>
                 </div>
+                {filteredData.length != 0 && (
+                  <div className='dataResult'>
+                    {filteredData.slice(0, 15).map((value, key) => {
+                      return (
+                        <a
+                          key={key}
+                          onClick={() => handleFilterClick(value.name)}
+                          className='dataItem'
+                          target='_blank'
+                        >
+                          {" "}
+                          <p>{value.name}</p>{" "}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
