@@ -602,6 +602,10 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
+.dataResult::-webkit-scrollbar {
+  display: none;
+}
+
 .dataResult .dataItem {
   width: 100%;
   height: 50px;
@@ -618,7 +622,51 @@ input[type="submit"] {
   }
 }
 
+.parent-element {
+  position: relative;
+  overflow: visible;
+}
+
+.dataClassResult {
+  margin: auto;
+  width: 90%;
+  height: 200px;
+  background-color: white;
+  box-shadow: rgba(0 0 0 / 35%) 0 5px 15px;
+  overflow: hidden;
+  overflow-y: auto;
+  border-radius: 5px;
+  position: absolute;
+  bottom: -200px;
+  right: 3px;
+  left: 3px;
+}
+
+.dataClassResult::-webkit-scrollbar {
+  display: none;
+}
+
+.dataClassResult .dataClassItem {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  color: black;
+
+  @include responsiveness.screen(smallest, phone) {
+    height: 30px;
+  }
+
+  @include responsiveness.screen(tablet, large-tablet) {
+    height: 40px;
+  }
+}
+
 .dataItem p {
+  margin-left: 10px;
+}
+
+.dataClassItem p {
   margin-left: 10px;
 }
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react"
 import "../stylesheets/textstyle.scss"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
-import "../stylesheets/search_bar.scss"
 import getBuilding, { getClasses } from "../utils/api"
 
 // Openlayers imports
@@ -386,13 +385,13 @@ export default function MapPage() {
                   <img id='classcode-arrow' src='/arrowcircle.png'></img>
                 </div>
                 {filteredData.length != 0 && (
-                  <div className='dataResult'>
+                  <div className='dataClassResult'>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
                         <a
                           key={key}
                           onClick={() => handleFilterClick(value.name)}
-                          className='dataItem'
+                          className='dataClassItem'
                           target='_blank'
                         >
                           {" "}
