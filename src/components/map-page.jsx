@@ -16,11 +16,12 @@ import VectorSource from "ol/source/Vector"
 import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
 
-// Booleans
-var search
-var info
-var toggleRight
+// Keep track of what is shown and not
+var search = true
+var info = false
+var toggleRight = false
 var buildingMarked = false
+var currentBuilding
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -33,6 +34,8 @@ const buildingsSource = new VectorSource({
   format: new GeoJSON(),
 })
 
+const quarters = ["fall2022", "winter2023", "spring2023"]
+
 export default function MapPage() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
@@ -40,6 +43,7 @@ export default function MapPage() {
   const [buildings, setBuildings] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
+  const [selectedQuarter, setQuarter] = useState(quarters[1])
 
   // eslint-disable-next-line
   const [classes, setClasses] = useState([])
@@ -56,11 +60,6 @@ export default function MapPage() {
   featRef.current = featuresLayer
   const overlayRef = useRef()
   overlayRef.current = overlayLayer
-
-  // Keep track of what is shown and not
-  search = true
-  info = false
-  toggleRight = false
 
   // Initialize map
   useEffect(() => {
@@ -120,10 +119,15 @@ export default function MapPage() {
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
 
+    getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
   }, [])
 
+  // console.log(buildings)
+  // console.log(classes)
+
   function toggleClick() {
+    console.log(toggleRight)
     document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
@@ -142,10 +146,8 @@ export default function MapPage() {
       ? "auto"
       : "1.5%"
     toggleRight = !toggleRight
-  }
-
-  function placeBuilding() {
-    console.log("clicked")
+    setWordEntered("")
+    setFilteredData("")
   }
 
   function searchButtonClick() {
@@ -164,6 +166,19 @@ export default function MapPage() {
       document.getElementById("search-arrow").style.bottom = "10px"
     }
     search = !search
+  }
+
+  function placeBuilding() {
+    // console.log("clicked")
+    if (!currentBuilding) {
+      alert(
+        "Please choose one of the classes or buildings listed. " +
+          "Class codes should be written in the format ABC123-01."
+      )
+    } else {
+      placeOnMap(currentBuilding.place_id)
+    }
+    searchButtonClick()
   }
 
   function openInfoWindow() {
@@ -207,13 +222,9 @@ export default function MapPage() {
     var selectCode = ""
     const floorFileNames = building.get("floors")
     if (floorFileNames.length > 0) {
-      selectCode +=
-        "<option value='" +
-        floorFileNames[0][0] +
-        "' selected>" +
-        floorFileNames[0][1] +
-        "</option>"
-      let i = 1
+      document.getElementById("floor-dropdown-select").value =
+        floorFileNames[0][0]
+      let i = 0
       while (floorFileNames.length > i) {
         selectCode +=
           "<option value='" +
@@ -247,12 +258,20 @@ export default function MapPage() {
   }
 
   // Search filter handler
-  const handleFilter = event => {
+  function handleFilter(event, arr) {
+    console.log("searching")
     const searchWord = event.target.value
     setWordEntered(searchWord)
-    const newFilter = buildings.filter(value => {
-      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+    const newFilter = arr.filter(value => {
+      if (arr == buildings) {
+        return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      } else {
+        return value.code.toLowerCase().includes(searchWord.toLowerCase())
+      }
     })
+
+    // console.log(newFilter)
+
     if (searchWord === "") {
       setFilteredData([])
     } else {
@@ -273,8 +292,8 @@ export default function MapPage() {
 
   const handleFilterClick = value => {
     setWordEntered(value.name)
+    currentBuilding = value
     console.log(value)
-    placeOnMap(value.place_id)
   }
 
   // Map click handler
@@ -296,6 +315,11 @@ export default function MapPage() {
     } else {
       document.exitFullscreen()
     }
+  }
+
+  function updateQuarter(value) {
+    getClasses(setClasses, value)
+    setQuarter(value)
   }
 
   return (
@@ -320,20 +344,21 @@ export default function MapPage() {
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   value={wordEntered}
-                  onChange={handleFilter}
+                  onChange={event => handleFilter(event, buildings)}
+                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
                 <img
                   className='search-bar-button'
                   onClick={placeBuilding}
-                  id='classcode-submit-button'
+                  id='classroom-submit-button'
                   src='/arrowcircle.png'
                 ></img>
               </div>
               <div>
                 {filteredData.length != 0 && (
-                  <div className='dataResult'>
+                  <div id='dataResult'>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
                         <a
@@ -355,20 +380,14 @@ export default function MapPage() {
               <div id='quarter-dropdown'>
                 <select
                   id='quarter-dropdown-select'
-                  onChange={() =>
-                    getClasses(
-                      setClasses,
-                      document.getElementsByTagName("option")[
-                        document.getElementById("quarter-dropdown-select")
-                          .selectedIndex
-                      ].value
-                    )
-                  }
-                  defaultValue={"winter2023"}
+                  value={selectedQuarter}
+                  onChange={e => updateQuarter(e.target.value)}
                 >
-                  <option value='fall2022'>Fall 22</option>
-                  <option value='winter2023'>Winter 23</option>
-                  <option value='spring2023'>Spring 23</option>
+                  {quarters.map(value => (
+                    <option value={value} key={value}>
+                      {value}
+                    </option>
+                  ))}
                 </select>
                 <div id='quarter-dropdown-field'></div>
                 <img
@@ -383,6 +402,8 @@ export default function MapPage() {
                   id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
+                  value={wordEntered}
+                  onChange={event => handleFilter(event, classes)}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
@@ -390,9 +411,26 @@ export default function MapPage() {
                 <img
                   className='search-bar-button'
                   onClick={placeBuilding}
-                  id='class-submit-button'
+                  id='classcode-submit-button'
                   src='/arrowcircle.png'
                 ></img>
+                {filteredData.length != 0 && (
+                  <div id='dataClassResult'>
+                    {filteredData.slice(0, 15).map((value, key) => {
+                      return (
+                        <a
+                          key={key}
+                          onClick={() => handleFilterClick(value.name)}
+                          className='dataClassItem'
+                          target='_blank'
+                        >
+                          {" "}
+                          <p>{value.name}</p>{" "}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>

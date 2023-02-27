@@ -74,7 +74,7 @@
   position: absolute;
   top: 0;
   min-height: 90px;
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 
 @include responsiveness.screen(smallest, phone) {
@@ -584,23 +584,35 @@ input[type="submit"] {
   }
 }
 
-.dataResult {
+#dataResult,
+#dataClassResult {
   margin: auto;
-  width: 90%;
-  height: 200px;
+  width: 88%;
+  max-height: 200px;
   background-color: white;
   box-shadow: rgba(0 0 0 / 35%) 0 5px 15px;
-  overflow: hidden;
   overflow-y: auto;
-  border-radius: 5px;
+  border-radius: 0 0 10px 10px;
+  flex-direction: column;
+  position: relative;
 }
 
-.dataResult .dataItem {
+#dataClassResult {
+  top: 68px;
+  margin-bottom: 60px;
+}
+
+#dataResult::-webkit-scrollbar,
+#dataClassResult::-webkit-scrollbar {
+  display: none;
+}
+
+.dataItem,
+.dataClassItem {
   width: 100%;
-  height: 50px;
   display: flex;
   align-items: center;
-  color: black;
+  color: rgb(85, 85, 85);
 
   @include responsiveness.screen(smallest, phone) {
     height: 30px;
@@ -609,12 +621,19 @@ input[type="submit"] {
   @include responsiveness.screen(tablet, large-tablet) {
     height: 40px;
   }
+
+  @include responsiveness.screen(small-laptop, desktop, big-desktop) {
+    height: 50px;
+  }
+
+  p {
+    margin-left: 10px;
+  }
 }
 
-.dataItem p {
-  margin-left: 10px;
+.dataClassItem:hover,
+.dataItem:hover {
+  background-color: rgb(253 199 0 / 100%);
 }
 
-a:hover {
-  background-color: lightgrey;
-}
+

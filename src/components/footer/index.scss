@@ -17,7 +17,9 @@
 }
 
 @include responsiveness.screen(smallest) {
-  .footer { height: 120px; }
+  .footer {
+    height: 120px;
+  }
 
   .footer-logo {
     margin: 15px 10px 15px 15px;
@@ -37,7 +39,9 @@
 }
 
 @include responsiveness.screen(phone) {
-  .footer { height: 120px; }
+  .footer {
+    height: 120px;
+  }
 
   .footer-logo {
     margin: 15px 10px 15px 15px;
@@ -57,7 +61,9 @@
 }
 
 @include responsiveness.screen(tablet, large-tablet) {
-  .footer { height: 160px; }
+  .footer {
+    height: 160px;
+  }
 
   .footer-logo {
     margin: 15px 20px 20px 25px;
@@ -77,7 +83,9 @@
 }
 
 @include responsiveness.screen(small-laptop, desktop, big-desktop) {
-  .footer { height: 180px; }
+  .footer {
+    height: 180px;
+  }
 
   .footer-logo {
     margin: 20px 20px 20px 35px;
