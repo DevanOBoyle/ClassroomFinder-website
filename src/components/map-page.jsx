@@ -15,18 +15,27 @@ import VectorImageLayer from "ol/layer/VectorImage"
 import VectorSource from "ol/source/Vector"
 import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
+// import { transform } from "ol/proj"
 
-// Booleans
-var search
-var info
-var toggleRight
+// Keep track of what is shown and not
+var search = true
+var info = false
+var toggleRight = false
 var buildingMarked = false
+var currentBuilding
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
 var floorMapFolder
 var floorMapHref
 const googleMapsLinkBase = "https://www.google.com/maps/place/?q=place_id:"
+
+const buildingsSource = new VectorSource({
+  url: "/map.geojson",
+  format: new GeoJSON(),
+})
+
+const quarters = ["fall2022", "winter2023", "spring2023"]
 
 export default function MapPage() {
   const [map, setMap] = useState()
@@ -35,6 +44,7 @@ export default function MapPage() {
   const [buildings, setBuildings] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
+  const [selectedQuarter, setQuarter] = useState(quarters[1])
 
   // eslint-disable-next-line
   const [classes, setClasses] = useState([])
@@ -52,11 +62,6 @@ export default function MapPage() {
   const overlayRef = useRef()
   overlayRef.current = overlayLayer
 
-  // Keep track of what is shown and not
-  search = true
-  info = false
-  toggleRight = false
-
   // Initialize map
   useEffect(() => {
     // Vector layer with buildings
@@ -67,17 +72,22 @@ export default function MapPage() {
       color: [45, 45, 45, 1],
       width: 1.2,
     })
+    /*
+    const pointStyle = new Circle({
+      fill: new Fill({
+        color: [159, 212, 255, 1],
+      }),
+      radius: 7,
+      stroke: strokeStyle,
+    }) */
 
-    const buildingsSource = new VectorSource({
-      url: "/map.geojson",
-      format: new GeoJSON(),
-    })
     const buildingsLayer = new VectorImageLayer({
       source: buildingsSource,
       visible: true,
       style: new Style({
         fill: fillStyle,
         stroke: strokeStyle,
+        // image: pointStyle,
       }),
     })
 
@@ -109,7 +119,8 @@ export default function MapPage() {
       view: new View({
         center: [-13587641.820142383, 4438297.780079307],
         zoom: 15,
-        minZoom: 13,
+        maxZoom: 18,
+        minZoom: 10,
       }),
     })
     // Handle map click
@@ -119,10 +130,12 @@ export default function MapPage() {
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
 
+    getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
   }, [])
 
   function toggleClick() {
+    console.log(toggleRight)
     document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
@@ -141,6 +154,8 @@ export default function MapPage() {
       ? "auto"
       : "1.5%"
     toggleRight = !toggleRight
+    setWordEntered("")
+    setFilteredData("")
   }
 
   function searchButtonClick() {
@@ -159,6 +174,30 @@ export default function MapPage() {
       document.getElementById("search-arrow").style.bottom = "10px"
     }
     search = !search
+  }
+
+  function placeBuilding() {
+    // console.log("clicked")
+    if (!currentBuilding) {
+      alert(
+        "Please choose one of the classes or buildings listed. " +
+          "Class codes should be written in the format ABC123-01."
+      )
+    } else {
+      placeOnMap(currentBuilding.place_id)
+    }
+    searchButtonClick()
+  }
+
+  const checkKey = event => {
+    if (event.key === "Enter") {
+      placeBuilding()
+    } else if (event.key === "Tab") {
+      event.preventDefault()
+      if (filteredData.length != 0) {
+        handleFilterClick(filteredData[0])
+      }
+    }
   }
 
   function openInfoWindow() {
@@ -188,6 +227,41 @@ export default function MapPage() {
     else openInfoWindow()
   }
 
+  // Change the info text to infoabout the building building
+  function changeInfoText(building) {
+    nameElement.current.innerHTML = building.get("name")
+    addressElement.current.innerHTML = building.get("address")
+    document.getElementById("building-directions").href =
+      googleMapsLinkBase + building.getId()
+  }
+
+  // Show the correct floormaps
+  function showFloorMaps(building) {
+    // Change the options of the drop-down menu
+    var selectCode = ""
+    const floorFileNames = building.get("floors")
+    if (floorFileNames.length > 0) {
+      document.getElementById("floor-dropdown-select").value =
+        floorFileNames[0][0]
+      let i = 0
+      while (floorFileNames.length > i) {
+        selectCode +=
+          "<option value='" +
+          floorFileNames[i][0] +
+          "'>" +
+          floorFileNames[i][1] +
+          "</option>"
+        i++
+      }
+    }
+    document.getElementById("floor-dropdown-select").innerHTML = selectCode
+    // Show the right floor plan image
+    floorMapFolder = floorMapBaseFolder + building.getId() + "/"
+    floorMapHref =
+      floorMapFolder + document.getElementById("floor-dropdown-select").value
+    document.getElementById("floor-map").src = floorMapHref
+  }
+
   // Show info at click
   function showFeatureInfo(e) {
     mapRef.current.forEachFeatureAtPixel(e.pixel, function (building) {
@@ -195,52 +269,26 @@ export default function MapPage() {
       // Place a marker
       overlayRef.current.setPosition(e.coordinate)
       // Set text
-      // nameElement.current.innerHTML = building.getId()
-      nameElement.current.innerHTML = building.get("name")
-      addressElement.current.innerHTML = building.get("address")
-      document.getElementById("building-directions").href =
-        googleMapsLinkBase + building.getId()
-      // Change the options of the drop-down menu
-      var selectCode = ""
-      const floorFileNames = building.get("floors")
-      if (floorFileNames.length > 0) {
-        selectCode +=
-          "<option value='" +
-          floorFileNames[0][0] +
-          "' selected>" +
-          floorFileNames[0][1] +
-          "</option>"
-        let i = 1
-        while (floorFileNames.length > i) {
-          selectCode +=
-            "<option value='" +
-            floorFileNames[i][0] +
-            "'>" +
-            floorFileNames[i][1] +
-            "</option>"
-          i++
-        }
-      }
-      document.getElementById("floor-dropdown-select").innerHTML = selectCode
-      // Show the right floor plan image
-      floorMapFolder = floorMapBaseFolder + building.getId() + "/"
-      floorMapHref =
-        floorMapFolder + document.getElementById("floor-dropdown-select").value
-      document.getElementById("floor-map").src = floorMapHref
+      changeInfoText(building)
+      showFloorMaps(building)
       // Make sure the info window is open
       openInfoWindow()
     })
   }
 
   // Search filter handler
-  const handleFilter = event => {
+  function handleFilter(event, arr) {
+    console.log(event)
+    console.log(arr)
     const searchWord = event.target.value
     setWordEntered(searchWord)
-    const newFilter = buildings.filter(value => {
-      return value.name.toLowerCase().includes(searchWord.toLowerCase())
+    const newFilter = arr.filter(value => {
+      if (arr == buildings) {
+        return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      } else {
+        return value.code.toLowerCase().includes(searchWord.toLowerCase())
+      }
     })
-
-    // console.log(newFilter)
 
     if (searchWord === "") {
       setFilteredData([])
@@ -249,11 +297,37 @@ export default function MapPage() {
     }
   }
 
-  const handleFilterClick = name => {
-    setWordEntered(name)
+  const placeOnMap = placeId => {
+    const building = buildingsSource.getFeatureById(placeId)
+    buildingMarked = true
+    const cord = building.get("geometry").geometries_[0].flatCoordinates
+    // Place a marker
+    overlayRef.current.setPosition([cord[0], cord[1]])
+    zoomAndCenter(cord)
+    changeInfoText(building)
+    showFloorMaps(building)
+    openInfoWindow()
   }
 
-  // -map click handler
+  // Center and zoom the map
+  function zoomAndCenter(coordinates) {
+    mapRef.current.setView(
+      new View({
+        center: coordinates,
+        zoom: 16,
+        maxZoom: 18,
+        minZoom: 10,
+      })
+    )
+  }
+
+  const handleFilterClick = value => {
+    setWordEntered(value.name)
+    currentBuilding = value
+    document.getElementById("classroom-input").focus()
+  }
+
+  // Map click handler
   const handleMapClick = event => {
     showFeatureInfo(event)
   }
@@ -272,6 +346,11 @@ export default function MapPage() {
     } else {
       document.exitFullscreen()
     }
+  }
+
+  function updateQuarter(value) {
+    getClasses(setClasses, value)
+    setQuarter(value)
   }
 
   return (
@@ -296,24 +375,27 @@ export default function MapPage() {
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   value={wordEntered}
-                  onChange={handleFilter}
+                  onChange={event => handleFilter(event, buildings)}
+                  onKeyDown={checkKey}
+                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
-                <div className='search-bar-button'>
-                  <input type='submit' id='room-submit-button' value=''></input>
-                  <img id='room-arrow' src='/arrowcircle.png'></img>
-                </div>
-                <div className='search-bar-arrow right'></div>
+                <img
+                  className='search-bar-button'
+                  onClick={placeBuilding}
+                  id='classroom-submit-button'
+                  src='/arrowcircle.png'
+                ></img>
               </div>
               <div>
                 {filteredData.length != 0 && (
-                  <div className='dataResult'>
+                  <div id='data-result'>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
                         <a
                           key={key}
-                          onClick={() => handleFilterClick(value.name)}
+                          onClick={() => handleFilterClick(value)}
                           className='dataItem'
                           target='_blank'
                         >
@@ -330,20 +412,14 @@ export default function MapPage() {
               <div id='quarter-dropdown'>
                 <select
                   id='quarter-dropdown-select'
-                  onChange={() =>
-                    getClasses(
-                      setClasses,
-                      document.getElementsByTagName("option")[
-                        document.getElementById("quarter-dropdown-select")
-                          .selectedIndex
-                      ].value
-                    )
-                  }
-                  defaultValue={"winter2023"}
+                  value={selectedQuarter}
+                  onChange={e => updateQuarter(e.target.value)}
                 >
-                  <option value='fall2022'>Fall 22</option>
-                  <option value='winter2023'>Winter 23</option>
-                  <option value='spring2023'>Spring 23</option>
+                  {quarters.map(value => (
+                    <option value={value} key={value}>
+                      {value}
+                    </option>
+                  ))}
                 </select>
                 <div id='quarter-dropdown-field'></div>
                 <img
@@ -353,24 +429,41 @@ export default function MapPage() {
                 ></img>
               </div>
               <div className='search-bar'>
-                {/* Implement search by code around here */}
                 <input
                   type='text'
                   id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
+                  value={wordEntered}
+                  onChange={event => handleFilter(event, classes)}
+                  onKeyDown={checkKey}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
                 <div className='search-bar-field'></div>
-                <div className='search-bar-button'>
-                  <input
-                    type='submit'
-                    id='classcode-submit-button'
-                    value=''
-                  ></input>
-                  <img id='classcode-arrow' src='/arrowcircle.png'></img>
-                </div>
+                <img
+                  className='search-bar-button'
+                  onClick={placeBuilding}
+                  id='classcode-submit-button'
+                  src='/arrowcircle.png'
+                ></img>
+                {filteredData.length != 0 && (
+                  <div id='data-class-result'>
+                    {filteredData.slice(0, 15).map((value, key) => {
+                      return (
+                        <a
+                          key={key}
+                          onClick={() => handleFilterClick(value.name)}
+                          className='dataClassItem'
+                          target='_blank'
+                        >
+                          {" "}
+                          <p>{value.name}</p>{" "}
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
