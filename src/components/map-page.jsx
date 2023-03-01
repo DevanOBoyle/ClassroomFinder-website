@@ -458,7 +458,9 @@ export default function MapPage() {
                           target='_blank'
                         >
                           {" "}
-                          <p>{value.name}</p>{" "}
+                          <p>
+                            {value.name} {value.code}
+                          </p>{" "}
                         </a>
                       )
                     })}
