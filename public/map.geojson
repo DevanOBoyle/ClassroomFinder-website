@@ -750,12 +750,7 @@
       "properties": {
         "address": "355 Rachel Carson Road",
         "name": "Rachel Carson College Academic Building",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["rachel_carson.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
