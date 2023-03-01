@@ -851,12 +851,7 @@
       "properties": {
         "address": "233 Oakes Road",
         "name": "Oakes College Academic Building",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["Oakes_College.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
