@@ -74,6 +74,7 @@
   position: absolute;
   top: 0;
   min-height: 90px;
+
   // overflow-y: auto;
 }
 
@@ -330,7 +331,7 @@ input[type="submit"] {
 @include responsiveness.screen(small-laptop, desktop, big-desktop) {
   #floor-dropdown {
     height: 68px;
-    margin: 50px 0;
+    margin: 40px 0;
   }
 
   #quarter-dropdown-select,
@@ -533,7 +534,7 @@ input[type="submit"] {
 #info-div-text {
   float: left;
   padding: 20px;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 #floor-map {
@@ -544,7 +545,12 @@ input[type="submit"] {
   #info-div-text {
     width: 100%;
     padding: 0 20px;
-    line-height: 1.5;
+
+    h4,
+    h6,
+    a {
+      margin-bottom: 10px;
+    }
   }
 
   #info-line {
@@ -566,7 +572,12 @@ input[type="submit"] {
   #info-div-text {
     width: 35%;
     padding: 20px;
-    line-height: 2;
+
+    h4,
+    h6,
+    a {
+      margin-bottom: 15px;
+    }
   }
 
   #info-line {
@@ -584,8 +595,8 @@ input[type="submit"] {
   }
 }
 
-#dataResult,
-#dataClassResult {
+#data-result,
+#data-class-result {
   margin: auto;
   width: 88%;
   max-height: 200px;
@@ -597,13 +608,13 @@ input[type="submit"] {
   position: relative;
 }
 
-#dataClassResult {
+#data-class-result {
   top: 68px;
   margin-bottom: 60px;
 }
 
-#dataResult::-webkit-scrollbar,
-#dataClassResult::-webkit-scrollbar {
+#data-result::-webkit-scrollbar,
+#data-class-result::-webkit-scrollbar {
   display: none;
 }
 
@@ -612,7 +623,7 @@ input[type="submit"] {
   width: 100%;
   display: flex;
   align-items: center;
-  color: rgb(85, 85, 85);
+  color: rgb(85 85 85);
 
   @include responsiveness.screen(smallest, phone) {
     height: 30px;
@@ -635,5 +646,3 @@ input[type="submit"] {
 .dataItem:hover {
   background-color: rgb(253 199 0 / 100%);
 }
-
-
