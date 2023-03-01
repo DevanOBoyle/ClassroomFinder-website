@@ -15,6 +15,7 @@ import VectorImageLayer from "ol/layer/VectorImage"
 import VectorSource from "ol/source/Vector"
 import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
+// import { transform } from "ol/proj"
 
 // Keep track of what is shown and not
 var search = true
@@ -71,6 +72,14 @@ export default function MapPage() {
       color: [45, 45, 45, 1],
       width: 1.2,
     })
+    /*
+    const pointStyle = new Circle({
+      fill: new Fill({
+        color: [159, 212, 255, 1],
+      }),
+      radius: 7,
+      stroke: strokeStyle,
+    }) */
 
     const buildingsLayer = new VectorImageLayer({
       source: buildingsSource,
@@ -78,6 +87,7 @@ export default function MapPage() {
       style: new Style({
         fill: fillStyle,
         stroke: strokeStyle,
+        // image: pointStyle,
       }),
     })
 
@@ -109,7 +119,8 @@ export default function MapPage() {
       view: new View({
         center: [-13587641.820142383, 4438297.780079307],
         zoom: 15,
-        minZoom: 13,
+        maxZoom: 18,
+        minZoom: 10,
       }),
     })
     // Handle map click
@@ -122,9 +133,6 @@ export default function MapPage() {
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
   }, [])
-
-  // console.log(buildings)
-  // console.log(classes)
 
   function toggleClick() {
     console.log(toggleRight)
@@ -179,6 +187,17 @@ export default function MapPage() {
       placeOnMap(currentBuilding.place_id)
     }
     searchButtonClick()
+  }
+
+  const checkKey = event => {
+    if (event.key === "Enter") {
+      placeBuilding()
+    } else if (event.key === "Tab") {
+      event.preventDefault()
+      if (filteredData.length != 0) {
+        handleFilterClick(filteredData[0])
+      }
+    }
   }
 
   function openInfoWindow() {
@@ -259,7 +278,8 @@ export default function MapPage() {
 
   // Search filter handler
   function handleFilter(event, arr) {
-    console.log("searching")
+    console.log(event)
+    console.log(arr)
     const searchWord = event.target.value
     setWordEntered(searchWord)
     const newFilter = arr.filter(value => {
@@ -269,8 +289,6 @@ export default function MapPage() {
         return value.code.toLowerCase().includes(searchWord.toLowerCase())
       }
     })
-
-    // console.log(newFilter)
 
     if (searchWord === "") {
       setFilteredData([])
@@ -284,16 +302,29 @@ export default function MapPage() {
     buildingMarked = true
     const cord = building.get("geometry").geometries_[0].flatCoordinates
     // Place a marker
-    overlayRef.current.setPosition([cord[0] + 500, cord[1]])
+    overlayRef.current.setPosition([cord[0], cord[1]])
+    zoomAndCenter(cord)
     changeInfoText(building)
     showFloorMaps(building)
     openInfoWindow()
   }
 
+  // Center and zoom the map
+  function zoomAndCenter(coordinates) {
+    mapRef.current.setView(
+      new View({
+        center: coordinates,
+        zoom: 16,
+        maxZoom: 18,
+        minZoom: 10,
+      })
+    )
+  }
+
   const handleFilterClick = value => {
     setWordEntered(value.name)
     currentBuilding = value
-    console.log(value)
+    document.getElementById("classroom-input").focus()
   }
 
   // Map click handler
@@ -345,6 +376,7 @@ export default function MapPage() {
                   maxLength={60}
                   value={wordEntered}
                   onChange={event => handleFilter(event, buildings)}
+                  onKeyDown={checkKey}
                   //onChange={handleFilter(buildings)}
                   required
                 />
@@ -358,7 +390,7 @@ export default function MapPage() {
               </div>
               <div>
                 {filteredData.length != 0 && (
-                  <div id='dataResult'>
+                  <div id='data-result'>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
                         <a
@@ -404,6 +436,7 @@ export default function MapPage() {
                   placeholder='e.g. "CSE123-01"'
                   value={wordEntered}
                   onChange={event => handleFilter(event, classes)}
+                  onKeyDown={checkKey}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
                   required
                 />
@@ -415,7 +448,7 @@ export default function MapPage() {
                   src='/arrowcircle.png'
                 ></img>
                 {filteredData.length != 0 && (
-                  <div id='dataClassResult'>
+                  <div id='data-class-result'>
                     {filteredData.slice(0, 15).map((value, key) => {
                       return (
                         <a
