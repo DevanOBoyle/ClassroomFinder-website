@@ -22,7 +22,7 @@ var search = true
 var info = false
 var toggleRight = false
 var buildingMarked = false
-var currentBuilding
+var currentBuilding = ""
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -137,6 +137,7 @@ export default function Body() {
 
   function toggleClick() {
     console.log(toggleRight)
+    currentBuilding = ""
     document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
@@ -177,25 +178,35 @@ export default function Body() {
     search = !search
   }
 
-  function placeBuilding() {
-    // console.log("clicked")
-    if (!currentBuilding) {
-      alert(
-        "Please choose one of the classes or buildings listed. " +
-          "Class codes should be written in the format ABC123-01."
-      )
+  function placeBuildingFromRoom() {
+    if (currentBuilding == "") {
+      alert("Please choose one of the buildings listed.")
     } else {
       placeOnMap(currentBuilding.place_id)
+      searchButtonClick()
     }
-    searchButtonClick()
+  }
+
+  function placeBuildingFromCode() {
+    if (!currentBuilding) {
+      alert(
+        "Please choose one of the classes listed. " +
+          "Class codes should be written in the format ABC123-01. " +
+          "You can also search by the name of a class."
+      )
+    } else {
+      // placeOnMap(currentBuilding.place_id)
+      showPinOnFloorMap(50, 50)
+      searchButtonClick()
+    }
   }
 
   const checkKey = event => {
     if (event.key === "Enter") {
-      placeBuilding()
+      toggleRight ? placeBuildingFromCode() : placeBuildingFromRoom()
     } else if (event.key === "Tab") {
       event.preventDefault()
-      if (filteredData.length != 0) {
+      if (filteredData.length > 0) {
         handleFilterClick(filteredData[0])
       }
     }
@@ -277,6 +288,26 @@ export default function Body() {
     })
   }
 
+  // Accepts coordinates as percentage from 0 to 100
+  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
+    console.log(document.getElementById("floormap-img").clientHeight)
+    // console.log(document.getElementById("floormap").clientHeight)
+    if (xcoord != -1 && ycoord != -1) {
+      var yPercentageOfDiv =
+        (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+      document
+        .getElementById("floormap-pin")
+        .setAttribute(
+          "style",
+          "left: " +
+            xcoord.toString() +
+            "%; top: " +
+            yPercentageOfDiv.toString() +
+            "px; display: block;"
+        )
+    }
+  }
+
   // Search filter handler
   function handleFilter(event, arr) {
     console.log(event)
@@ -323,9 +354,12 @@ export default function Body() {
   }
 
   const handleFilterClick = value => {
+    console.log(value)
     setWordEntered(value.name)
     currentBuilding = value
-    document.getElementById("classroom-input").focus()
+    toggleRight
+      ? document.getElementById("classcode-input").focus()
+      : document.getElementById("classroom-input").focus()
   }
 
   // Map click handler
@@ -384,7 +418,7 @@ export default function Body() {
                 <div className='search-bar-field'></div>
                 <img
                   className='search-bar-button'
-                  onClick={placeBuilding}
+                  onClick={placeBuildingFromRoom}
                   id='classroom-submit-button'
                   src='/arrowcircle.png'
                 ></img>
@@ -444,7 +478,7 @@ export default function Body() {
                 <div className='search-bar-field'></div>
                 <img
                   className='search-bar-button'
-                  onClick={placeBuilding}
+                  onClick={placeBuildingFromCode}
                   id='classcode-submit-button'
                   src='/arrowcircle.png'
                 ></img>
