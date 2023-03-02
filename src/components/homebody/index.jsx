@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
-import "../stylesheets/textstyle.scss"
-import "./page.scss"
-import "../../node_modules/ol/ol.css"
-import getBuilding, { getClasses } from "../utils/api"
+import "../../stylesheets/textstyle.scss"
+import "./index.scss"
+import "../../../node_modules/ol/ol.css"
+import getBuilding, { getClasses } from "../../utils/api"
 
 // Openlayers imports
 import Map from "ol/Map"
@@ -37,7 +37,7 @@ const buildingsSource = new VectorSource({
 
 const quarters = ["fall2022", "winter2023", "spring2023"]
 
-export default function MapPage() {
+export default function Body() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
@@ -54,6 +54,7 @@ export default function MapPage() {
   const mapPin = useRef()
   const nameElement = useRef()
   const addressElement = useRef()
+  const floorPin = useRef()
 
   const mapRef = useRef()
   mapRef.current = map
@@ -202,7 +203,7 @@ export default function MapPage() {
 
   function openInfoWindow() {
     document.getElementById("info-div").style.display = buildingMarked
-      ? "block"
+      ? "flex"
       : "none"
     document.getElementById("info-nobuilding-text").style.display =
       buildingMarked ? "none" : "block"
@@ -259,7 +260,7 @@ export default function MapPage() {
     floorMapFolder = floorMapBaseFolder + building.getId() + "/"
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
-    document.getElementById("floor-map").src = floorMapHref
+    document.getElementById("floormap-img").src = floorMapHref
   }
 
   // Show info at click
@@ -336,11 +337,11 @@ export default function MapPage() {
     // console.log(document.getElementById("floor-dropdownSelect").value)
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
-    document.getElementById("floor-map").src = floorMapHref
+    document.getElementById("floormap-img").src = floorMapHref
   }
 
   function showFullScreen() {
-    let image = document.getElementById("floor-map")
+    let image = document.getElementById("floormap-img")
     if (!document.fullscreenElement) {
       image?.requestFullscreen()
     } else {
@@ -533,7 +534,17 @@ export default function MapPage() {
             </div>
           </div>
           <div id='info-line'></div>
-          <img id='floor-map' onClick={showFullScreen}></img>
+          <div id='floormap' onClick={showFullScreen}>
+            <img id='floormap-img'></img>
+            <img
+              ref={floorPin}
+              id='floormap-pin'
+              src={
+                "http://icons.iconarchive.com/icons/icons-land" +
+                "/vista-map-markers/256/Map-Marker-Ball-Pink-icon.png"
+              }
+            ></img>
+          </div>
         </div>
       </div>
     </div>

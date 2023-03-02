@@ -1,12 +1,13 @@
 @use "../../stylesheets/fonts";
 @use "../../stylesheets/responsiveness";
+@use "../../stylesheets/colors.scss";
 @import "../../stylesheets/fonts";
 
 .header {
   position: fixed; /* Fixed at scrolling */
   top: 0;
   width: 100%;
-  background-color: #fdc700;
+  background-color: var(--slug-yellow);
   z-index: 100;
 }
 
@@ -15,7 +16,7 @@
   display: block;
   text-align: left;
   font-family: $corinthia;
-  color: #001f39;
+  color: var(--dark-blue);
   padding: 5px 16px;
 }
 
