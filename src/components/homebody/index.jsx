@@ -17,12 +17,15 @@ import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
 // import { transform } from "ol/proj"
 
+import * as ics from "ics"
+
 // Keep track of what is shown and not
 var search = true
 var info = false
 var toggleRight = false
 var buildingMarked = false
 var currentBuilding = ""
+var currentClass = ""
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -136,8 +139,6 @@ export default function Body() {
   }, [])
 
   function toggleClick() {
-    console.log(toggleRight)
-    currentBuilding = ""
     document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
@@ -155,7 +156,13 @@ export default function Body() {
     document.getElementById("search-toggle-slide").style.right = toggleRight
       ? "auto"
       : "1.5%"
+    document.getElementById("room-form").style.display = toggleRight
+      ? "contents"
+      : "none"
+
     toggleRight = !toggleRight
+    currentBuilding = ""
+    currentClass = ""
     setWordEntered("")
     setFilteredData("")
   }
@@ -182,21 +189,23 @@ export default function Body() {
     if (currentBuilding == "") {
       alert("Please choose one of the buildings listed.")
     } else {
+      document.getElementById("info-div-text-class").style.display = "none"
       placeOnMap(currentBuilding.place_id)
       searchButtonClick()
     }
   }
 
   function placeBuildingFromCode() {
-    if (!currentBuilding) {
+    if (!currentClass) {
       alert(
         "Please choose one of the classes listed. " +
           "Class codes should be written in the format ABC123-01. " +
           "You can also search by the name of a class."
       )
     } else {
+      document.getElementById("info-div-text-class").style.display = "flex"
       // placeOnMap(currentBuilding.place_id)
-      showPinOnFloorMap(50, 50)
+      showPinOnFloorMap()
       searchButtonClick()
     }
   }
@@ -278,6 +287,7 @@ export default function Body() {
   function showFeatureInfo(e) {
     mapRef.current.forEachFeatureAtPixel(e.pixel, function (building) {
       buildingMarked = true
+      document.getElementById("info-div-text-class").style.display = "none"
       // Place a marker
       overlayRef.current.setPosition(e.coordinate)
       // Set text
@@ -291,7 +301,6 @@ export default function Body() {
   // Accepts coordinates as percentage from 0 to 100
   function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
     console.log(document.getElementById("floormap-img").clientHeight)
-    // console.log(document.getElementById("floormap").clientHeight)
     if (xcoord != -1 && ycoord != -1) {
       var yPercentageOfDiv =
         (ycoord / 100) * document.getElementById("floormap-img").clientHeight
@@ -356,10 +365,13 @@ export default function Body() {
   const handleFilterClick = value => {
     console.log(value)
     setWordEntered(value.name)
-    currentBuilding = value
-    toggleRight
-      ? document.getElementById("classcode-input").focus()
-      : document.getElementById("classroom-input").focus()
+    if (toggleRight) {
+      currentClass = value
+      document.getElementById("classcode-input").focus()
+    } else {
+      currentBuilding = value
+      document.getElementById("classroom-input").focus()
+    }
   }
 
   // Map click handler
@@ -386,6 +398,53 @@ export default function Body() {
   function updateQuarter(value) {
     getClasses(setClasses, value)
     setQuarter(value)
+  }
+
+  async function handleDownloadedEvent(calendarEvent) {
+    const filename = "ExampleEvent.ics"
+    const file = await new Promise((resolve, reject) => {
+      ics.createEvent(calendarEvent, (error, value) => {
+        if (error) {
+          reject(error)
+        }
+
+        resolve(new File([value], filename, { type: "plain/text" }))
+      })
+    })
+    const url = URL.createObjectURL(file)
+
+    // trying to assign the file URL to a window could cause cross-site
+    // issues so this is a workaround using HTML5
+    const anchor = document.createElement("a")
+    anchor.href = url
+    anchor.download = filename
+
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
+
+    URL.revokeObjectURL(url)
+  }
+
+  function downloadCalendarEvent() {
+    // create calendar event
+    const calendarEvent = {
+      // Jan 9th 2023, 6.30-9.30
+      start: [2023, 1, 9, 6, 30],
+      end: [2023, 1, 9, 9, 30],
+      // Repeated every MWF until March 25th
+      recurrenceRule:
+        "FREQ=WEEKLY;BYDAY=MO,WE,FR;INTERVAL=1;UNTIL=20230325T000000Z;",
+      title: "class.code" + " " + "class.name",
+      description:
+        "Instructor: " + "class.instructor" + "\nMode: " + "class.mode",
+      location: "class.meeting_place",
+      // url: "https://www.classroomfinder.ucsc.edu/",
+      // geo: { lat: 40.0095, lon: 105.2669 },
+      busyStatus: "BUSY",
+      organizer: { name: "UCSC" },
+    }
+    handleDownloadedEvent(calendarEvent)
   }
 
   return (
@@ -565,6 +624,11 @@ export default function Body() {
                 src='/arrowcircle.png'
                 className='arrow-circle'
               ></img>
+            </div>
+            <div id='info-div-text-class'>
+              <button id='calendar-button' onClick={downloadCalendarEvent}>
+                Click here to download calendar event
+              </button>
             </div>
           </div>
           <div id='info-line'></div>

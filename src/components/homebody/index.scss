@@ -203,9 +203,13 @@
   display: none;
 }
 
-.search-bar,
+.search-bar {
+  position: relative;
+}
+
 #quarter-dropdown,
 #floor-dropdown {
+  // cursor: pointer;
   position: relative;
 }
 
@@ -232,6 +236,7 @@
   appearance: none;
   border-radius: 50px;
   color: black;
+  cursor: pointer;
 }
 
 #classroom-input,
@@ -245,17 +250,6 @@
   z-index: 150;
   color: black;
   text-align: left;
-}
-
-input[type="submit"] {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  background-color: transparent;
-  padding: 0;
-  border-width: 0;
-  z-index: 250;
-  border-radius: 50%;
 }
 
 // Drop-down menus
@@ -311,7 +305,7 @@ input[type="submit"] {
 @include responsiveness.screen(small-laptop, desktop, big-desktop) {
   #floor-dropdown {
     height: 68px;
-    margin: 40px 0;
+    margin: 30px 0 20px;
   }
 
   #quarter-dropdown-select,
@@ -533,8 +527,7 @@ input[type="submit"] {
   overflow-y: auto;
   background-color: white;
   position: relative;
-
-  // flex: 2 2 auto;
+  cursor: pointer;
 }
 
 @include responsiveness.screen(smallest, phone, tablet) {
@@ -562,13 +555,11 @@ input[type="submit"] {
 @include responsiveness.screen(
   large-tablet,
   small-laptop,
-    desktop,
+  desktop,
     big-desktop
 ) {
   #info-div-text {
     width: 35%;
-
-    // padding: 20px;
 
     h4,
     h6,
@@ -578,13 +569,8 @@ input[type="submit"] {
   }
 
   #info-line {
-    // width: 3px;
-    // position: absolute;
-    // top: 92px;
-    // bottom: 240px;
+    margin: 15px 0;
     background-color: var(--slug-blue);
-
-    // left: 40%;
     flex: 0;
     padding: 2px;
   }
@@ -667,5 +653,30 @@ input[type="submit"] {
 
 .dataClassItem:hover,
 .dataItem:hover {
-  background-color: var(--slug-yellow);
+  background-color: var(--light-yellow);
+}
+
+// Calendar event button
+
+#calendar-button {
+  position: relative;
+  right: 0;
+  top: 0;
+  margin: 10px auto;
+  padding: 10px 20px;
+  height: 50px;
+  z-index: 500;
+  background-color: white;
+  box-shadow: inset 0 -2px 8px var(--shadow);
+  border-radius: 68px;
+  border: none;
+  cursor: pointer;
+}
+
+#calendar-button:hover {
+  background-color: var(--light-yellow);
+}
+
+#info-div-text-class {
+  display: none;
 }
