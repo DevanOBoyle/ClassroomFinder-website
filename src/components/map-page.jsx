@@ -44,6 +44,7 @@ export default function MapPage() {
   const [buildings, setBuildings] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
+  const [selectedResult, setSelectedResult] = useState(null)
   const [selectedQuarter, setQuarter] = useState(quarters[1])
 
   // eslint-disable-next-line
@@ -295,6 +296,8 @@ export default function MapPage() {
     } else {
       setFilteredData(newFilter)
     }
+
+    setSelectedResult(null)
   }
 
   const placeOnMap = placeId => {
@@ -322,7 +325,10 @@ export default function MapPage() {
   }
 
   const handleFilterClick = value => {
+    setSelectedResult(value)
     setWordEntered(value.name)
+    setFilteredData([])
+
     currentBuilding = value
     document.getElementById("classroom-input").focus()
   }
@@ -374,7 +380,7 @@ export default function MapPage() {
                   className='input'
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
-                  value={wordEntered}
+                  value={selectedResult ? selectedResult.name : wordEntered}
                   onChange={event => handleFilter(event, buildings)}
                   onKeyDown={checkKey}
                   //onChange={handleFilter(buildings)}
@@ -434,7 +440,11 @@ export default function MapPage() {
                   id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
-                  value={wordEntered}
+                  value={
+                    selectedResult
+                      ? selectedResult.code + " " + selectedResult.name
+                      : wordEntered
+                  }
                   onChange={event => handleFilter(event, classes)}
                   onKeyDown={checkKey}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
@@ -453,13 +463,13 @@ export default function MapPage() {
                       return (
                         <a
                           key={key}
-                          onClick={() => handleFilterClick(value.name)}
+                          onClick={() => handleFilterClick(value)} //value.name
                           className='dataClassItem'
                           target='_blank'
                         >
                           {" "}
                           <p>
-                            {value.name} {value.code}
+                            {value.code} {value.name}
                           </p>{" "}
                         </a>
                       )
