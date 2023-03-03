@@ -2798,7 +2798,7 @@
       "properties": {
         "name": "Merrill Academic Building",
         "address": "639 Merrill Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["Merrill_College.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2851,7 +2851,7 @@
       "properties": {
         "name": "Crown Classroom Building",
         "address": "624 Crown Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["Crown_College.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
