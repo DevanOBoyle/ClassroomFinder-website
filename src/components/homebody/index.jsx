@@ -66,6 +66,9 @@ export default function Body() {
   const overlayRef = useRef()
   overlayRef.current = overlayLayer
 
+  // Dummy values
+  const meetingTime = "TuTh 03:20AM-04:55PM"
+
   // Initialize map
   useEffect(() => {
     // Vector layer with buildings
@@ -401,7 +404,7 @@ export default function Body() {
   }
 
   async function handleDownloadedEvent(calendarEvent) {
-    const filename = "ExampleEvent.ics"
+    const filename = "class.code" + ".ics"
     const file = await new Promise((resolve, reject) => {
       ics.createEvent(calendarEvent, (error, value) => {
         if (error) {
@@ -426,15 +429,52 @@ export default function Body() {
     URL.revokeObjectURL(url)
   }
 
+  function getDays(meetingDays) {
+    // Form: "MO,WE,FR"
+    var weekDays = ""
+    if (meetingDays.match("M")) weekDays += "MO,"
+    if (meetingDays.match("Th")) {
+      if (meetingDays.match("Tu")) weekDays += "TU,"
+    } else if (meetingDays.match("T")) weekDays += "TU,"
+    if (meetingDays.match("W")) weekDays += "WE,"
+    if (meetingDays.match("Th")) weekDays += "TH,"
+    if (meetingDays.match("F")) weekDays += "F,"
+    return weekDays.slice(0, -1)
+  }
+
+  function getHr(USTime) {
+    return USTime.charAt(5) == "P"
+      ? +USTime.substr(0, 2) + 12
+      : +USTime.substr(0, 2)
+  }
+
+  function getMin(USTime) {
+    return +USTime.substr(3, 2)
+  }
+
   function downloadCalendarEvent() {
+    var meetingTimeArray = meetingTime.split(/\s|-/)
+    console.log(meetingTime)
+    console.log(meetingTimeArray)
+    const startHr = getHr(meetingTimeArray[1])
+    const startMin = getMin(meetingTimeArray[1])
+    const endHr = getHr(meetingTimeArray[2])
+    const endMin = getMin(meetingTimeArray[2])
+    console.log(startHr)
+    console.log(startMin)
+    console.log(endHr)
+    console.log(endMin)
     // create calendar event
     const calendarEvent = {
-      // Jan 9th 2023, 6.30-9.30
-      start: [2023, 1, 9, 6, 30],
-      end: [2023, 1, 9, 9, 30],
+      // Jan 9th 2023
+      start: [2023, 1, 9, startHr, startMin],
+      end: [2023, 1, 9, endHr, endMin],
+      // startInputType: "utc-8", // Solve time zones
       // Repeated every MWF until March 25th
       recurrenceRule:
-        "FREQ=WEEKLY;BYDAY=MO,WE,FR;INTERVAL=1;UNTIL=20230325T000000Z;",
+        "FREQ=WEEKLY;BYDAY=" +
+        getDays(meetingTimeArray[0]) +
+        ";INTERVAL=1;UNTIL=20230325T000000Z;",
       title: "class.code" + " " + "class.name",
       description:
         "Instructor: " + "class.instructor" + "\nMode: " + "class.mode",
