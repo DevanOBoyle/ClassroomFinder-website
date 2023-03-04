@@ -49,4 +49,28 @@ export const getClasses = async (setClasses: Dispatch<any>, term: string) => {
   }
 }
 
+export const getRooms = async (setRooms: Dispatch<any>) => {
+  try {
+    const getBuildingAxiosRequest = {
+      method: "get",
+      url: `${process.env.REACT_APP_ENDPOINT_URL}/rooms`,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": process.env.REACT_APP_CORS_ORIGIN || "",
+      },
+    }
+    const res = await axios(getBuildingAxiosRequest)
+    const roomData = res.data.rooms
+
+    console.log(roomData)
+
+    setRooms(roomData)
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      const axiosError: any = err
+      console.log(axiosError.response.data.error)
+    }
+  }
+}
+
 export default getBuilding

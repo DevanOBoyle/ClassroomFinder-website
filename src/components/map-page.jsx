@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import "../stylesheets/textstyle.scss"
 import "./page.scss"
 import "../../node_modules/ol/ol.css"
-import getBuilding, { getClasses } from "../utils/api"
+import getBuilding, { getClasses, getRooms } from "../utils/api"
 
 // Openlayers imports
 import Map from "ol/Map"
@@ -42,6 +42,7 @@ export default function MapPage() {
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
   const [buildings, setBuildings] = useState([])
+  const [rooms, setRooms] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
   const [selectedQuarter, setQuarter] = useState(quarters[1])
@@ -132,6 +133,7 @@ export default function MapPage() {
 
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
+    getRooms(setRooms)
   }, [])
 
   function toggleClick() {
@@ -283,10 +285,18 @@ export default function MapPage() {
     const searchWord = event.target.value
     setWordEntered(searchWord)
     const newFilter = arr.filter(value => {
-      if (arr == buildings) {
-        return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      if (arr == rooms) {
+        let concatStr = value.name.toLowerCase()
+        if (value.room_number) {
+          concatStr = concatStr + " " + value.room_number.toLowerCase()
+        }
+        return concatStr.includes(searchWord.toLowerCase())
       } else {
-        return value.code.toLowerCase().includes(searchWord.toLowerCase())
+        let concatStr = value.code.toLowerCase()
+        if (value.name) {
+          concatStr = concatStr + " " + value.name.toLowerCase()
+        }
+        return concatStr.includes(searchWord.toLowerCase())
       }
     })
 
@@ -321,9 +331,50 @@ export default function MapPage() {
     )
   }
 
+  /* 
+  Handler for clicking on drop down element on search
+  param: value -> contains either room or class object data
+  global var change: currentBuilding, currentRoomNum (To Be Added) 
+  */
+
   const handleFilterClick = value => {
-    setWordEntered(value.name)
-    currentBuilding = value
+    if (value.code) {
+      let room = null
+      setWordEntered(value.code + " " + value.name)
+      for (let i = 0; i < rooms.length; i++) {
+        if (
+          value.meeting_place
+            .toLowerCase()
+            .includes(rooms[i].name.toLowerCase())
+        ) {
+          currentBuilding = buildings[i]
+        } else {
+          for (let j = 0; j < rooms[i].other_names.length; j++) {
+            if (
+              value.meeting_place
+                .toLowerCase()
+                .includes(rooms[i].other_names[j].toLowerCase())
+            ) {
+              room = rooms[i]
+            }
+          }
+        }
+        if (room) {
+          for (let i = 0; i < buildings.length; i++) {
+            if (buildings[i].name === room.name) {
+              currentBuilding = buildings[i]
+            }
+          }
+        }
+      }
+    } else if (value.room_number) {
+      setWordEntered(value.name + " " + value.room_number)
+      for (let i = 0; i < buildings.length; i++) {
+        if (buildings[i].name === value.name) {
+          currentBuilding = buildings[i]
+        }
+      }
+    }
     document.getElementById("classroom-input").focus()
   }
 
@@ -375,7 +426,7 @@ export default function MapPage() {
                   placeholder='e.g. "R Carson 205"'
                   maxLength={60}
                   value={wordEntered}
-                  onChange={event => handleFilter(event, buildings)}
+                  onChange={event => handleFilter(event, rooms)}
                   onKeyDown={checkKey}
                   //onChange={handleFilter(buildings)}
                   required
@@ -400,7 +451,7 @@ export default function MapPage() {
                           target='_blank'
                         >
                           {" "}
-                          <p>{value.name}</p>{" "}
+                          <p>{value.name + " " + value.room_number}</p>{" "}
                         </a>
                       )
                     })}
@@ -453,12 +504,12 @@ export default function MapPage() {
                       return (
                         <a
                           key={key}
-                          onClick={() => handleFilterClick(value.name)}
+                          onClick={() => handleFilterClick(value)}
                           className='dataClassItem'
                           target='_blank'
                         >
                           {" "}
-                          <p>{value.name}</p>{" "}
+                          <p>{value.code + " " + value.name}</p>{" "}
                         </a>
                       )
                     })}
