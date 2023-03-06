@@ -1,16 +1,11 @@
-@use "../stylesheets/responsiveness";
-@use "../stylesheets/fonts";
-@import "../stylesheets/fonts";
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@use "../../stylesheets/fonts";
+@use "../../stylesheets/responsiveness";
+@use "../../stylesheets/colors.scss";
+@import "../../stylesheets/fonts";
 
 #main {
   width: 100%;
-  background: rgb(255 255 255 / 100%);
+  background: white;
   position: relative;
   top: 0;
   left: 0;
@@ -68,14 +63,12 @@
 
 #search-window {
   width: 100%;
-  background: rgb(0 60 108 / 100%);
-  box-shadow: 0 4px 45px rgb(0 0 0 / 70%);
+  background: var(--slug-blue);
+  box-shadow: 0 4px 45px #000000b3;
   z-index: 80;
   position: absolute;
   top: 0;
   min-height: 90px;
-
-  // overflow-y: auto;
 }
 
 @include responsiveness.screen(smallest, phone) {
@@ -160,8 +153,8 @@
 #search-toggle-field {
   width: 100%;
   height: 100%;
-  background: rgb(255 255 255 / 100%);
-  box-shadow: inset 0 4px 4px rgb(0 0 0 / 25%);
+  background: white;
+  box-shadow: inset 0 4px 4px var(--shadow);
   position: relative;
   top: 0;
   left: 0;
@@ -173,14 +166,14 @@
 #search-toggle-slide {
   width: 51%;
   height: 80%;
-  background: rgb(0 31 57 / 100%);
+  background: var(--dark-blue);
   position: absolute;
   top: 10%;
   left: 1.5%;
   margin: 0;
   padding: 0;
   border-radius: 55px;
-  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  box-shadow: 0 4px 4px var(--shadow);
 }
 
 #search-toggle-text-room,
@@ -196,7 +189,7 @@
 
 #search-toggle-text-room {
   left: 0;
-  color: rgb(253 199 0 / 100%);
+  color: var(--slug-yellow);
 }
 
 #search-toggle-text-class {
@@ -210,37 +203,14 @@
   display: none;
 }
 
-.search-bar,
-#quarter-dropdown,
-#floor-dropdown {
+.search-bar {
   position: relative;
 }
 
-@include responsiveness.screen(smallest, phone) {
-  .search-bar,
-  #quarter-dropdown {
-    width: 70vw;
-    height: 40px;
-    margin: 30px 0 0;
-  }
-}
-
-@include responsiveness.screen(tablet, large-tablet) {
-  .search-bar,
-  #quarter-dropdown {
-    width: 55vw;
-    height: 54px;
-    margin: 42px 0 0;
-  }
-}
-
-@include responsiveness.screen(small-laptop, desktop, big-desktop) {
-  .search-bar,
-  #quarter-dropdown {
-    width: 40vw;
-    height: 68px;
-    margin: 50px 0 0;
-  }
+#quarter-dropdown,
+#floor-dropdown {
+  // cursor: pointer;
+  position: relative;
 }
 
 .search-bar-field,
@@ -248,7 +218,7 @@
   width: 100%;
   height: 100%;
   background: white;
-  box-shadow: inset 0 4px 4px rgb(0 0 0 / 25%);
+  box-shadow: inset 0 4px 4px var(--shadow);
   position: absolute;
   margin: 0;
   border-radius: 68px;
@@ -266,6 +236,7 @@
   appearance: none;
   border-radius: 50px;
   color: black;
+  cursor: pointer;
 }
 
 #classroom-input,
@@ -279,17 +250,6 @@
   z-index: 150;
   color: black;
   text-align: left;
-}
-
-input[type="submit"] {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  background-color: transparent;
-  padding: 0;
-  border-width: 0;
-  z-index: 250;
-  border-radius: 50%;
 }
 
 // Drop-down menus
@@ -309,6 +269,13 @@ input[type="submit"] {
   #classcode-input {
     padding: 0 38px 0 15px;
   }
+
+  .search-bar,
+  #quarter-dropdown {
+    width: 70vw;
+    height: 40px;
+    margin: 30px 0 0;
+  }
 }
 
 @include responsiveness.screen(tablet, large-tablet) {
@@ -326,12 +293,19 @@ input[type="submit"] {
   #classcode-input {
     padding: 0 60px 0 30px;
   }
+
+  .search-bar,
+  #quarter-dropdown {
+    width: 55vw;
+    height: 54px;
+    margin: 42px 0 0;
+  }
 }
 
 @include responsiveness.screen(small-laptop, desktop, big-desktop) {
   #floor-dropdown {
     height: 68px;
-    margin: 40px 0;
+    margin: 30px 0 20px;
   }
 
   #quarter-dropdown-select,
@@ -343,13 +317,20 @@ input[type="submit"] {
   #classcode-input {
     padding: 0 80px 0 35px;
   }
+
+  .search-bar,
+  #quarter-dropdown {
+    width: 40vw;
+    height: 68px;
+    margin: 50px 0 0;
+  }
 }
 
 #floor-dropdown-field {
   width: 100%;
   height: 100%;
-  background: linear-gradient(rgb(255 255 255 / 100%), rgb(246 246 246 / 100%));
-  box-shadow: inset 0 4px 4px rgb(0 0 0 / 25%);
+  background: linear-gradient(#fff, #f6f6f6);
+  box-shadow: inset 0 4px 4px var(--shadow);
   position: absolute;
   top: 0;
   left: 0;
@@ -367,7 +348,7 @@ input[type="submit"] {
   right: 1.5%;
   margin: 0;
   clip-path: circle();
-  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  box-shadow: 0 4px 4px var(--shadow);
   z-index: 300;
 }
 
@@ -424,7 +405,7 @@ input[type="submit"] {
 
 #search-text,
 #info-text {
-  color: rgb(253 199 0 / 100%);
+  color: var(--slug-yellow);
   position: absolute;
   text-align: right;
 }
@@ -461,10 +442,10 @@ input[type="submit"] {
 
 #info-window {
   width: 100%;
-  background: rgb(0 60 108 / 100%);
+  background: var(--slug-blue);
   position: absolute;
   bottom: 0;
-  box-shadow: 0 -3px 35px rgb(0 0 0 / 50%);
+  box-shadow: 0 -3px 35px #00000080;
   z-index: 75;
 }
 
@@ -509,20 +490,26 @@ input[type="submit"] {
 }
 
 #info-nobuilding-text {
-  // margin: 60px auto 30px;
   padding: 20px;
-  color: rgb(253 199 0 / 100%);
+  color: var(--slug-yellow);
   display: none;
 }
 
 #info-div {
-  padding: 20px;
   background-color: white;
   width: 93%;
   min-height: 150px;
   text-align: center;
   display: none;
-  overflow-y: auto;
+  flex-direction: row;
+  align-items: stretch;
+  align-content: stretch;
+
+  // padding: 20px;
+}
+
+#info-div > * {
+  margin: 15px 30px;
 }
 
 #info-div::after {
@@ -532,13 +519,15 @@ input[type="submit"] {
 }
 
 #info-div-text {
-  float: left;
   padding: 20px;
   line-height: 1.2;
 }
 
-#floor-map {
+#floormap {
+  overflow-y: auto;
   background-color: white;
+  position: relative;
+  cursor: pointer;
 }
 
 @include responsiveness.screen(smallest, phone, tablet) {
@@ -557,7 +546,7 @@ input[type="submit"] {
     display: none;
   }
 
-  #floor-map {
+  #floormap {
     width: 90%;
     padding: 10px 20px;
   }
@@ -571,7 +560,6 @@ input[type="submit"] {
 ) {
   #info-div-text {
     width: 35%;
-    padding: 20px;
 
     h4,
     h6,
@@ -581,19 +569,29 @@ input[type="submit"] {
   }
 
   #info-line {
-    width: 3px;
-    position: absolute;
-    top: 92px;
-    bottom: 240px;
-    background-color: rgb(0 60 108 / 100%);
-    left: 40%;
+    margin: 15px 0;
+    background-color: var(--slug-blue);
+    flex: 0;
+    padding: 2px;
   }
 
-  #floor-map {
+  #floormap {
     width: 55%;
-    float: right;
   }
 }
+
+#floormap-img {
+  width: 100%;
+}
+
+#floormap-pin {
+  position: absolute;
+  display: none;
+  width: 35px;
+  transform: translate(-50%, -100%); // bottom center
+}
+
+// Search suggestions on input
 
 #data-result,
 #data-class-result {
@@ -601,7 +599,7 @@ input[type="submit"] {
   width: 88%;
   max-height: 200px;
   background-color: white;
-  box-shadow: rgba(0 0 0 / 35%) 0 5px 15px;
+  box-shadow: #00000059 0 5px 15px;
   overflow-y: auto;
   border-radius: 0 0 10px 10px;
   flex-direction: column;
@@ -609,8 +607,19 @@ input[type="submit"] {
 }
 
 #data-class-result {
-  top: 68px;
   margin-bottom: 60px;
+
+  @include responsiveness.screen(smallest, phone) {
+    top: 40px;
+  }
+
+  @include responsiveness.screen(tablet, large-tablet) {
+    top: 54px;
+  }
+
+  @include responsiveness.screen(small-laptop, desktop, big-desktop) {
+    top: 68px;
+  }
 }
 
 #data-result::-webkit-scrollbar,
@@ -623,7 +632,7 @@ input[type="submit"] {
   width: 100%;
   display: flex;
   align-items: center;
-  color: rgb(85 85 85);
+  color: #555;
 
   @include responsiveness.screen(smallest, phone) {
     height: 30px;
@@ -644,5 +653,30 @@ input[type="submit"] {
 
 .dataClassItem:hover,
 .dataItem:hover {
-  background-color: rgb(253 199 0 / 100%);
+  background-color: var(--light-yellow);
+}
+
+// Calendar event button
+
+#calendar-button {
+  position: relative;
+  right: 0;
+  top: 0;
+  margin: 10px auto;
+  padding: 10px 20px;
+  height: 50px;
+  z-index: 500;
+  background-color: white;
+  box-shadow: inset 0 -2px 8px var(--shadow);
+  border-radius: 68px;
+  border: none;
+  cursor: pointer;
+}
+
+#calendar-button:hover {
+  background-color: var(--light-yellow);
+}
+
+#info-div-text-class {
+  display: none;
 }
