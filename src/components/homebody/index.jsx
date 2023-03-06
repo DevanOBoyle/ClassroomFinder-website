@@ -209,7 +209,7 @@ export default function Body() {
       )
     } else {
       document.getElementById("info-div-text-class").style.display = "flex"
-      // placeOnMap(currentBuilding.place_id)
+      placeOnMap(currentBuilding.place_id)
       showPinOnFloorMap()
       searchButtonClick()
     }
@@ -400,6 +400,7 @@ export default function Body() {
                 .includes(rooms[i].other_names[j].toLowerCase())
             ) {
               room = rooms[i]
+              currentClass = rooms[i]
             }
           }
         }
