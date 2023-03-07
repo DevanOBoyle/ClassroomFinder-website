@@ -304,7 +304,7 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
+  function showPinOnFloorMap(xcoord = 50, ycoord = 50) {
     console.log(document.getElementById("floormap-img").clientHeight)
     if (xcoord != -1 && ycoord != -1) {
       var yPercentageOfDiv =
@@ -334,7 +334,19 @@ export default function Body() {
         if (value.room_number) {
           concatStr = concatStr + " " + value.room_number.toLowerCase()
         }
-        return concatStr.includes(searchWord.toLowerCase())
+        if (concatStr.includes(searchWord.toLowerCase())) {
+          return true
+        }
+        for (let i = 0; i < value.other_names.length; i++) {
+          concatStr = value.other_names[i].toLowerCase()
+          if (value.room_number) {
+            concatStr = concatStr + " " + value.room_number.toLowerCase()
+          }
+          if (concatStr.includes(searchWord.toLowerCase())) {
+            return true
+          }
+        }
+        return false
       } else {
         let concatStr = value.code.toLowerCase()
         if (value.name) {
@@ -552,7 +564,7 @@ export default function Body() {
                   type='text'
                   id='classroom-input'
                   className='input'
-                  placeholder='e.g. "R Carson 205"'
+                  placeholder='e.g. "R Carson 250"'
                   maxLength={60}
                   value={wordEntered}
                   onChange={event => handleFilter(event, rooms)}
