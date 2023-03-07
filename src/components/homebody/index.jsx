@@ -85,7 +85,6 @@ export default function Body() {
       style: new Style({
         fill: fillStyle,
         stroke: strokeStyle,
-        // image: pointStyle,
       }),
     })
 
@@ -115,7 +114,7 @@ export default function Body() {
       controls: [],
       overlays: [initialOverlayLayer],
       view: new View({
-        center: [-13587641.820142383, 4438297.780079307],
+        center: [-13587600, 4438600],
         zoom: 15,
         maxZoom: 18,
         minZoom: 10,
