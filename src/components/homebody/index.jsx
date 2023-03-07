@@ -330,7 +330,7 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = 50, ycoord = 50) {
+  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
     if (document.getElementById("floormap-img").clientHeight == 0) {
       setTimeout(showPinOnFloorMap, 1000)
     } else {
@@ -461,7 +461,7 @@ export default function Body() {
       }
     } else if (value.room_number) {
       setWordEntered(value.name + " " + value.room_number)
-      currentRoom = value
+      currentRoomNr = value
       for (let i = 0; i < buildings.length; i++) {
         if (buildings[i].name === value.name) {
           currentBuilding = buildings[i]
