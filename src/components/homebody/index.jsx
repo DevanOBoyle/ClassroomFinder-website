@@ -25,7 +25,7 @@ var info = false
 var toggleRight = false
 var buildingMarked = false
 var currentBuilding = ""
-var currentClass = ""
+var currentRoom = ""
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -167,7 +167,7 @@ export default function Body() {
 
     toggleRight = !toggleRight
     currentBuilding = ""
-    currentClass = ""
+    currentRoom = ""
     setWordEntered("")
     setFilteredData("")
   }
@@ -195,13 +195,14 @@ export default function Body() {
       alert("Please choose one of the buildings listed.")
     } else {
       document.getElementById("info-div-text-class").style.display = "none"
+      console.log("Placing ID")
       placeOnMap(currentBuilding.place_id)
       searchButtonClick()
     }
   }
 
   function placeBuildingFromCode() {
-    if (!currentClass) {
+    if (!currentRoom) {
       alert(
         "Please choose one of the classes listed. " +
           "Class codes should be written in the format ABC123-01. " +
@@ -210,7 +211,6 @@ export default function Body() {
     } else {
       document.getElementById("info-div-text-class").style.display = "flex"
       placeOnMap(currentBuilding.place_id)
-      showPinOnFloorMap()
       searchButtonClick()
     }
   }
@@ -286,6 +286,8 @@ export default function Body() {
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
     document.getElementById("floormap-img").src = floorMapHref
+
+    showPinOnFloorMap()
   }
 
   // Show info at click
@@ -305,20 +307,25 @@ export default function Body() {
 
   // Accepts coordinates as percentage from 0 to 100
   function showPinOnFloorMap(xcoord = 50, ycoord = 50) {
-    console.log(document.getElementById("floormap-img").clientHeight)
-    if (xcoord != -1 && ycoord != -1) {
-      var yPercentageOfDiv =
-        (ycoord / 100) * document.getElementById("floormap-img").clientHeight
-      document
-        .getElementById("floormap-pin")
-        .setAttribute(
-          "style",
-          "left: " +
-            xcoord.toString() +
-            "%; top: " +
-            yPercentageOfDiv.toString() +
-            "px; display: block;"
-        )
+    if (document.getElementById("floormap-img").clientHeight == 0) {
+      setTimeout(showPinOnFloorMap, 1000)
+    } else {
+      console.log(document.getElementById("floormap-img").clientHeight)
+      if (xcoord != -1 && ycoord != -1) {
+        console.log("ID Being placed")
+        var yPercentageOfDiv =
+          (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+        document
+          .getElementById("floormap-pin")
+          .setAttribute(
+            "style",
+            "left: " +
+              xcoord.toString() +
+              "%; top: " +
+              yPercentageOfDiv.toString() +
+              "px; display: block;"
+          )
+      }
     }
   }
 
@@ -390,7 +397,7 @@ export default function Body() {
   /* 
   Handler for clicking on drop down element on search
   param: value -> contains either room or class object data
-  global var change: currentBuilding, currentRoomNum (To Be Added) 
+  global var change: currentBuilding, currentRoom
   */
 
   const handleFilterClick = value => {
@@ -412,7 +419,7 @@ export default function Body() {
                 .includes(rooms[i].other_names[j].toLowerCase())
             ) {
               room = rooms[i]
-              currentClass = rooms[i]
+              currentRoom = rooms[i]
             }
           }
         }
@@ -426,6 +433,7 @@ export default function Body() {
       }
     } else if (value.room_number) {
       setWordEntered(value.name + " " + value.room_number)
+      currentRoom = value
       for (let i = 0; i < buildings.length; i++) {
         if (buildings[i].name === value.name) {
           currentBuilding = buildings[i]
@@ -569,7 +577,6 @@ export default function Body() {
                   value={wordEntered}
                   onChange={event => handleFilter(event, rooms)}
                   onKeyDown={checkKey}
-                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
