@@ -201,7 +201,6 @@ export default function Body() {
       placeOnMap(currentBuilding.place_id)
       changeInfoTextForClass()
       showClassInfo()
-      showPinOnFloorMap()
       searchButtonClick()
     }
   }
@@ -292,6 +291,8 @@ export default function Body() {
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
     document.getElementById("floormap-img").src = floorMapHref
+
+    showPinOnFloorMap()
   }
 
   function showBuildingInfo() {
@@ -329,21 +330,26 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
-    // console.log(document.getElementById("floormap-img").clientHeight)
-    if (xcoord != -1 && ycoord != -1) {
-      var yPercentageOfDiv =
-        (ycoord / 100) * document.getElementById("floormap-img").clientHeight
-      document
-        .getElementById("floormap-pin")
-        .setAttribute(
-          "style",
-          "left: " +
-            xcoord.toString() +
-            "%; top: " +
-            yPercentageOfDiv.toString() +
-            "px; display: block;"
-        )
+  function showPinOnFloorMap(xcoord = 50, ycoord = 50) {
+    if (document.getElementById("floormap-img").clientHeight == 0) {
+      setTimeout(showPinOnFloorMap, 1000)
+    } else {
+      console.log(document.getElementById("floormap-img").clientHeight)
+      if (xcoord != -1 && ycoord != -1) {
+        console.log("ID Being placed")
+        var yPercentageOfDiv =
+          (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+        document
+          .getElementById("floormap-pin")
+          .setAttribute(
+            "style",
+            "left: " +
+              xcoord.toString() +
+              "%; top: " +
+              yPercentageOfDiv.toString() +
+              "px; display: block;"
+          )
+      }
     }
   }
 
@@ -359,7 +365,19 @@ export default function Body() {
         if (value.room_number) {
           concatStr = concatStr + " " + value.room_number.toLowerCase()
         }
-        return concatStr.includes(searchWord.toLowerCase())
+        if (concatStr.includes(searchWord.toLowerCase())) {
+          return true
+        }
+        for (let i = 0; i < value.other_names.length; i++) {
+          concatStr = value.other_names[i].toLowerCase()
+          if (value.room_number) {
+            concatStr = concatStr + " " + value.room_number.toLowerCase()
+          }
+          if (concatStr.includes(searchWord.toLowerCase())) {
+            return true
+          }
+        }
+        return false
       } else {
         let concatStr = value.code.toLowerCase()
         if (value.name) {
@@ -404,7 +422,7 @@ export default function Body() {
   /* 
   Handler for clicking on drop down element on search
   param: value -> contains either room or class object data
-  global var change: currentBuilding, currentRoomNum (To Be Added) 
+  global var change: currentBuilding, currentRoom
   */
 
   const handleFilterClick = value => {
@@ -443,6 +461,7 @@ export default function Body() {
       }
     } else if (value.room_number) {
       setWordEntered(value.name + " " + value.room_number)
+      currentRoom = value
       for (let i = 0; i < buildings.length; i++) {
         if (buildings[i].name === value.name) {
           currentBuilding = buildings[i]
@@ -590,12 +609,11 @@ export default function Body() {
                   type='text'
                   id='classroom-input'
                   className='input'
-                  placeholder='e.g. "R Carson 205"'
+                  placeholder='e.g. "R Carson 250"'
                   maxLength={60}
                   value={wordEntered}
                   onChange={event => handleFilter(event, rooms)}
                   onKeyDown={checkKey}
-                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
