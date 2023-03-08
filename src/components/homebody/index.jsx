@@ -330,15 +330,17 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
+  function showPinOnFloorMap(xcoord = 75, ycoord = 50) {
     if (document.getElementById("floormap-img").clientHeight == 0) {
       setTimeout(showPinOnFloorMap, 1000)
     } else {
       console.log(document.getElementById("floormap-img").clientHeight)
       if (xcoord != -1 && ycoord != -1) {
         console.log("ID Being placed")
+        /*
         var yPercentageOfDiv =
           (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+        */
         document
           .getElementById("floormap-pin")
           .setAttribute(
@@ -346,8 +348,8 @@ export default function Body() {
             "left: " +
               xcoord.toString() +
               "%; top: " +
-              yPercentageOfDiv.toString() +
-              "px; display: block;"
+              ycoord.toString() +
+              "%; display: flex;"
           )
       }
     }
