@@ -712,10 +712,9 @@
         "address": "568 Steinhart Way",
         "name": "Thimann Laboratories",
         "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
+          ["thimann_laboratories_floor1.jpg", "Floor 1"],
+          ["thimann_laboratories_floor2.jpg", "Floor 2"],
+          ["thimann_laboratories_floor3.jpg", "Floor 3"]
         ]
       },
       "geometry": {
