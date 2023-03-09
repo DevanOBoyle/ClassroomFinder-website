@@ -18,6 +18,7 @@ import Overlay from "ol/Overlay"
 // import { transform } from "ol/proj"
 
 import * as ics from "ics"
+// import { NULL } from "sass"
 
 // Keep track of what is shown and not
 var search = true
@@ -39,7 +40,32 @@ const buildingsSource = new VectorSource({
   format: new GeoJSON(),
 })
 
-const quarters = ["fall2022", "winter2023", "spring2023"]
+const fall2022 = {
+  name: "Fall 2022",
+  quarter: "fall2022",
+  startDate: new Date(2022, 8, 22), // Thursday
+  endDate: new Date(2022, 11, 2),
+}
+
+const winter2023 = {
+  name: "Winter 2023",
+  quarter: "winter2023",
+  startDate: new Date(2023, 0, 9),
+  endDate: new Date(2023, 2, 17),
+}
+
+const spring2023 = {
+  name: "Spring 2023",
+  quarter: "spring2023",
+  startDate: new Date(2023, 3, 3),
+  endDate: new Date(2023, 5, 9),
+}
+const quarters = [fall2022, winter2023, spring2023]
+
+var meetingTimeArray
+var weekDaysString = ""
+var weekDaysCount = [0, 0, 0, 0, 0, 0, 0]
+var lecturesTBD = false
 
 export default function Body() {
   const [map, setMap] = useState()
@@ -49,7 +75,7 @@ export default function Body() {
   const [rooms, setRooms] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
-  const [selectedQuarter, setQuarter] = useState(quarters[1])
+  const [selectedQuarter, setQuarter] = useState(quarters[1].quarter)
 
   // eslint-disable-next-line
   const [classes, setClasses] = useState([])
@@ -126,7 +152,7 @@ export default function Body() {
     setMap(initialMap)
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
-
+    console.log(selectedQuarter)
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
     getRooms(setRooms)
@@ -186,10 +212,12 @@ export default function Body() {
     } else {
       placeOnMap(currentBuilding.place_id)
       showBuildingInfo()
+      openInfoWindow()
       searchButtonClick()
     }
   }
 
+  // Place the building on the map and show info about the class
   function placeBuildingFromCode() {
     if (currentClass == "") {
       alert(
@@ -198,14 +226,19 @@ export default function Body() {
           "You can also search by the name of a class."
       )
     } else {
-      placeOnMap(currentBuilding.place_id)
+      updateClassVariables()
+      if (currentBuilding) placeOnMap(currentBuilding.place_id)
+      else buildingMarked = true
       changeInfoTextForClass()
       showClassInfo()
       showPinOnFloorMap()
+      openInfoWindow()
       searchButtonClick()
     }
   }
 
+  // Checks which key that was pushed
+  // Searchs on enter, autofills on tab
   const checkKey = event => {
     if (event.key === "Enter") {
       toggleRight ? placeBuildingFromCode() : placeBuildingFromRoom()
@@ -252,6 +285,13 @@ export default function Body() {
       googleMapsLinkBase + building.getId()
   }
 
+  function updateClassVariables() {
+    meetingTimeArray = currentClass.meeting_time.split(/\s|-/)
+    let weekDays = updateWeekDays(meetingTimeArray[0])
+    console.log(weekDays)
+    lecturesTBD = weekDays == ""
+  }
+
   // Change the info text for the class
   function changeInfoTextForClass() {
     document.getElementById("class-name").innerHTML =
@@ -260,11 +300,10 @@ export default function Body() {
       "Instructor: " + currentClass.instructor
     document.getElementById("class-mode").innerHTML =
       "Mode: " + currentClass.mode
-    document.getElementById("class-lectures").innerHTML =
-      "Lectures: " +
-      currentClass.meeting_time +
-      " in " +
-      currentClass.meeting_place
+    document.getElementById("class-time").innerHTML =
+      "Lecture time: " + currentClass.meeting_time
+    document.getElementById("class-place").innerHTML =
+      "Place: " + currentClass.meeting_place
   }
 
   // Show the correct floormaps
@@ -301,16 +340,25 @@ export default function Body() {
     const buildingInfo = document.getElementsByClassName("building-info")
     for (let i = 0; i < buildingInfo.length; i++)
       buildingInfo[i].style.display = "block"
+    document.getElementById("floormap").style.display = "block"
+    document.getElementById("info-line").style.display = "flex"
   }
 
   function showClassInfo() {
-    console.log("hej")
     const buildingInfo = document.getElementsByClassName("building-info")
     for (let i = 0; i < buildingInfo.length; i++)
       buildingInfo[i].style.display = "none"
     const classInfo = document.getElementsByClassName("class-info")
     for (let i = 0; i < classInfo.length; i++)
       classInfo[i].style.display = "block"
+    if (lecturesTBD) {
+      document.getElementById("calendar-button").style.display = "none"
+      document.getElementById("floormap").style.display = "none"
+      document.getElementById("info-line").style.display = "none"
+    } else {
+      document.getElementById("floormap").style.display = "flex"
+      document.getElementById("info-line").style.display = "flex"
+    }
   }
 
   // Show info at click
@@ -378,15 +426,20 @@ export default function Body() {
 
   // Place a pin on the map for the building with place_id placeId
   const placeOnMap = placeId => {
-    const building = buildingsSource.getFeatureById(placeId)
-    buildingMarked = true
-    const cord = building.get("geometry").geometries_[0].flatCoordinates
-    // Place a marker
-    overlayRef.current.setPosition([cord[0], cord[1]])
-    zoomAndCenter(cord)
-    changeInfoTextforBuilding(building)
-    showFloorMaps(building)
-    openInfoWindow()
+    if (lecturesTBD) return
+    try {
+      const building = buildingsSource.getFeatureById(placeId)
+      buildingMarked = true
+      const cord = building.get("geometry").geometries_[0].flatCoordinates
+      // Place a marker
+      overlayRef.current.setPosition([cord[0], cord[1]])
+      zoomAndCenter(cord)
+      changeInfoTextforBuilding(building)
+      showFloorMaps(building)
+    } catch (e) {
+      console.log(e)
+      alert("Oops! Seems like the building is missing")
+    }
   }
 
   // Center and zoom the map
@@ -458,7 +511,6 @@ export default function Body() {
   }
 
   function selectFloorMap() {
-    // console.log(document.getElementById("floor-dropdownSelect").value)
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
     document.getElementById("floormap-img").src = floorMapHref
@@ -476,8 +528,8 @@ export default function Body() {
 
   // Sets the quarter to value
   function updateQuarter(value) {
-    getClasses(setClasses, value)
     setQuarter(value)
+    getClasses(setClasses, value)
   }
 
   // Creating an ics file from the calendar event calendarEvent
@@ -508,19 +560,74 @@ export default function Body() {
     URL.revokeObjectURL(url)
   }
 
+  // Identifies the right quarter object from the quarter string
+  function getQuarterObjectIndex(quarterString = selectedQuarter) {
+    console.log(quarterString)
+    const quarter = element => element.quarter == quarterString
+    return quarters.findIndex(quarter)
+  }
+
   // Identifies the week days from the string meetingDays
   // on the form "TuTh10:30PM-12:30PM"
-  function getDays(meetingDays) {
+  function updateWeekDays(meetingDays) {
     // Form: "MO,WE,FR"
-    var weekDays = ""
-    if (meetingDays.match("M")) weekDays += "MO,"
+    weekDaysString = ""
+    if (meetingDays.match("M")) {
+      weekDaysString += "MO,"
+      weekDaysCount[1] = 1
+    }
     if (meetingDays.match("Th")) {
-      if (meetingDays.match("Tu")) weekDays += "TU,"
-    } else if (meetingDays.match("T")) weekDays += "TU,"
-    if (meetingDays.match("W")) weekDays += "WE,"
-    if (meetingDays.match("Th")) weekDays += "TH,"
-    if (meetingDays.match("F")) weekDays += "F,"
-    return weekDays.slice(0, -1)
+      if (meetingDays.match("Tu")) {
+        weekDaysString += "TU,"
+        weekDaysCount[2] = 1
+      }
+    } else if (meetingDays.match("T")) {
+      weekDaysString += "TU,"
+      weekDaysCount[2] = 1
+    }
+    if (meetingDays.match("W")) {
+      weekDaysString += "WE,"
+      weekDaysCount[3] = 1
+    }
+    if (meetingDays.match("Th")) {
+      weekDaysString += "TH,"
+      weekDaysCount[4] = 1
+    }
+    if (meetingDays.match("F")) {
+      weekDaysString += "FR,"
+      weekDaysCount[5] = 1
+    }
+    if (meetingDays.match("Sa")) {
+      weekDaysString += "SA,"
+      weekDaysCount[6] = 1
+    }
+    if (meetingDays.match("Su")) {
+      weekDaysString += "SU,"
+      weekDaysCount[0] = 1
+    }
+    if (weekDaysString.length == 0) return ""
+    return weekDaysString.slice(0, -1)
+  }
+
+  function getDateDiff(firstDayOfQuarter) {
+    let day = firstDayOfQuarter
+    do {
+      if (weekDaysCount[day]) return (day - firstDayOfQuarter) % 7
+      day = day == 6 ? 0 : day + 1
+    } while (day != firstDayOfQuarter)
+    return 0
+  }
+
+  Date.prototype.addDays = function (diff) {
+    var newDate = new Date(this.valueOf())
+    newDate.setDate(newDate.getDate() + diff)
+    return newDate
+  }
+
+  function getDateOfFirstEvent(firstDateOfQuarter) {
+    console.log(firstDateOfQuarter)
+    var firstDay = firstDateOfQuarter.getDay()
+    return firstDateOfQuarter.addDays(getDateDiff(firstDay))
   }
 
   // Identifies the minute part from the string USTime, on the form "10:30PM"
@@ -539,22 +646,33 @@ export default function Body() {
 
   // Creates and downloads a calendar event for the meetings of currentClass
   function downloadCalendarEvent() {
-    console.log(currentClass)
-    var meetingTimeArray = currentClass.meeting_time.split(/\s|-/)
-    console.log(meetingTimeArray)
     const startHr = getHr(meetingTimeArray[1])
     const startMin = getMin(meetingTimeArray[1])
     const endHr = getHr(meetingTimeArray[2])
     const endMin = getMin(meetingTimeArray[2])
+    const qrtrObj = quarters[getQuarterObjectIndex()]
+    const dateOfFirstLecture = getDateOfFirstEvent(qrtrObj.startDate)
     // create calendar event
     const calendarEvent = {
       // Jan 9th 2023
-      start: [2023, 1, 9, startHr, startMin],
-      end: [2023, 1, 9, endHr, endMin],
+      start: [
+        dateOfFirstLecture.getFullYear(),
+        dateOfFirstLecture.getMonth() + 1,
+        dateOfFirstLecture.getDate(),
+        startHr,
+        startMin,
+      ],
+      end: [
+        dateOfFirstLecture.getFullYear(),
+        dateOfFirstLecture.getMonth() + 1,
+        dateOfFirstLecture.getDate(),
+        endHr,
+        endMin,
+      ],
       // startInputType: "utc-8", // Solve time zones
       recurrenceRule:
         "FREQ=WEEKLY;BYDAY=" +
-        getDays(meetingTimeArray[0]) +
+        weekDaysString +
         ";INTERVAL=1;UNTIL=20230325T000000Z;",
       title: currentClass.code + " " + currentClass.name,
       description:
@@ -634,8 +752,8 @@ export default function Body() {
                   onChange={e => updateQuarter(e.target.value)}
                 >
                   {quarters.map(value => (
-                    <option value={value} key={value}>
-                      {value}
+                    <option value={value.quarter} key={value.name}>
+                      {value.name}
                     </option>
                   ))}
                 </select>
@@ -731,7 +849,8 @@ export default function Body() {
               Click here to download calendar event
             </button>
             <h6 className='class-info' id='class-instructor'></h6>
-            <h6 className='class-info' id='class-lectures'></h6>
+            <h6 className='class-info' id='class-time'></h6>
+            <h6 className='class-info' id='class-place'></h6>
             <h6 className='class-info' id='class-mode'></h6>
             <h6
               ref={addressElement}
