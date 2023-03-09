@@ -330,17 +330,16 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = 75, ycoord = 50) {
+  function showPinOnFloorMap(xcoord = 50, ycoord = 70) {
+    // test that these coords work for Jack Baskin Engineering Building 165
     if (document.getElementById("floormap-img").clientHeight == 0) {
       setTimeout(showPinOnFloorMap, 1000)
     } else {
       console.log(document.getElementById("floormap-img").clientHeight)
       if (xcoord != -1 && ycoord != -1) {
         console.log("ID Being placed")
-        /*
         var yPercentageOfDiv =
           (ycoord / 100) * document.getElementById("floormap-img").clientHeight
-        */
         document
           .getElementById("floormap-pin")
           .setAttribute(
@@ -348,8 +347,8 @@ export default function Body() {
             "left: " +
               xcoord.toString() +
               "%; top: " +
-              ycoord.toString() +
-              "%; display: flex;"
+              yPercentageOfDiv.toString() +
+              "px; display: flex;"
           )
       }
     }
