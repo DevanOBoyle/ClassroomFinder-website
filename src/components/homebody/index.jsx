@@ -16,8 +16,6 @@ import VectorSource from "ol/source/Vector"
 import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
 // import { transform } from "ol/proj"
-
-import * as ics from "ics"
 // import { NULL } from "sass"
 
 // Keep track of what is shown and not
@@ -44,21 +42,21 @@ const fall2022 = {
   name: "Fall 2022",
   quarter: "fall2022",
   startDate: new Date(2022, 8, 22), // Thursday
-  endDate: new Date(2022, 11, 2),
+  endDate: "20221203T000000",
 }
 
 const winter2023 = {
   name: "Winter 2023",
   quarter: "winter2023",
   startDate: new Date(2023, 0, 9),
-  endDate: new Date(2023, 2, 17),
+  endDate: "20230318T000000",
 }
 
 const spring2023 = {
   name: "Spring 2023",
   quarter: "spring2023",
   startDate: new Date(2023, 3, 3),
-  endDate: new Date(2023, 5, 9),
+  endDate: "20230610T000000",
 }
 const quarters = [fall2022, winter2023, spring2023]
 
@@ -532,18 +530,57 @@ export default function Body() {
     getClasses(setClasses, value)
   }
 
-  // Creating an ics file from the calendar event calendarEvent
+  function getTZString(date, meetingTime = "") {
+    console.log(date)
+    console.log("The type of date is", typeof date)
+    const isoString = date.toISOString()
+    console.log(isoString)
+    let tzString =
+      isoString.substr(0, 4) + isoString.substr(5, 2) + isoString.substr(8, 2)
+    if (meetingTime == "") tzString += "T235959"
+    else tzString += "T" + getHr(meetingTime) + getMin(meetingTime) + "00"
+    console.log(tzString)
+    return tzString
+  }
+
+  function createEventString(dateOfFirstLecture, endDate) {
+    let icsEvent = ""
+    icsEvent +=
+      "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nSUMMARY: " +
+      currentClass.code +
+      " " +
+      currentClass.name +
+      "\r\nDTSTART;TZID=America/Los_Angeles:" +
+      getTZString(dateOfFirstLecture, meetingTimeArray[1]) +
+      "\r\nDTEND;TZID=America/Los_Angeles:" +
+      getTZString(dateOfFirstLecture, meetingTimeArray[2]) +
+      "\r\n"
+    icsEvent +=
+      "DESCRIPTION:Instructor: " +
+      currentClass.instructor +
+      "\nMode: " +
+      currentClass.mode +
+      "\r\nLOCATION:" +
+      currentClass.meeting_place +
+      "\r\n"
+    icsEvent +=
+      "RRULE;TZID=America/Los_Angeles:FREQ=WEEKLY;BYDAY=" +
+      weekDaysString +
+      ";INTERVAL=1;UNTIL=" +
+      endDate +
+      "\r\n"
+    icsEvent += "END:VEVENT\r\nEND:VCALENDAR\r\n"
+    console.log(icsEvent)
+    return icsEvent
+  }
+
+  // Creating an ics file for the calendar event
   // Credit to https://www.npmjs.com/package/ics
-  async function handleDownloadedEvent(calendarEvent) {
+  async function createEventFile(fileContent) {
     const filename = currentClass.code + ".ics"
     const file = await new Promise((resolve, reject) => {
-      ics.createEvent(calendarEvent, (error, value) => {
-        if (error) {
-          reject(error)
-        }
-
-        resolve(new File([value], filename, { type: "plain/text" }))
-      })
+      if (!currentClass) reject()
+      resolve(new File([fileContent], filename, { type: "plain/text" }))
     })
     const url = URL.createObjectURL(file)
 
@@ -552,15 +589,13 @@ export default function Body() {
     const anchor = document.createElement("a")
     anchor.href = url
     anchor.download = filename
-
     document.body.appendChild(anchor)
     anchor.click()
     document.body.removeChild(anchor)
-
     URL.revokeObjectURL(url)
   }
 
-  // Identifies the right quarter object from the quarter string
+  // Identifies the right quarter object from the selected quarter string
   function getQuarterObjectIndex(quarterString = selectedQuarter) {
     console.log(quarterString)
     const quarter = element => element.quarter == quarterString
@@ -609,6 +644,7 @@ export default function Body() {
     return weekDaysString.slice(0, -1)
   }
 
+  // Returns the number of days between the first event and firstDayOfQuarter
   function getDateDiff(firstDayOfQuarter) {
     let day = firstDayOfQuarter
     do {
@@ -618,75 +654,41 @@ export default function Body() {
     return 0
   }
 
+  // Adds diff nr of days to the date
   Date.prototype.addDays = function (diff) {
     var newDate = new Date(this.valueOf())
     newDate.setDate(newDate.getDate() + diff)
     return newDate
   }
 
+  // Returns the date of the first event
   function getDateOfFirstEvent(firstDateOfQuarter) {
-    console.log(firstDateOfQuarter)
     var firstDay = firstDateOfQuarter.getDay()
     return firstDateOfQuarter.addDays(getDateDiff(firstDay))
   }
 
-  // Identifies the minute part from the string USTime, on the form "10:30PM"
+  // Identifies the minute part from the string USTime, in the form "10:30PM"
   function getHr(USTime) {
-    return USTime.charAt(5) == "P"
-      ? +USTime.substr(0, 2) + 12
-      : +USTime.substr(0, 2)
+    if (USTime.charAt(5) == "P") return +USTime.slice(0, 2) + 12
+    else return USTime.slice(0, 2)
     // Does it work if the time is between 00:00 and 01:00?
   }
 
   // Identifies the hour part from the string USTime, on the form "10:30PM"
   // and converts it to 24hr time
   function getMin(USTime) {
-    return +USTime.substr(3, 2)
+    return USTime.substr(3, 2)
   }
 
   // Creates and downloads a calendar event for the meetings of currentClass
   function downloadCalendarEvent() {
-    const startHr = getHr(meetingTimeArray[1])
-    const startMin = getMin(meetingTimeArray[1])
-    const endHr = getHr(meetingTimeArray[2])
-    const endMin = getMin(meetingTimeArray[2])
-    const qrtrObj = quarters[getQuarterObjectIndex()]
-    const dateOfFirstLecture = getDateOfFirstEvent(qrtrObj.startDate)
-    // create calendar event
-    const calendarEvent = {
-      // Jan 9th 2023
-      start: [
-        dateOfFirstLecture.getFullYear(),
-        dateOfFirstLecture.getMonth() + 1,
-        dateOfFirstLecture.getDate(),
-        startHr,
-        startMin,
-      ],
-      end: [
-        dateOfFirstLecture.getFullYear(),
-        dateOfFirstLecture.getMonth() + 1,
-        dateOfFirstLecture.getDate(),
-        endHr,
-        endMin,
-      ],
-      // startInputType: "utc-8", // Solve time zones
-      recurrenceRule:
-        "FREQ=WEEKLY;BYDAY=" +
-        weekDaysString +
-        ";INTERVAL=1;UNTIL=20230325T000000Z;",
-      title: currentClass.code + " " + currentClass.name,
-      description:
-        "Instructor: " +
-        currentClass.instructor +
-        "\nMode: " +
-        currentClass.mode,
-      location: currentClass.meeting_place,
-      // url: "https://www.classroomfinder.ucsc.edu/",
-      // geo: { lat: 40.0095, lon: 105.2669 },
-      busyStatus: "BUSY",
-      organizer: { name: "UCSC" },
-    }
-    handleDownloadedEvent(calendarEvent)
+    const qrtrObjIndex = getQuarterObjectIndex()
+    const dateOfFirstLecture = getDateOfFirstEvent(
+      quarters[qrtrObjIndex].startDate
+    )
+    createEventFile(
+      createEventString(dateOfFirstLecture, quarters[qrtrObjIndex].endDate)
+    )
   }
 
   return (
