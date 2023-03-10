@@ -534,6 +534,7 @@
           ["soc_sci_ground.JPG", "Ground Floor"],
           ["soc_sci_first.JPG", "Floor 1"],
           ["soc_sci_second.JPG", "Floor 2"],
+          ["pageNotFound.png", "Floor 3"],
           ["soc_sci_fourth.JPG", "Floor 4"]
         ]
       },
@@ -568,12 +569,7 @@
       "properties": {
         "address": "704 College Nine Road",
         "name": "Social Sciences 1",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -746,12 +742,7 @@
       "properties": {
         "address": "562 Steinhart Way",
         "name": "Thimann Lecture Hall",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -860,12 +851,7 @@
       "properties": {
         "address": "453 Kerr Road",
         "name": "Media Theater",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1031,12 +1017,7 @@
       "properties": {
         "address": "455 Kerr Road",
         "name": "eXperimental Theater / Theater Arts Classroom Building",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1069,12 +1050,7 @@
       "properties": {
         "address": "404 McHenry Road",
         "name": "Gamelan Studio",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1202,12 +1178,7 @@
       "properties": {
         "address": "350 Rachel Carson Road",
         "name": "Visual Arts Research Facility",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1738,12 +1709,7 @@
       "properties": {
         "address": "402 McHenry Road",
         "name": "Music Center",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1955,12 +1921,7 @@
       "properties": {
         "address": "520 Steinhart Way",
         "name": "Classroom Unit",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1999,12 +1960,7 @@
       "properties": {
         "address": "500 Kerr Road",
         "name": "Kerr Hall",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2051,12 +2007,7 @@
       "properties": {
         "address": "575 McLaughlin Drive",
         "name": "Biomedical Sciences",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2194,12 +2145,7 @@
       "properties": {
         "address": "400 Hahn Road",
         "name": "Hahn Student Services",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2326,12 +2272,7 @@
       "properties": {
         "address": "424 Baskin Arts Service Road",
         "name": "Elena Baskin Visual Arts Center",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2528,12 +2469,7 @@
       "properties": {
         "address": "582 Steinhart Way",
         "name": "Sinsheimer Labs",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2592,13 +2528,7 @@
       "properties": {
         "address": "1156 High St",
         "name": "Humanities Lecture Hall",
-        "floors": [
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"],
-          ["floor4.png", "Floor 4"],
-          ["floor5.png", "Floor 5"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2639,13 +2569,7 @@
       "properties": {
         "address": "1156 High St",
         "name": "Humanities 1",
-        "floors": [
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"],
-          ["floor4.png", "Floor 4"],
-          ["floor5.png", "Floor 5"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2690,13 +2614,7 @@
       "properties": {
         "address": "2 Hagar Dr",
         "name": "Humanities and Social Sciences",
-        "floors": [
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"],
-          ["floor4.png", "Floor 4"],
-          ["floor5.png", "Floor 5"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3487,7 +3405,7 @@
       "properties": {
         "name": "East Field House",
         "address": "418 Hagar Drive",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3645,7 +3563,7 @@
       "properties": {
         "address": "403 East Field Service Road",
         "name": "Athletics & Recreation Multi-Purpose Room",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3676,7 +3594,7 @@
       "properties": {
         "address": "405 East Field Service Road",
         "name": "Athletics & Recreation Fitness Center",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
