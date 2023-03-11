@@ -49,7 +49,6 @@ export default function Body() {
   const [rooms, setRooms] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
-  const [selectedResult, setSelectedResult] = useState(null)
   const [selectedQuarter, setQuarter] = useState(quarters[1])
 
   // eslint-disable-next-line
@@ -394,8 +393,6 @@ export default function Body() {
     } else {
       setFilteredData(newFilter)
     }
-
-    setSelectedResult(null)
   }
 
   // Place a pin on the map for the building with place_id placeId
@@ -430,13 +427,6 @@ export default function Body() {
   */
 
   const handleFilterClick = value => {
-<<<<<<< HEAD:src/components/map-page.jsx
-    setSelectedResult(value)
-    setWordEntered(value.name)
-    setFilteredData([])
-
-    currentBuilding = value
-=======
     console.log(value)
     if (value.code) {
       let room = null
@@ -479,7 +469,6 @@ export default function Body() {
         }
       }
     }
->>>>>>> main:src/components/homebody/index.jsx
     document.getElementById("classroom-input").focus()
   }
 
@@ -623,13 +612,8 @@ export default function Body() {
                   className='input'
                   placeholder='e.g. "R Carson 250"'
                   maxLength={60}
-<<<<<<< HEAD:src/components/map-page.jsx
-                  value={selectedResult ? selectedResult.name : wordEntered}
-                  onChange={event => handleFilter(event, buildings)}
-=======
                   value={wordEntered}
                   onChange={event => handleFilter(event, rooms)}
->>>>>>> main:src/components/homebody/index.jsx
                   onKeyDown={checkKey}
                   required
                 />
@@ -687,11 +671,7 @@ export default function Body() {
                   id='classcode-input'
                   className='input'
                   placeholder='e.g. "CSE123-01"'
-                  value={
-                    selectedResult
-                      ? selectedResult.code + " " + selectedResult.name
-                      : wordEntered
-                  }
+                  value={wordEntered}
                   onChange={event => handleFilter(event, classes)}
                   onKeyDown={checkKey}
                   pattern='^[a-zA-Z]{2,4}\d{2,4}[a-zA-Z]{0,1}-\d{2}$'
@@ -710,22 +690,12 @@ export default function Body() {
                       return (
                         <a
                           key={key}
-<<<<<<< HEAD:src/components/map-page.jsx
-                          onClick={() => handleFilterClick(value)} //value.name
-=======
                           onClick={() => handleFilterClick(value)}
->>>>>>> main:src/components/homebody/index.jsx
                           className='dataClassItem'
                           target='_blank'
                         >
                           {" "}
-<<<<<<< HEAD:src/components/map-page.jsx
-                          <p>
-                            {value.code} {value.name}
-                          </p>{" "}
-=======
                           <p>{value.code + " " + value.name}</p>{" "}
->>>>>>> main:src/components/homebody/index.jsx
                         </a>
                       )
                     })}
