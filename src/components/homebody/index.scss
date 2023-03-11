@@ -623,9 +623,10 @@
 }
 
 #floormap-pin {
-  position: absolute;
+  position: relative;
   display: none;
-  width: 35px;
+  height: 35px;
+  margin-bottom: -35px;
   transform: translate(-50%, -100%); // bottom center
 }
 

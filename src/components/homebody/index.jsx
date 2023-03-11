@@ -26,6 +26,7 @@ var buildingMarked = false
 var currentBuilding = ""
 var currentClass = ""
 var currentRoomNr = ""
+var floorMapLoaded = false
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -150,7 +151,6 @@ export default function Body() {
     setMap(initialMap)
     setFeaturesLayer(buildingsLayer)
     setOverlayLayer(initialOverlayLayer)
-    console.log(selectedQuarter)
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
     getRooms(setRooms)
@@ -229,8 +229,8 @@ export default function Body() {
       else buildingMarked = true
       changeInfoTextForClass()
       showClassInfo()
-      showPinOnFloorMap()
       openInfoWindow()
+      showPinOnFloorMap(50, 100) // Add coordinates!
       searchButtonClick()
     }
   }
@@ -286,7 +286,6 @@ export default function Body() {
   function updateClassVariables() {
     meetingTimeArray = currentClass.meeting_time.split(/\s|-/)
     let weekDays = updateWeekDays(meetingTimeArray[0])
-    console.log(weekDays)
     lecturesTBD = weekDays == ""
   }
 
@@ -328,6 +327,7 @@ export default function Body() {
     floorMapFolder = floorMapBaseFolder + building.getId() + "/"
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
+    floorMapLoaded = false
     document.getElementById("floormap-img").src = floorMapHref
   }
 
@@ -354,7 +354,7 @@ export default function Body() {
       document.getElementById("floormap").style.display = "none"
       document.getElementById("info-line").style.display = "none"
     } else {
-      document.getElementById("floormap").style.display = "flex"
+      document.getElementById("floormap").style.display = "block"
       document.getElementById("info-line").style.display = "flex"
     }
   }
@@ -375,21 +375,28 @@ export default function Body() {
   }
 
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord = -1, ycoord = -1) {
-    // console.log(document.getElementById("floormap-img").clientHeight)
-    if (xcoord != -1 && ycoord != -1) {
-      var yPercentageOfDiv =
-        (ycoord / 100) * document.getElementById("floormap-img").clientHeight
-      document
-        .getElementById("floormap-pin")
-        .setAttribute(
-          "style",
-          "left: " +
-            xcoord.toString() +
-            "%; top: " +
-            yPercentageOfDiv.toString() +
-            "px; display: block;"
-        )
+  function showPinOnFloorMap(xcoord, ycoord, i = 0) {
+    // Allow 8 tries
+    if (i < 8) {
+      if (
+        !floorMapLoaded ||
+        document.getElementById("floormap-img").clientHeight == 0
+      ) {
+        setTimeout(showPinOnFloorMap, 1000, xcoord, ycoord, i + 1)
+      } else {
+        var yPercentageOfDiv =
+          (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+        document
+          .getElementById("floormap-pin")
+          .setAttribute(
+            "style",
+            "left: " +
+              xcoord.toString() +
+              "%; bottom: " +
+              yPercentageOfDiv.toString() +
+              "px; display: flex;"
+          )
+      }
     }
   }
 
@@ -509,9 +516,14 @@ export default function Body() {
   }
 
   function selectFloorMap() {
+    floorMapLoaded = false
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
     document.getElementById("floormap-img").src = floorMapHref
+  }
+
+  function setFloorMapLoaded() {
+    floorMapLoaded = true
   }
 
   // Shows the floormap in fullscreen
@@ -531,15 +543,11 @@ export default function Body() {
   }
 
   function getTZString(date, meetingTime = "") {
-    console.log(date)
-    console.log("The type of date is", typeof date)
     const isoString = date.toISOString()
-    console.log(isoString)
     let tzString =
       isoString.substr(0, 4) + isoString.substr(5, 2) + isoString.substr(8, 2)
     if (meetingTime == "") tzString += "T235959"
     else tzString += "T" + getHr(meetingTime) + getMin(meetingTime) + "00"
-    console.log(tzString)
     return tzString
   }
 
@@ -570,7 +578,6 @@ export default function Body() {
       endDate +
       "\r\n"
     icsEvent += "END:VEVENT\r\nEND:VCALENDAR\r\n"
-    console.log(icsEvent)
     return icsEvent
   }
 
@@ -597,7 +604,6 @@ export default function Body() {
 
   // Identifies the right quarter object from the selected quarter string
   function getQuarterObjectIndex(quarterString = selectedQuarter) {
-    console.log(quarterString)
     const quarter = element => element.quarter == quarterString
     return quarters.findIndex(quarter)
   }
@@ -883,7 +889,11 @@ export default function Body() {
                 className='arrow-circle'
               ></img>
             </div>
-            <img id='floormap-img' onClick={showFullScreen}></img>
+            <img
+              id='floormap-img'
+              onClick={showFullScreen}
+              onLoad={setFloorMapLoaded}
+            ></img>
             <img
               ref={floorPin}
               id='floormap-pin'
