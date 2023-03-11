@@ -22,37 +22,40 @@ import Overlay from "ol/Overlay"
 var search = true
 var info = false
 var toggleRight = false
-var buildingMarked = false
+var infoToShow = false
 var currentBuilding = ""
+var selectedBuilding = ""
 var currentClass = ""
+var selectedClass = ""
 var currentRoomNr = ""
-var floorMapLoaded = false
+var selectedRoomNr = ""
+var floorMapImage
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
 var floorMapFolder
-var floorMapHref
 const googleMapsLinkBase = "https://www.google.com/maps/place/?q=place_id:"
+const roomCoordX = 0 // Left: 50%
+const roomCoordY = 0 // Top: 25%
 
 const buildingsSource = new VectorSource({
   url: "/map.geojson",
   format: new GeoJSON(),
 })
 
+// Constants and variables for the calendar event
 const fall2022 = {
   name: "Fall 2022",
   quarter: "fall2022",
   startDate: new Date(2022, 8, 22), // Thursday
   endDate: "20221203T000000",
 }
-
 const winter2023 = {
   name: "Winter 2023",
   quarter: "winter2023",
   startDate: new Date(2023, 0, 9),
   endDate: "20230318T000000",
 }
-
 const spring2023 = {
   name: "Spring 2023",
   quarter: "spring2023",
@@ -60,7 +63,6 @@ const spring2023 = {
   endDate: "20230610T000000",
 }
 const quarters = [fall2022, winter2023, spring2023]
-
 var meetingTimeArray
 var weekDaysString = ""
 var weekDaysCount = [0, 0, 0, 0, 0, 0, 0]
@@ -154,6 +156,8 @@ export default function Body() {
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
     getRooms(setRooms)
+
+    floorMapImage = new Image()
   }, [])
 
   function toggleClick() {
@@ -208,7 +212,11 @@ export default function Body() {
     if (currentBuilding == "") {
       alert("Please choose one of the buildings listed.")
     } else {
-      placeOnMap(currentBuilding.place_id)
+      selectedClass = currentClass
+      selectedBuilding = currentBuilding
+      selectedRoomNr = currentRoomNr
+      infoToShow = true
+      placeOnMap(selectedBuilding.place_id)
       showBuildingInfo()
       openInfoWindow()
       searchButtonClick()
@@ -224,13 +232,17 @@ export default function Body() {
           "You can also search by the name of a class."
       )
     } else {
+      infoToShow = true
+      selectedClass = currentClass
+      selectedBuilding = currentBuilding
+      selectedRoomNr = currentRoomNr
       updateClassVariables()
-      if (currentBuilding) placeOnMap(currentBuilding.place_id)
-      else buildingMarked = true
+      if (selectedBuilding != "") placeOnMap(selectedBuilding.place_id)
       changeInfoTextForClass()
       showClassInfo()
       openInfoWindow()
-      showPinOnFloorMap(50, 100) // Add coordinates!
+      // if (selectedRoomNr != "") showPinOnFloorMap(roomCoordX, roomCoordY)
+      /// Add coordinates!
       searchButtonClick()
     }
   }
@@ -249,11 +261,12 @@ export default function Body() {
   }
 
   function openInfoWindow() {
-    document.getElementById("info-div").style.display = buildingMarked
+    document.getElementById("info-div").style.display = infoToShow
       ? "flex"
       : "none"
-    document.getElementById("info-nobuilding-text").style.display =
-      buildingMarked ? "none" : "block"
+    document.getElementById("info-nobuilding-text").style.display = infoToShow
+      ? "none"
+      : "block"
     document.getElementById("info-text").style.display = "none"
     document.getElementById("info-arrow").style.transform = "rotate(180deg)"
     document.getElementById("info-arrow").style.top = "10px"
@@ -284,7 +297,7 @@ export default function Body() {
   }
 
   function updateClassVariables() {
-    meetingTimeArray = currentClass.meeting_time.split(/\s|-/)
+    meetingTimeArray = selectedClass.meeting_time.split(/\s|-/)
     let weekDays = updateWeekDays(meetingTimeArray[0])
     lecturesTBD = weekDays == ""
   }
@@ -292,20 +305,31 @@ export default function Body() {
   // Change the info text for the class
   function changeInfoTextForClass() {
     document.getElementById("class-name").innerHTML =
-      currentClass.code + " " + currentClass.name
+      selectedClass.code + " " + selectedClass.name
     document.getElementById("class-instructor").innerHTML =
-      "Instructor: " + currentClass.instructor
+      "Instructor: " + selectedClass.instructor
     document.getElementById("class-mode").innerHTML =
-      "Mode: " + currentClass.mode
+      "Mode: " + selectedClass.mode
     document.getElementById("class-time").innerHTML =
-      "Lecture time: " + currentClass.meeting_time
+      "Lecture time: " + selectedClass.meeting_time
     document.getElementById("class-place").innerHTML =
-      "Place: " + currentClass.meeting_place
+      "Place: " + selectedClass.meeting_place
+  }
+
+  async function load(floorMapHref) {
+    floorMapImage.src = floorMapHref
+  }
+
+  async function loadFloorMap(floorMapHref) {
+    load(floorMapHref).then(
+      (document.getElementById("floormap-img").src = floorMapImage.src)
+    )
   }
 
   // Show the correct floormaps
   function showFloorMaps(building) {
     // Change the options of the drop-down menu
+    hidePinOnFloorMap()
     var selectCode = ""
     const floorFileNames = building.get("floors")
     if (floorFileNames.length > 0) {
@@ -325,10 +349,9 @@ export default function Body() {
     document.getElementById("floor-dropdown-select").innerHTML = selectCode
     // Show the right floor plan image
     floorMapFolder = floorMapBaseFolder + building.getId() + "/"
-    floorMapHref =
+    const floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
-    floorMapLoaded = false
-    document.getElementById("floormap-img").src = floorMapHref
+    loadFloorMap(floorMapHref).then(showPinOnFloorMap(roomCoordX, roomCoordY))
   }
 
   function showBuildingInfo() {
@@ -343,6 +366,8 @@ export default function Body() {
   }
 
   function showClassInfo() {
+    const floormap = document.getElementById("floormap")
+    const line = document.getElementById("info-line")
     const buildingInfo = document.getElementsByClassName("building-info")
     for (let i = 0; i < buildingInfo.length; i++)
       buildingInfo[i].style.display = "none"
@@ -351,54 +376,74 @@ export default function Body() {
       classInfo[i].style.display = "block"
     if (lecturesTBD) {
       document.getElementById("calendar-button").style.display = "none"
-      document.getElementById("floormap").style.display = "none"
-      document.getElementById("info-line").style.display = "none"
+      floormap.style.display = "none"
+      line.style.display = "none"
     } else {
-      document.getElementById("floormap").style.display = "block"
-      document.getElementById("info-line").style.display = "flex"
+      if (infoToShow) {
+        floormap.style.display = "block"
+        line.style.display = "flex"
+      } else {
+        floormap.style.display = "none"
+        line.style.display = "none"
+      }
     }
   }
 
   // Show info at click
   function showFeatureInfo(e) {
     mapRef.current.forEachFeatureAtPixel(e.pixel, function (building) {
-      buildingMarked = true
+      infoToShow = true
+      selectedRoomNr = ""
+      selectedClass = ""
+      selectedBuilding = "map"
       // Place a marker
       overlayRef.current.setPosition(e.coordinate)
       // Set text
       changeInfoTextforBuilding(building)
       showBuildingInfo()
-      showFloorMaps(building)
       // Make sure the info window is open
       openInfoWindow()
+      showFloorMaps(building)
     })
   }
 
+  function placePin(xcoord, ycoord, mapHeight) {
+    var yPercentageOfDiv = (1 - ycoord / 100) * mapHeight
+    document
+      .getElementById("floormap-pin")
+      .setAttribute(
+        "style",
+        "left: " +
+          xcoord.toString() +
+          "%; bottom: " +
+          yPercentageOfDiv.toString() +
+          "px; display: flex;"
+      )
+  }
+
+  // Places a pin on the floormap at (xcoord, ycoord)
   // Accepts coordinates as percentage from 0 to 100
-  function showPinOnFloorMap(xcoord, ycoord, i = 0) {
-    // Allow 8 tries
-    if (i < 8) {
-      if (
-        !floorMapLoaded ||
-        document.getElementById("floormap-img").clientHeight == 0
-      ) {
+  function showPinOnFloorMap(
+    xcoord = selectedClass.coord[0],
+    ycoord = selectedClass.coord[1],
+    i = 0
+  ) {
+    console.log("in showpinonfloormap")
+    // Allow 10 tries
+    if (i < 10 && selectedRoomNr != "") {
+      console.log("placing pin")
+      const img = document.getElementById("floormap-img")
+      // const div = document.getElementById("floormap")
+      if (img.clientHeight == 0 || !floorMapImage.complete) {
         setTimeout(showPinOnFloorMap, 1000, xcoord, ycoord, i + 1)
       } else {
-        var yPercentageOfDiv =
-          (1 - ycoord / 100) *
-          document.getElementById("floormap-img").clientHeight
-        document
-          .getElementById("floormap-pin")
-          .setAttribute(
-            "style",
-            "left: " +
-              xcoord.toString() +
-              "%; bottom: " +
-              yPercentageOfDiv.toString() +
-              "px; display: flex;"
-          )
+        placePin(xcoord, ycoord, img.clientHeight)
       }
     }
+  }
+
+  function hidePinOnFloorMap() {
+    document.getElementById("floormap-pin").style.display = "none"
   }
 
   // Search filter handler
@@ -435,7 +480,6 @@ export default function Body() {
     if (lecturesTBD) return
     try {
       const building = buildingsSource.getFeatureById(placeId)
-      buildingMarked = true
       const cord = building.get("geometry").geometries_[0].flatCoordinates
       // Place a marker
       overlayRef.current.setPosition([cord[0], cord[1]])
@@ -487,7 +531,7 @@ export default function Body() {
             ) {
               room = rooms[i]
               currentRoomNr = rooms[i]
-              console.log(currentRoomNr)
+              console.log("room nr" + currentRoomNr)
             }
           }
         }
@@ -517,23 +561,36 @@ export default function Body() {
   }
 
   function selectFloorMap() {
-    floorMapLoaded = false
-    floorMapHref =
-      floorMapFolder + document.getElementById("floor-dropdown-select").value
-    document.getElementById("floormap-img").src = floorMapHref
+    hidePinOnFloorMap()
+    const selectedFloor = document.getElementById("floor-dropdown-select").value
+    const floorMapHref = floorMapFolder + selectedFloor
+    loadFloorMap(floorMapHref).then(showPinOnFloorMap(roomCoordX, roomCoordY))
+    /// if (selectedFloor == currentClass.floor)
   }
 
-  function setFloorMapLoaded() {
-    floorMapLoaded = true
+  function showFullScreen() {
+    document.getElementById("fullscreen-text").innerHTML =
+      "Click on the floormap to exit fullscreen mode."
+    showPinOnFloorMap(roomCoordX, roomCoordY)
   }
 
   // Shows the floormap in fullscreen
-  function showFullScreen() {
-    let image = document.getElementById("floormap-img")
+  function openFullScreen() {
+    let floormap = document.getElementById("floormap")
     if (!document.fullscreenElement) {
-      image?.requestFullscreen()
+      // Open full screen
+      if (floormap.requestFullscreen) {
+        floormap.requestFullscreen().then(showFullScreen)
+      } else if (floormap.webkitRequestFullscreen) {
+        // In Safari browser
+        floormap.webkitRequestFullscreen().then(showFullScreen)
+      }
     } else {
-      document.exitFullscreen()
+      document.exitFullscreen().then(() => {
+        document.getElementById("fullscreen-text").innerHTML =
+          "Click on the floormap to view in fullscreen."
+        showPinOnFloorMap(roomCoordX, roomCoordY)
+      })
     }
   }
 
@@ -556,9 +613,9 @@ export default function Body() {
     let icsEvent = ""
     icsEvent +=
       "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nSUMMARY: " +
-      currentClass.code +
+      selectedClass.code +
       " " +
-      currentClass.name +
+      selectedClass.name +
       "\r\nDTSTART;TZID=America/Los_Angeles:" +
       getTZString(dateOfFirstLecture, meetingTimeArray[1]) +
       "\r\nDTEND;TZID=America/Los_Angeles:" +
@@ -566,11 +623,11 @@ export default function Body() {
       "\r\n"
     icsEvent +=
       "DESCRIPTION:Instructor: " +
-      currentClass.instructor +
+      selectedClass.instructor +
       "\nMode: " +
-      currentClass.mode +
+      selectedClass.mode +
       "\r\nLOCATION:" +
-      currentClass.meeting_place +
+      selectedClass.meeting_place +
       "\r\n"
     icsEvent +=
       "RRULE;TZID=America/Los_Angeles:FREQ=WEEKLY;BYDAY=" +
@@ -585,9 +642,9 @@ export default function Body() {
   // Creating an ics file for the calendar event
   // Credit to https://www.npmjs.com/package/ics
   async function createEventFile(fileContent) {
-    const filename = currentClass.code + ".ics"
+    const filename = selectedClass.code + ".ics"
     const file = await new Promise((resolve, reject) => {
-      if (!currentClass) reject()
+      if (!selectedClass) reject()
       resolve(new File([fileContent], filename, { type: "plain/text" }))
     })
     const url = URL.createObjectURL(file)
@@ -687,7 +744,7 @@ export default function Body() {
     return USTime.substr(3, 2)
   }
 
-  // Creates and downloads a calendar event for the meetings of currentClass
+  // Creates and downloads a calendar event for the meetings of selectedClass
   function downloadCalendarEvent() {
     const qrtrObjIndex = getQuarterObjectIndex()
     const dateOfFirstLecture = getDateOfFirstEvent(
@@ -890,11 +947,7 @@ export default function Body() {
                 className='arrow-circle'
               ></img>
             </div>
-            <img
-              id='floormap-img'
-              onClick={showFullScreen}
-              onLoad={setFloorMapLoaded}
-            ></img>
+            <img id='floormap-img' onClick={openFullScreen}></img>
             <img
               ref={floorPin}
               id='floormap-pin'
@@ -903,7 +956,9 @@ export default function Body() {
                 "/vista-map-markers/256/Map-Marker-Ball-Pink-icon.png"
               }
             ></img>
-            <p>Click on the floormap to view in fullscreen.</p>
+            <p id='fullscreen-text'>
+              Click on the floormap to view in fullscreen.
+            </p>
           </div>
         </div>
       </div>
