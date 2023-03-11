@@ -385,7 +385,8 @@ export default function Body() {
         setTimeout(showPinOnFloorMap, 1000, xcoord, ycoord, i + 1)
       } else {
         var yPercentageOfDiv =
-          (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+          (1 - ycoord / 100) *
+          document.getElementById("floormap-img").clientHeight
         document
           .getElementById("floormap-pin")
           .setAttribute(
