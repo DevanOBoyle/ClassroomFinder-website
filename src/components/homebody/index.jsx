@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react"
-import "../stylesheets/textstyle.scss"
-import "./page.scss"
-import "../../node_modules/ol/ol.css"
-import getBuilding, { getClasses } from "../utils/api"
+import "../../stylesheets/textstyle.scss"
+import "./index.scss"
+import "../../../node_modules/ol/ol.css"
+import getBuilding, { getClasses, getRooms } from "../../utils/api"
 
 // Openlayers imports
 import Map from "ol/Map"
@@ -17,12 +17,16 @@ import { Fill, Stroke, Style } from "ol/style"
 import Overlay from "ol/Overlay"
 // import { transform } from "ol/proj"
 
+import * as ics from "ics"
+
 // Keep track of what is shown and not
 var search = true
 var info = false
 var toggleRight = false
 var buildingMarked = false
-var currentBuilding
+var currentBuilding = ""
+var currentClass = ""
+var currentRoomNr = ""
 
 // Finding the floormaps
 const floorMapBaseFolder = "/floormaps/"
@@ -37,11 +41,12 @@ const buildingsSource = new VectorSource({
 
 const quarters = ["fall2022", "winter2023", "spring2023"]
 
-export default function MapPage() {
+export default function Body() {
   const [map, setMap] = useState()
   const [featuresLayer, setFeaturesLayer] = useState()
   const [overlayLayer, setOverlayLayer] = useState()
   const [buildings, setBuildings] = useState([])
+  const [rooms, setRooms] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [wordEntered, setWordEntered] = useState("")
   const [selectedResult, setSelectedResult] = useState(null)
@@ -55,6 +60,7 @@ export default function MapPage() {
   const mapPin = useRef()
   const nameElement = useRef()
   const addressElement = useRef()
+  const floorPin = useRef()
 
   const mapRef = useRef()
   mapRef.current = map
@@ -73,14 +79,6 @@ export default function MapPage() {
       color: [45, 45, 45, 1],
       width: 1.2,
     })
-    /*
-    const pointStyle = new Circle({
-      fill: new Fill({
-        color: [159, 212, 255, 1],
-      }),
-      radius: 7,
-      stroke: strokeStyle,
-    }) */
 
     const buildingsLayer = new VectorImageLayer({
       source: buildingsSource,
@@ -88,7 +86,6 @@ export default function MapPage() {
       style: new Style({
         fill: fillStyle,
         stroke: strokeStyle,
-        // image: pointStyle,
       }),
     })
 
@@ -118,7 +115,7 @@ export default function MapPage() {
       controls: [],
       overlays: [initialOverlayLayer],
       view: new View({
-        center: [-13587641.820142383, 4438297.780079307],
+        center: [-13587600, 4438600],
         zoom: 15,
         maxZoom: 18,
         minZoom: 10,
@@ -133,10 +130,10 @@ export default function MapPage() {
 
     getClasses(setClasses, selectedQuarter)
     getBuilding(setBuildings)
+    getRooms(setRooms)
   }, [])
 
   function toggleClick() {
-    console.log(toggleRight)
     document.getElementById("room-form").style.display = toggleRight
       ? "contents"
       : "none"
@@ -154,7 +151,14 @@ export default function MapPage() {
     document.getElementById("search-toggle-slide").style.right = toggleRight
       ? "auto"
       : "1.5%"
+    document.getElementById("room-form").style.display = toggleRight
+      ? "contents"
+      : "none"
+
     toggleRight = !toggleRight
+    currentBuilding = ""
+    currentRoomNr = ""
+    currentClass = ""
     setWordEntered("")
     setFilteredData("")
   }
@@ -177,25 +181,37 @@ export default function MapPage() {
     search = !search
   }
 
-  function placeBuilding() {
-    // console.log("clicked")
-    if (!currentBuilding) {
+  function placeBuildingFromRoom() {
+    if (currentBuilding == "") {
+      alert("Please choose one of the buildings listed.")
+    } else {
+      placeOnMap(currentBuilding.place_id)
+      showBuildingInfo()
+      searchButtonClick()
+    }
+  }
+
+  function placeBuildingFromCode() {
+    if (currentClass == "") {
       alert(
-        "Please choose one of the classes or buildings listed. " +
-          "Class codes should be written in the format ABC123-01."
+        "Please choose one of the classes listed. " +
+          "Class codes should be written in the format ABC123-01. " +
+          "You can also search by the name of a class."
       )
     } else {
       placeOnMap(currentBuilding.place_id)
+      changeInfoTextForClass()
+      showClassInfo()
+      searchButtonClick()
     }
-    searchButtonClick()
   }
 
   const checkKey = event => {
     if (event.key === "Enter") {
-      placeBuilding()
+      toggleRight ? placeBuildingFromCode() : placeBuildingFromRoom()
     } else if (event.key === "Tab") {
       event.preventDefault()
-      if (filteredData.length != 0) {
+      if (filteredData.length > 0) {
         handleFilterClick(filteredData[0])
       }
     }
@@ -203,7 +219,7 @@ export default function MapPage() {
 
   function openInfoWindow() {
     document.getElementById("info-div").style.display = buildingMarked
-      ? "block"
+      ? "flex"
       : "none"
     document.getElementById("info-nobuilding-text").style.display =
       buildingMarked ? "none" : "block"
@@ -228,12 +244,27 @@ export default function MapPage() {
     else openInfoWindow()
   }
 
-  // Change the info text to infoabout the building building
-  function changeInfoText(building) {
+  // Change the info text to info about the building building
+  function changeInfoTextforBuilding(building) {
     nameElement.current.innerHTML = building.get("name")
     addressElement.current.innerHTML = building.get("address")
     document.getElementById("building-directions").href =
       googleMapsLinkBase + building.getId()
+  }
+
+  // Change the info text for the class
+  function changeInfoTextForClass() {
+    document.getElementById("class-name").innerHTML =
+      currentClass.code + " " + currentClass.name
+    document.getElementById("class-instructor").innerHTML =
+      "Instructor: " + currentClass.instructor
+    document.getElementById("class-mode").innerHTML =
+      "Mode: " + currentClass.mode
+    document.getElementById("class-lectures").innerHTML =
+      "Lectures: " +
+      currentClass.meeting_time +
+      " in " +
+      currentClass.meeting_place
   }
 
   // Show the correct floormaps
@@ -260,7 +291,28 @@ export default function MapPage() {
     floorMapFolder = floorMapBaseFolder + building.getId() + "/"
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
-    document.getElementById("floor-map").src = floorMapHref
+    document.getElementById("floormap-img").src = floorMapHref
+
+    showPinOnFloorMap()
+  }
+
+  function showBuildingInfo() {
+    const classInfo = document.getElementsByClassName("class-info")
+    for (let i = 0; i < classInfo.length; i++)
+      classInfo[i].style.display = "none"
+    const buildingInfo = document.getElementsByClassName("building-info")
+    for (let i = 0; i < buildingInfo.length; i++)
+      buildingInfo[i].style.display = "block"
+  }
+
+  function showClassInfo() {
+    console.log("hej")
+    const buildingInfo = document.getElementsByClassName("building-info")
+    for (let i = 0; i < buildingInfo.length; i++)
+      buildingInfo[i].style.display = "none"
+    const classInfo = document.getElementsByClassName("class-info")
+    for (let i = 0; i < classInfo.length; i++)
+      classInfo[i].style.display = "block"
   }
 
   // Show info at click
@@ -270,11 +322,37 @@ export default function MapPage() {
       // Place a marker
       overlayRef.current.setPosition(e.coordinate)
       // Set text
-      changeInfoText(building)
+      changeInfoTextforBuilding(building)
+      showBuildingInfo()
       showFloorMaps(building)
       // Make sure the info window is open
       openInfoWindow()
     })
+  }
+
+  // Accepts coordinates as percentage from 0 to 100
+  function showPinOnFloorMap(xcoord = 50, ycoord = 70) {
+    // test that these coords work for Jack Baskin Engineering Building 165
+    if (document.getElementById("floormap-img").clientHeight == 0) {
+      setTimeout(showPinOnFloorMap, 1000)
+    } else {
+      console.log(document.getElementById("floormap-img").clientHeight)
+      if (xcoord != -1 && ycoord != -1) {
+        console.log("ID Being placed")
+        var yPercentageOfDiv =
+          (ycoord / 100) * document.getElementById("floormap-img").clientHeight
+        document
+          .getElementById("floormap-pin")
+          .setAttribute(
+            "style",
+            "left: " +
+              xcoord.toString() +
+              "%; top: " +
+              yPercentageOfDiv.toString() +
+              "px; display: flex;"
+          )
+      }
+    }
   }
 
   // Search filter handler
@@ -284,10 +362,30 @@ export default function MapPage() {
     const searchWord = event.target.value
     setWordEntered(searchWord)
     const newFilter = arr.filter(value => {
-      if (arr == buildings) {
-        return value.name.toLowerCase().includes(searchWord.toLowerCase())
+      if (arr == rooms) {
+        let concatStr = value.name.toLowerCase()
+        if (value.room_number) {
+          concatStr = concatStr + " " + value.room_number.toLowerCase()
+        }
+        if (concatStr.includes(searchWord.toLowerCase())) {
+          return true
+        }
+        for (let i = 0; i < value.other_names.length; i++) {
+          concatStr = value.other_names[i].toLowerCase()
+          if (value.room_number) {
+            concatStr = concatStr + " " + value.room_number.toLowerCase()
+          }
+          if (concatStr.includes(searchWord.toLowerCase())) {
+            return true
+          }
+        }
+        return false
       } else {
-        return value.code.toLowerCase().includes(searchWord.toLowerCase())
+        let concatStr = value.code.toLowerCase()
+        if (value.name) {
+          concatStr = concatStr + " " + value.name.toLowerCase()
+        }
+        return concatStr.includes(searchWord.toLowerCase())
       }
     })
 
@@ -300,6 +398,7 @@ export default function MapPage() {
     setSelectedResult(null)
   }
 
+  // Place a pin on the map for the building with place_id placeId
   const placeOnMap = placeId => {
     const building = buildingsSource.getFeatureById(placeId)
     buildingMarked = true
@@ -307,7 +406,7 @@ export default function MapPage() {
     // Place a marker
     overlayRef.current.setPosition([cord[0], cord[1]])
     zoomAndCenter(cord)
-    changeInfoText(building)
+    changeInfoTextforBuilding(building)
     showFloorMaps(building)
     openInfoWindow()
   }
@@ -324,12 +423,63 @@ export default function MapPage() {
     )
   }
 
+  /* 
+  Handler for clicking on drop down element on search
+  param: value -> contains either room or class object data
+  global var change: currentBuilding, currentRoom
+  */
+
   const handleFilterClick = value => {
+<<<<<<< HEAD:src/components/map-page.jsx
     setSelectedResult(value)
     setWordEntered(value.name)
     setFilteredData([])
 
     currentBuilding = value
+=======
+    console.log(value)
+    if (value.code) {
+      let room = null
+      setWordEntered(value.code + " " + value.name)
+      for (let i = 0; i < rooms.length; i++) {
+        if (
+          value.meeting_place
+            .toLowerCase()
+            .includes(rooms[i].name.toLowerCase())
+        ) {
+          currentBuilding = buildings[i]
+        } else {
+          for (let j = 0; j < rooms[i].other_names.length; j++) {
+            if (
+              value.meeting_place
+                .toLowerCase()
+                .includes(rooms[i].other_names[j].toLowerCase())
+            ) {
+              room = rooms[i]
+              currentRoomNr = rooms[i]
+              console.log(currentRoomNr)
+            }
+          }
+        }
+        if (room) {
+          for (let i = 0; i < buildings.length; i++) {
+            if (buildings[i].name === room.name) {
+              currentBuilding = buildings[i]
+            }
+          }
+        }
+        currentClass = value
+      }
+    } else if (value.room_number) {
+      setWordEntered(value.name + " " + value.room_number)
+      currentRoomNr = value
+      for (let i = 0; i < buildings.length; i++) {
+        if (buildings[i].name === value.name) {
+          currentBuilding = buildings[i]
+        }
+      }
+    }
+>>>>>>> main:src/components/homebody/index.jsx
     document.getElementById("classroom-input").focus()
   }
 
@@ -342,11 +492,12 @@ export default function MapPage() {
     // console.log(document.getElementById("floor-dropdownSelect").value)
     floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
-    document.getElementById("floor-map").src = floorMapHref
+    document.getElementById("floormap-img").src = floorMapHref
   }
 
+  // Shows the floormap in fullscreen
   function showFullScreen() {
-    let image = document.getElementById("floor-map")
+    let image = document.getElementById("floormap-img")
     if (!document.fullscreenElement) {
       image?.requestFullscreen()
     } else {
@@ -354,9 +505,101 @@ export default function MapPage() {
     }
   }
 
+  // Sets the quarter to value
   function updateQuarter(value) {
     getClasses(setClasses, value)
     setQuarter(value)
+  }
+
+  // Creating an ics file from the calendar event calendarEvent
+  // Credit to https://www.npmjs.com/package/ics
+  async function handleDownloadedEvent(calendarEvent) {
+    const filename = currentClass.code + ".ics"
+    const file = await new Promise((resolve, reject) => {
+      ics.createEvent(calendarEvent, (error, value) => {
+        if (error) {
+          reject(error)
+        }
+
+        resolve(new File([value], filename, { type: "plain/text" }))
+      })
+    })
+    const url = URL.createObjectURL(file)
+
+    // trying to assign the file URL to a window could cause cross-site
+    // issues so this is a workaround using HTML5
+    const anchor = document.createElement("a")
+    anchor.href = url
+    anchor.download = filename
+
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
+
+    URL.revokeObjectURL(url)
+  }
+
+  // Identifies the week days from the string meetingDays
+  // on the form "TuTh10:30PM-12:30PM"
+  function getDays(meetingDays) {
+    // Form: "MO,WE,FR"
+    var weekDays = ""
+    if (meetingDays.match("M")) weekDays += "MO,"
+    if (meetingDays.match("Th")) {
+      if (meetingDays.match("Tu")) weekDays += "TU,"
+    } else if (meetingDays.match("T")) weekDays += "TU,"
+    if (meetingDays.match("W")) weekDays += "WE,"
+    if (meetingDays.match("Th")) weekDays += "TH,"
+    if (meetingDays.match("F")) weekDays += "F,"
+    return weekDays.slice(0, -1)
+  }
+
+  // Identifies the minute part from the string USTime, on the form "10:30PM"
+  function getHr(USTime) {
+    return USTime.charAt(5) == "P"
+      ? +USTime.substr(0, 2) + 12
+      : +USTime.substr(0, 2)
+    // Does it work if the time is between 00:00 and 01:00?
+  }
+
+  // Identifies the hour part from the string USTime, on the form "10:30PM"
+  // and converts it to 24hr time
+  function getMin(USTime) {
+    return +USTime.substr(3, 2)
+  }
+
+  // Creates and downloads a calendar event for the meetings of currentClass
+  function downloadCalendarEvent() {
+    console.log(currentClass)
+    var meetingTimeArray = currentClass.meeting_time.split(/\s|-/)
+    console.log(meetingTimeArray)
+    const startHr = getHr(meetingTimeArray[1])
+    const startMin = getMin(meetingTimeArray[1])
+    const endHr = getHr(meetingTimeArray[2])
+    const endMin = getMin(meetingTimeArray[2])
+    // create calendar event
+    const calendarEvent = {
+      // Jan 9th 2023
+      start: [2023, 1, 9, startHr, startMin],
+      end: [2023, 1, 9, endHr, endMin],
+      // startInputType: "utc-8", // Solve time zones
+      recurrenceRule:
+        "FREQ=WEEKLY;BYDAY=" +
+        getDays(meetingTimeArray[0]) +
+        ";INTERVAL=1;UNTIL=20230325T000000Z;",
+      title: currentClass.code + " " + currentClass.name,
+      description:
+        "Instructor: " +
+        currentClass.instructor +
+        "\nMode: " +
+        currentClass.mode,
+      location: currentClass.meeting_place,
+      // url: "https://www.classroomfinder.ucsc.edu/",
+      // geo: { lat: 40.0095, lon: 105.2669 },
+      busyStatus: "BUSY",
+      organizer: { name: "UCSC" },
+    }
+    handleDownloadedEvent(calendarEvent)
   }
 
   return (
@@ -378,18 +621,22 @@ export default function MapPage() {
                   type='text'
                   id='classroom-input'
                   className='input'
-                  placeholder='e.g. "R Carson 205"'
+                  placeholder='e.g. "R Carson 250"'
                   maxLength={60}
+<<<<<<< HEAD:src/components/map-page.jsx
                   value={selectedResult ? selectedResult.name : wordEntered}
                   onChange={event => handleFilter(event, buildings)}
+=======
+                  value={wordEntered}
+                  onChange={event => handleFilter(event, rooms)}
+>>>>>>> main:src/components/homebody/index.jsx
                   onKeyDown={checkKey}
-                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
                 <img
                   className='search-bar-button'
-                  onClick={placeBuilding}
+                  onClick={placeBuildingFromRoom}
                   id='classroom-submit-button'
                   src='/arrowcircle.png'
                 ></img>
@@ -406,7 +653,7 @@ export default function MapPage() {
                           target='_blank'
                         >
                           {" "}
-                          <p>{value.name}</p>{" "}
+                          <p>{value.name + " " + value.room_number}</p>{" "}
                         </a>
                       )
                     })}
@@ -453,7 +700,7 @@ export default function MapPage() {
                 <div className='search-bar-field'></div>
                 <img
                   className='search-bar-button'
-                  onClick={placeBuilding}
+                  onClick={placeBuildingFromCode}
                   id='classcode-submit-button'
                   src='/arrowcircle.png'
                 ></img>
@@ -463,14 +710,22 @@ export default function MapPage() {
                       return (
                         <a
                           key={key}
+<<<<<<< HEAD:src/components/map-page.jsx
                           onClick={() => handleFilterClick(value)} //value.name
+=======
+                          onClick={() => handleFilterClick(value)}
+>>>>>>> main:src/components/homebody/index.jsx
                           className='dataClassItem'
                           target='_blank'
                         >
                           {" "}
+<<<<<<< HEAD:src/components/map-page.jsx
                           <p>
                             {value.code} {value.name}
                           </p>{" "}
+=======
+                          <p>{value.code + " " + value.name}</p>{" "}
+>>>>>>> main:src/components/homebody/index.jsx
                         </a>
                       )
                     })}
@@ -513,24 +768,37 @@ export default function MapPage() {
           <div className='info-div-text' id='info-div-text'>
             <h4
               ref={nameElement}
-              className='info-div-text'
+              className='building-info'
               id='building-name'
             ></h4>
+            <h4 className='class-info' id='class-name'></h4>
+            <button
+              id='calendar-button'
+              className='class-info'
+              onClick={downloadCalendarEvent}
+            >
+              Click here to download calendar event
+            </button>
+            <h6 className='class-info' id='class-instructor'></h6>
+            <h6 className='class-info' id='class-lectures'></h6>
+            <h6 className='class-info' id='class-mode'></h6>
             <h6
               ref={addressElement}
-              className='info-div-text'
+              className='building-info'
               id='building-address'
             ></h6>
             <a
               href=''
               target='_blank'
               rel='noopener noreferrer'
-              className='info-div-text'
+              className='building-info class-info'
               id='building-directions'
             >
               Get directions on Google Maps
             </a>
-            <br></br>
+          </div>
+          <div id='info-line'></div>
+          <div id='floormap'>
             <div className='floor-dropdown' id='floor-dropdown'>
               <select
                 id='floor-dropdown-select'
@@ -543,9 +811,17 @@ export default function MapPage() {
                 className='arrow-circle'
               ></img>
             </div>
+            <img id='floormap-img' onClick={showFullScreen}></img>
+            <img
+              ref={floorPin}
+              id='floormap-pin'
+              src={
+                "http://icons.iconarchive.com/icons/icons-land" +
+                "/vista-map-markers/256/Map-Marker-Ball-Pink-icon.png"
+              }
+            ></img>
+            <p>Click on the floormap to view in fullscreen.</p>
           </div>
-          <div id='info-line'></div>
-          <img id='floor-map' onClick={showFullScreen}></img>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react"
 import "./index.scss"
 
-const NavBar = () => {
+const Header = () => {
   return (
     <div className='header'>
       <p className='header-text'>UCSC Classroom finder</p>
@@ -9,4 +9,4 @@ const NavBar = () => {
   )
 }
 
-export default NavBar
+export default Header
