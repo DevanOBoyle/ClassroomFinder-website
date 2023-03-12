@@ -553,7 +553,8 @@
 }
 
 #class-instructor,
-#class-lectures,
+#class-time,
+#class-place,
 #class-mode {
   text-align: left;
 }
@@ -593,7 +594,8 @@
   big-desktop
 ) {
   #info-div-text {
-    max-width: 42%;
+    min-width: 35%;
+    max-width: 50%;
 
     h4,
     h6,
@@ -610,7 +612,8 @@
   }
 
   #floormap {
-    width: 55%;
+    min-width: 50%;
+    max-width: 65%;
   }
 }
 
@@ -620,9 +623,10 @@
 }
 
 #floormap-pin {
-  position: absolute;
+  position: relative;
   display: none;
-  width: 35px;
+  height: 35px;
+  margin-bottom: -35px;
   transform: translate(-50%, -100%); // bottom center
 }
 
