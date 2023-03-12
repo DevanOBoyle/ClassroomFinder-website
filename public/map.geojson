@@ -530,7 +530,7 @@
           ["soc_sci_first.JPG", "Floor 1"],
           ["soc_sci_second.JPG", "Floor 2"],
           ["pageNotFound.png", "Floor 3"],
-          ["soc_sci_fourth.JPG", "Floor 4"]
+          ["soc_sci_fourth.JPG", "Floor 4"],
           ["college_nine.png", "Overview"]
         ]
       },
@@ -847,9 +847,7 @@
       "properties": {
         "address": "453 Kerr Road",
         "name": "Media Theater",
-        "floors": [
-          ["theater.gif", "Overview"]
-        ]
+        "floors": [["theater.gif", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -982,7 +980,8 @@
                   [-122.06193041187265, 36.9953582319433],
                   [-122.06206869116644, 36.9953396529978],
                   [-122.06208290679473, 36.995378875210946],
-                  [-122.06217466221369, 36.995359264107194]]
+                  [-122.06217466221369, 36.995359264107194]
+                ]
               ]
             ]
           }
@@ -996,9 +995,7 @@
       "properties": {
         "address": "404 McHenry Road",
         "name": "Gamelan Studio",
-        "floors": [
-          ["music_center.png", "Overview"]
-        ]
+        "floors": [["music_center.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1077,9 +1074,7 @@
       "properties": {
         "address": "411 Porter-Kresge Road",
         "name": "Porter / Kresge Dining Hall",
-        "floors": [
-          ["porter.png", "Overview"]
-        ]
+        "floors": [["porter.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1116,9 +1111,7 @@
       "properties": {
         "address": "500 Porter-Kresge Road",
         "name": "Kresge Seminar Building",
-        "floors": [
-          ["kresge.png", "Overview"]
-        ]
+        "floors": [["kresge.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1153,9 +1146,7 @@
       "properties": {
         "address": "355 Rachel Carson Road",
         "name": "Rachel Carson College Academic Building",
-        "floors": [
-          ["rachel_carson.png", "Overview"]
-        ]
+        "floors": [["rachel_carson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1204,9 +1195,7 @@
       "properties": {
         "address": "350 Rachel Carson Road",
         "name": "Visual Arts Research Facility",
-        "floors": [
-          ["rachel_carson.png", "Overview"]
-        ]
+        "floors": [["rachel_carson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1737,9 +1726,7 @@
       "properties": {
         "address": "402 McHenry Road",
         "name": "Music Center",
-        "floors": [
-          ["music_center.png", "Overview"]
-        ]
+        "floors": [["music_center.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1913,9 +1900,7 @@
       "properties": {
         "address": "501 Cowell Service Road",
         "name": "Cowell Computer Lab",
-        "floors": [
-          ["cowell.jpg", "Overview"]
-        ]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2331,9 +2316,7 @@
       "properties": {
         "address": "424 Baskin Arts Service Road",
         "name": "Elena Baskin Visual Arts Center",
-        "floors": [
-          ["elena_baskin_arts.png", "Overview"]
-        ]
+        "floors": [["elena_baskin_arts.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
