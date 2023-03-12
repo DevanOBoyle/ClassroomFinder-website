@@ -7,12 +7,7 @@
       "properties": {
         "address": "605 Baskin Circle",
         "name": "Jack Baskin Engineering Auditorium",
-        "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
-        ]
+        "floors": [["pageNotFound.png", "Map"]]
       },
       "geometry": {
         "type": "GeometryCollection",
