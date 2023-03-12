@@ -531,6 +531,7 @@
           ["soc_sci_second.JPG", "Floor 2"],
           ["pageNotFound.png", "Floor 3"],
           ["soc_sci_fourth.JPG", "Floor 4"]
+          ["college_nine.png", "Overview"]
         ]
       },
       "geometry": {
@@ -564,7 +565,7 @@
       "properties": {
         "address": "704 College Nine Road",
         "name": "Social Sciences 1",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [["college_nine.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -846,7 +847,9 @@
       "properties": {
         "address": "453 Kerr Road",
         "name": "Media Theater",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["theater.gif", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -883,7 +886,7 @@
       "properties": {
         "address": "441 Kerr Road",
         "name": "Theater Arts Center / Main Stage",
-        "floors": [["overview.gif", "Overview"]]
+        "floors": [["theater.gif", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -972,13 +975,14 @@
                 ]
               ],
               [
-                [-122.06217466221369, 36.995359264107194],
-                [-122.06208678378403, 36.99509606195987],
-                [-122.06186062606096, 36.995147670295324],
-                [-122.06193041187265, 36.9953582319433],
-                [-122.06206869116644, 36.9953396529978],
-                [-122.06208290679473, 36.995378875210946],
-                [-122.06217466221369, 36.995359264107194]
+                [
+                  [-122.06217466221369, 36.995359264107194],
+                  [-122.06208678378403, 36.99509606195987],
+                  [-122.06186062606096, 36.995147670295324],
+                  [-122.06193041187265, 36.9953582319433],
+                  [-122.06206869116644, 36.9953396529978],
+                  [-122.06208290679473, 36.995378875210946],
+                  [-122.06217466221369, 36.995359264107194]]
               ]
             ]
           }
@@ -992,7 +996,9 @@
       "properties": {
         "address": "404 McHenry Road",
         "name": "Gamelan Studio",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["music_center.png", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1023,7 +1029,7 @@
       "properties": {
         "address": "405 Porter-Kresge Road",
         "name": "Porter College Academic Building",
-        "floors": [["porter.png", "Map"]]
+        "floors": [["porter.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1067,11 +1073,89 @@
 
     {
       "type": "Feature",
+      "id": "ChIJqZjyj55BjoARoDnq_JJ1zMA",
+      "properties": {
+        "address": "411 Porter-Kresge Road",
+        "name": "Porter / Kresge Dining Hall",
+        "floors": [
+          ["porter.png", "Overview"]
+        ]
+      },
+      "geometry": {
+        "type": "GeometryCollection",
+        "geometries": [
+          {
+            "type": "Point",
+            "coordinates": [-122.066, 36.9943]
+          },
+          {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [-122.06619154834218, 36.994467488003465],
+                [-122.06620734589283, 36.99439899349966],
+                [-122.06630514025443, 36.994415816716796],
+                [-122.06632846044857, 36.99431908316714],
+                [-122.06623066608697, 36.99430406241858],
+                [-122.06624872043052, 36.994233164445674],
+                [-122.06595533734611, 36.99418810214017],
+                [-122.06595985093189, 36.99416827471724],
+                [-122.06579736183886, 36.9941430398074],
+                [-122.06573567616473, 36.99439719101194],
+                [-122.06619154834218, 36.994467488003465]
+              ]
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "id": "ChIJZ5tNB3ZBjoARiFjFt2PmtHE",
+      "properties": {
+        "address": "500 Porter-Kresge Road",
+        "name": "Kresge Seminar Building",
+        "floors": [
+          ["kresge.png", "Overview"]
+        ]
+      },
+      "geometry": {
+        "type": "GeometryCollection",
+        "geometries": [
+          {
+            "type": "Point",
+            "coordinates": [-122.06455962076625, 36.99179033249497]
+          },
+          {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [-122.06683124631829, 36.99725767624582],
+                [-122.06675450791792, 36.99716294618483],
+                [-122.06658070852926, 36.99716803513641],
+                [-122.06656096930541, 36.99726188302981],
+                [-122.06659059772352, 36.997259779638085],
+                [-122.06658993931416, 36.99725110314553],
+                [-122.06671931673925, 36.997247948057236],
+                [-122.06675816288738, 36.99729527436902],
+                [-122.06683124631829, 36.99725767624582]
+              ]
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "type": "Feature",
       "id": "ChIJA5NfM41BjoAR3gw5dCqP3uA",
       "properties": {
         "address": "355 Rachel Carson Road",
         "name": "Rachel Carson College Academic Building",
-        "floors": [["rachel_carson.png", "Map"]]
+        "floors": [
+          ["rachel_carson.png", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1120,7 +1204,9 @@
       "properties": {
         "address": "350 Rachel Carson Road",
         "name": "Visual Arts Research Facility",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["rachel_carson.png", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1162,7 +1248,7 @@
       "properties": {
         "address": "233 Oakes Road",
         "name": "Oakes College Academic Building",
-        "floors": [["Oakes_College.png", "Map"]]
+        "floors": [["oakes.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1651,7 +1737,9 @@
       "properties": {
         "address": "402 McHenry Road",
         "name": "Music Center",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["music_center.png", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1751,7 +1839,7 @@
       "properties": {
         "address": "521 Cowell-Stevenson Road",
         "name": "Hahn Art Facility",
-        "floors": [["overview.png", "Overview"]]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1782,7 +1870,7 @@
       "properties": {
         "address": "530 Cowell-Stevenson Road",
         "name": "Stevenson Academic Building",
-        "floors": [["overview.png", "Overview"]]
+        "floors": [["stevenson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -1826,10 +1914,7 @@
         "address": "501 Cowell Service Road",
         "name": "Cowell Computer Lab",
         "floors": [
-          ["basement.png", "Basement"],
-          ["floor1.png", "Floor 1"],
-          ["floor2.png", "Floor 2"],
-          ["floor3.png", "Floor 3"]
+          ["cowell.jpg", "Overview"]
         ]
       },
       "geometry": {
@@ -2087,7 +2172,10 @@
       "properties": {
         "address": "400 Hahn Road",
         "name": "Hahn Student Services",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["floor1.png", "Floor 1"],
+          ["floor2.png", "Floor 2"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2243,7 +2331,9 @@
       "properties": {
         "address": "424 Baskin Arts Service Road",
         "name": "Elena Baskin Visual Arts Center",
-        "floors": [["pageNotFound.png", "Map"]]
+        "floors": [
+          ["elena_baskin_arts.png", "Overview"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2736,7 +2826,7 @@
       "properties": {
         "name": "Kresge Annex Building B",
         "address": "522 Porter-Kresge Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["kresge.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2767,7 +2857,7 @@
       "properties": {
         "name": "Kresge Annex Building A",
         "address": "516 Porter-Kresge Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["kresge.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -2981,7 +3071,11 @@
       "properties": {
         "name": "Digital Arts Research Center",
         "address": "407 McHenry Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [
+          ["floor1.png", "Floor 1"],
+          ["floor2.png", "Floor 2"],
+          ["floor3.png", "Floor 3"]
+        ]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3012,7 +3106,7 @@
       "properties": {
         "name": "Stevenson Library",
         "address": "540 Stevenson Service Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["stevenson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3051,7 +3145,7 @@
       "properties": {
         "name": "Stevenson Event Center",
         "address": "520 Cowell-Stevenson Road",
-        "floors": [["groundfloor.png", "Ground floor"]]
+        "floors": [["stevenson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3148,7 +3242,7 @@
       "properties": {
         "name": "Crown Classroom Building",
         "address": "624 Crown Road",
-        "floors": [["Crown_College.png", "Map"]]
+        "floors": [["crown.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3187,7 +3281,7 @@
       "properties": {
         "name": "Kresge Classroom Building",
         "address": "524 Porter-Kresge Road",
-        "floors": [["kresge.png", "Map"]]
+        "floors": [["kresge.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3294,7 +3388,7 @@
       "properties": {
         "name": "Cowell Academic Building",
         "address": "518 Cowell-Stevenson Road",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3326,7 +3420,7 @@
       "properties": {
         "name": "Cowell Classroom Building",
         "address": "518 Cowell-Stevenson Road",
-        "floors": [["overview.png", "Overview"]]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3357,7 +3451,7 @@
       "properties": {
         "name": "Rachel Carson College Garden",
         "address": "6 College Eight Service Rd",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["rachel_carson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3421,7 +3515,7 @@
       "properties": {
         "name": "West Field House",
         "address": "311 Rachel Carson Service Road",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["rachel_carson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3516,7 +3610,7 @@
       "properties": {
         "address": "Parking Lot 146",
         "name": "West Tennis Courts",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["rachel_carson.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3618,7 +3712,7 @@
       "properties": {
         "address": "500 Cowell Service Road",
         "name": "Cowell Garage",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3682,7 +3776,7 @@
       "properties": {
         "address": "511 Porter-Kresge Road",
         "name": "Kresge College House",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["kresge.png", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
@@ -3711,12 +3805,6 @@
                 [-122.06654814054586, 36.99734083134875],
                 [-122.06654952252681, 36.99727607871395],
                 [-122.0665603785907, 36.9972617211287],
-                [-122.06659058983556, 36.9972599138388],
-                [-122.06658969963347, 36.997251227168945],
-                [-122.06671950617876, 36.99724811733198],
-                [-122.06675774098389, 36.997295210180326],
-                [-122.06683092765822, 36.99725740380404],
-                [-122.06675522529702, 36.99716335598363],
                 [-122.06658058073351, 36.997167959367886],
                 [-122.06657885157937, 36.99715230785996],
                 [-122.06651372010828, 36.99715875259908],
@@ -3750,7 +3838,7 @@
       "properties": {
         "address": "520 Cowell-Stevenson Road",
         "name": "Cowell Commons Building",
-        "floors": [["basement.png", "Basement"]]
+        "floors": [["cowell.jpg", "Overview"]]
       },
       "geometry": {
         "type": "GeometryCollection",
