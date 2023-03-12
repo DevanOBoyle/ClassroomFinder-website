@@ -458,7 +458,19 @@ export default function Body() {
         if (value.room_number) {
           concatStr = concatStr + " " + value.room_number.toLowerCase()
         }
-        return concatStr.includes(searchWord.toLowerCase())
+        if (concatStr.includes(searchWord.toLowerCase())) {
+          return true
+        }
+        for (let i = 0; i < value.other_names.length; i++) {
+          concatStr = value.other_names[i].toLowerCase()
+          if (value.room_number) {
+            concatStr = concatStr + " " + value.room_number.toLowerCase()
+          }
+          if (concatStr.includes(searchWord.toLowerCase())) {
+            return true
+          }
+        }
+        return false
       } else {
         let concatStr = value.code.toLowerCase()
         if (value.name) {
@@ -507,7 +519,7 @@ export default function Body() {
   /* 
   Handler for clicking on drop down element on search
   param: value -> contains either room or class object data
-  global var change: currentBuilding, currentRoomNum (To Be Added) 
+  global var change: currentBuilding, currentRoom
   */
 
   const handleFilterClick = value => {
@@ -546,6 +558,7 @@ export default function Body() {
       }
     } else if (value.room_number) {
       setWordEntered(value.name + " " + value.room_number)
+      currentRoomNr = value
       for (let i = 0; i < buildings.length; i++) {
         if (buildings[i].name === value.name) {
           currentBuilding = buildings[i]
@@ -774,12 +787,11 @@ export default function Body() {
                   type='text'
                   id='classroom-input'
                   className='input'
-                  placeholder='e.g. "R Carson 205"'
+                  placeholder='e.g. "R Carson 250"'
                   maxLength={60}
                   value={wordEntered}
                   onChange={event => handleFilter(event, rooms)}
                   onKeyDown={checkKey}
-                  //onChange={handleFilter(buildings)}
                   required
                 />
                 <div className='search-bar-field'></div>
