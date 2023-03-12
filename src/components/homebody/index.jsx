@@ -768,6 +768,13 @@ export default function Body() {
     )
   }
 
+  function handleRoomNum(val) {
+    if (val == null) {
+      return ""
+    }
+    return val
+  }
+
   return (
     <div id='main'>
       <div id='search-window'>
@@ -814,7 +821,11 @@ export default function Body() {
                           target='_blank'
                         >
                           {" "}
-                          <p>{value.name + " " + value.room_number}</p>{" "}
+                          <p>
+                            {value.name +
+                              " " +
+                              handleRoomNum(value.room_number)}
+                          </p>{" "}
                         </a>
                       )
                     })}
