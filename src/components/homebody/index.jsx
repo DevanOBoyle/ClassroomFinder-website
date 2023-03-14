@@ -35,8 +35,8 @@ var floorMapImage
 const floorMapBaseFolder = "/floormaps/"
 var floorMapFolder
 const googleMapsLinkBase = "https://www.google.com/maps/place/?q=place_id:"
-const roomCoordX = 0 // Left: 50%
-const roomCoordY = 0 // Top: 25%
+var roomCoordX = 0 // Left: 50%
+var roomCoordY = 0 // Top: 25%
 
 const buildingsSource = new VectorSource({
   url: "/map.geojson",
@@ -215,6 +215,14 @@ export default function Body() {
       selectedClass = currentClass
       selectedBuilding = currentBuilding
       selectedRoomNr = currentRoomNr
+      if (currentRoomNr.pixel_coord != null) {
+        roomCoordX = currentRoomNr.pixel_coord[0]
+        roomCoordY = currentRoomNr.pixel_coord[1]
+        console.log(roomCoordX)
+      } else {
+        roomCoordX = -100
+        roomCoordY = -100
+      }
       infoToShow = true
       placeOnMap(selectedBuilding.place_id)
       showBuildingInfo()
@@ -236,6 +244,13 @@ export default function Body() {
       selectedClass = currentClass
       selectedBuilding = currentBuilding
       selectedRoomNr = currentRoomNr
+      if (currentRoomNr.pixel_coord != null) {
+        roomCoordX = currentRoomNr.pixel_coord[0]
+        roomCoordY = currentRoomNr.pixel_coord[1]
+      } else {
+        roomCoordX = -100
+        roomCoordY = -100
+      }
       updateClassVariables()
       if (selectedBuilding != "") placeOnMap(selectedBuilding.place_id)
       changeInfoTextForClass()
@@ -333,8 +348,6 @@ export default function Body() {
     var selectCode = ""
     const floorFileNames = building.get("floors")
     if (floorFileNames.length > 0) {
-      document.getElementById("floor-dropdown-select").value =
-        floorFileNames[0][0]
       let i = 0
       while (floorFileNames.length > i) {
         selectCode +=
@@ -347,7 +360,15 @@ export default function Body() {
       }
     }
     document.getElementById("floor-dropdown-select").innerHTML = selectCode
+
     // Show the right floor plan image
+    if (currentRoomNr.floor != null) {
+      document.getElementById("floor-dropdown-select").value =
+        floorFileNames[currentRoomNr.floor][0]
+    } else {
+      document.getElementById("floor-dropdown-select").value =
+        floorFileNames[0][0]
+    }
     floorMapFolder = floorMapBaseFolder + building.getId() + "/"
     const floorMapHref =
       floorMapFolder + document.getElementById("floor-dropdown-select").value
@@ -428,10 +449,8 @@ export default function Body() {
     ycoord = selectedClass.coord[1],
     i = 0
   ) {
-    console.log("in showpinonfloormap")
     // Allow 10 tries
     if (i < 10 && selectedRoomNr != "") {
-      console.log("placing pin")
       const img = document.getElementById("floormap-img")
       // const div = document.getElementById("floormap")
       if (img.clientHeight == 0 || !floorMapImage.complete) {
@@ -531,19 +550,25 @@ export default function Body() {
         if (
           value.meeting_place
             .toLowerCase()
-            .includes(rooms[i].name.toLowerCase())
+            .includes(rooms[i].name.toLowerCase() + " " + rooms[i].room_number)
         ) {
-          currentBuilding = buildings[i]
+          room = rooms[i]
+          currentRoomNr = rooms[i]
+          console.log("room nr" + currentRoomNr.floor)
         } else {
           for (let j = 0; j < rooms[i].other_names.length; j++) {
             if (
               value.meeting_place
                 .toLowerCase()
-                .includes(rooms[i].other_names[j].toLowerCase())
+                .includes(
+                  rooms[i].other_names[j].toLowerCase() +
+                    " " +
+                    rooms[i].room_number
+                )
             ) {
               room = rooms[i]
               currentRoomNr = rooms[i]
-              console.log("room nr" + currentRoomNr)
+              console.log("room nr" + currentRoomNr.floor)
             }
           }
         }
