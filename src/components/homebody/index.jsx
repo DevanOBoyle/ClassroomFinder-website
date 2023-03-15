@@ -346,6 +346,7 @@ export default function Body() {
     // Change the options of the drop-down menu
     hidePinOnFloorMap()
     var selectCode = ""
+    console.log(building)
     const floorFileNames = building.get("floors")
     if (floorFileNames.length > 0) {
       let i = 0
@@ -362,7 +363,10 @@ export default function Body() {
     document.getElementById("floor-dropdown-select").innerHTML = selectCode
 
     // Show the right floor plan image
-    if (currentRoomNr.floor != null) {
+    if (
+      currentRoomNr.floor != null &&
+      floorFileNames.length >= currentRoomNr.floor
+    ) {
       document.getElementById("floor-dropdown-select").value =
         floorFileNames[currentRoomNr.floor][0]
     } else {
@@ -517,9 +521,10 @@ export default function Body() {
       zoomAndCenter(cord)
       changeInfoTextforBuilding(building)
       showFloorMaps(building)
+      console.log(placeId)
     } catch (e) {
       console.log(e)
-      alert("Oops! Seems like the building is missing")
+      //      alert("Oops! Seems like the building is missing")
     }
   }
 
